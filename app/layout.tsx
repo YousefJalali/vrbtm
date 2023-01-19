@@ -1,12 +1,16 @@
-import './globals.css'
+import "../styles/globals.css";
+
+import { Montserrat } from "@next/font/google";
+
+const font = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={font.variable}>
       {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
@@ -14,5 +18,5 @@ export default function RootLayout({
       <head />
       <body>{children}</body>
     </html>
-  )
+  );
 }

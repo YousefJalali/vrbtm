@@ -1,91 +1,123 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+import "./mark.css";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import debounce from "lodash.debounce";
+import keyword_extractor from "keyword-extractor";
 
 export default function Home() {
+  const [showOptions, toggleOptions] = useState(false);
+  const [wordLength, setWordLength] = useState(2);
+  const [difficulty, setDifficulty] = useState(0.1);
+  // const [exclude, setExclude] = useState("");
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState<string[]>([]);
+  const [hiddenWord, setHiddenWord] = useState<string[]>([]);
+
+  const hide = (word: string) => {
+    if (Math.random() <= difficulty && word.length >= wordLength) {
+      setHiddenWord((prevState) => [...prevState, word]);
+    }
+
+    // return word;
+  };
+
+  const changeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    debouncedOmit(e.target.value);
+  };
+
+  const removeUselessWords = (txt: string) => {
+    const txtWithoutUselessWords = keyword_extractor.extract(txt, {
+      language: "english",
+      remove_digits: false,
+      return_changed_case: false,
+      remove_duplicates: false,
+    });
+
+    return txtWithoutUselessWords;
+  };
+
+  const debouncedOmit = useRef(
+    debounce(async (text) => {
+      if (text.length > 0) {
+        removeUselessWords(text).forEach((word, i) => hide(word));
+
+        setResult(text.split(" "));
+      } else {
+        console.log("else");
+        setResult([]);
+        setHiddenWord([]);
+      }
+    }, 500)
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      debouncedOmit.cancel();
+    };
+  }, [debouncedOmit]);
+
+  const displayResult =
+    result.length > 0
+      ? result
+          .map((word) =>
+            hiddenWord.includes(word)
+              ? `<mark class='mark' >${word}</mark>`
+              : word
+          )
+          .join(" ")
+      : "";
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="min-w-screen min-h-screen p-5">
+      <nav className="flex w-full items-center justify-between">
+        <h1 className="font-sans text-2xl">VRBTM</h1>
+        <a onClick={() => toggleOptions(!showOptions)}>
+          <HiOutlineAdjustmentsHorizontal className="text-2xl" />
+        </a>
+      </nav>
+
+      {showOptions && (
+        <div className="mt-4 mb-4 rounded-lg bg-layout-level1 p-3">
+          <ul className="space-y-4">
+            <li>
+              <div>
+                <div className="relative flex pt-1">
+                  <label htmlFor="customRange1" className="form-label">
+                    Difficulty
+                  </label>
+                  <input
+                    value={difficulty}
+                    onChange={(e) => setDifficulty(e.target.valueAsNumber)}
+                    type="range"
+                    className="form-range  h-6  w-full  appearance-none  bg-transparent  p-0  focus:shadow-none focus:outline-none focus:ring-0"
+                    id="customRange1"
+                  />
+                </div>
+              </div>
+            </li>
+            <li>Word length</li>
+            <li>Word length</li>
+            <li>Word length</li>
+          </ul>
         </div>
-      </div>
+      )}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+      <section>
+        <textarea
+          value={input}
+          onChange={changeHandler}
+          cols={5}
+          rows={20}
+          className="my-4 w-full bg-brand-primary-100 p-4"
+        ></textarea>
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        {result.length > 0 && (
+          <p dangerouslySetInnerHTML={{ __html: displayResult }}></p>
+        )}
+      </section>
     </main>
-  )
+  );
 }
