@@ -70,7 +70,7 @@ export default function Home() {
     ref.current.getEditor().removeFormat(0, text.length)
 
     if (text.length > 0) {
-      removeUselessWords(text).forEach((word, i) =>
+      removeUselessWords(text.replace(/-/g, "‑")).forEach((word, i) =>
         omitWord(word, text.indexOf(word))
       )
     }
