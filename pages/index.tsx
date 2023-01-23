@@ -46,7 +46,7 @@ export default function Home() {
   const removeUselessWords = (txt: string) => {
     const txtWithoutUselessWords = keyword_extractor.extract(txt, {
       language: "english",
-      remove_digits: false,
+      remove_digits: true,
       return_changed_case: false,
       remove_duplicates: false,
     })
@@ -70,7 +70,7 @@ export default function Home() {
     ref.current.getEditor().removeFormat(0, text.length)
 
     if (text.length > 0) {
-      removeUselessWords(text.replace(/-/g, "‑")).forEach((word, i) =>
+      removeUselessWords(text.replace(/-/g, "&#8209;")).forEach((word, i) =>
         omitWord(word, text.indexOf(word))
       )
     }
