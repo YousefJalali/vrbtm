@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react"
-import debounce from "lodash.debounce"
+import { useRef, useState } from "react"
 import keyword_extractor from "keyword-extractor"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
-import { Delta, DeltaStatic, Sources } from "quill"
+import { DeltaStatic, Sources } from "quill"
 import { UnprivilegedEditor } from "react-quill"
 import Header from "@/components/layout/Header"
 import Nav from "@/components/layout/Nav"
@@ -23,7 +22,7 @@ export default function Home() {
 
   const ref = useRef(null)
 
-  const omit = (word: string, index: number) => {
+  const omitWord = (word: string, index: number) => {
     if (Math.random() <= difficulty) {
       // @ts-ignore
       ref.current.getEditor().formatText(index, word.length, "mark", true)
@@ -42,12 +41,6 @@ export default function Home() {
 
     setText(editor.getText())
     setHtmlText(value)
-
-    // @ts-ignore
-    const ops = delta.ops.map((op) => Object.keys(op)).flat()
-    if (ops.includes("delete") || ops.includes("insert")) {
-      debouncedOmit(editor.getText())
-    }
   }
 
   const removeUselessWords = (txt: string) => {
@@ -61,39 +54,26 @@ export default function Home() {
     return txtWithoutUselessWords
   }
 
-  const debouncedOmit = useRef(
-    debounce(async (text) => {
-      if (text.length > 0) {
-        removeUselessWords(text).forEach((word, i) =>
-          omit(word, text.indexOf(word))
-        )
+  const toggleOmit = (isVisible: boolean) => {
+    setVisibility(isVisible)
 
-        // setResult(text.split(" "))
-      } else {
-        console.log("else")
-        // setResult([])
-        // setHiddenWord([])
-      }
-    }, 500)
-  ).current
-
-  useEffect(() => {
-    return () => {
-      debouncedOmit.cancel()
-    }
-  }, [debouncedOmit])
-
-  useEffect(() => {
     omittedWords.forEach(({ word, index }) => {
       // @ts-ignore
       ref.current.getEditor().formatText(index, word.length, "mark", isVisible)
     })
-  }, [isVisible])
+  }
 
-  const reOmit = () => {
+  const omit = () => {
+    setOmittedWords([])
+
     // @ts-ignore
     ref.current.getEditor().removeFormat(0, text.length)
-    debouncedOmit(text)
+
+    if (text.length > 0) {
+      removeUselessWords(text).forEach((word, i) =>
+        omitWord(word, text.indexOf(word))
+      )
+    }
   }
 
   return (
@@ -102,15 +82,23 @@ export default function Home() {
 
       {/* {showOptions && <Nav />} */}
 
-      <div className="my-2 flex w-fit space-x-5 rounded-lg bg-layout-level0accent p-2">
-        <a onClick={reOmit}>
-          <RxReload />
-        </a>
+      {text.trim().length > 0 && (
+        <div className="mb-4 flex w-fit space-x-5 rounded-lg bg-layout-level0accent p-2">
+          {/* <button
+            onClick={omit}
+            disabled
+            className="disabled:text-content-subtle"
+          >
+            <RxReload />
+          </button> */}
 
-        <a onClick={() => setVisibility((prevState) => !prevState)}>
-          {isVisible ? <RxEyeClosed /> : <RxEyeOpen />}
-        </a>
-      </div>
+          <button onClick={omit}>Omit</button>
+
+          <button onClick={() => toggleOmit(!isVisible)}>
+            {isVisible ? <RxEyeClosed /> : <RxEyeOpen />}
+          </button>
+        </div>
+      )}
 
       <div className="space-x-2">
         <TextEditor
