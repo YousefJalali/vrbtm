@@ -23,11 +23,17 @@ export default function Home() {
   const ref = useRef(null)
 
   const omitWord = (word: string, index: number) => {
-    if (Math.random() <= difficulty) {
+    if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
       // @ts-ignore
       ref.current.getEditor().formatText(index, word.length, "mark", true)
       setOmittedWords((prevState) => [...prevState, { word, index }])
     }
+
+    // if (Math.random() <= difficulty) {
+    //   // @ts-ignore
+    //   ref.current.getEditor().formatText(index, word.length, "mark", true)
+    //   setOmittedWords((prevState) => [...prevState, { word, index }])
+    // }
   }
 
   const changeHandler = (
@@ -44,15 +50,32 @@ export default function Home() {
   }
 
   const removeUselessWords = (txt: string) => {
+    // const hyphen = /(?<=\w)-(?=\w)/
+
+    // console.log(txt.replace(hyphen, "?"))
+
+    // const removeSpecialChar = txt
+    // .replace(hyphen, " ")
+    // .replace(/[^a-zA-Z0-9 ]/g, "")
+
+    // console.log(">", txt)
+    // console.log(">", removeSpecialChar)
+    // console.log(">", txt.split(" "))
+    // console.log(">", txt.indexOf("national"), "national".length)
+
     const txtWithoutUselessWords = keyword_extractor.extract(txt, {
       language: "english",
-      remove_digits: true,
+      remove_digits: false,
       return_changed_case: false,
       remove_duplicates: false,
     })
 
+    // console.log(txtWithoutUselessWords)
+
     return txtWithoutUselessWords
   }
+
+  // console.log(omittedWords)
 
   const toggleOmit = (isVisible: boolean) => {
     setVisibility(isVisible)
@@ -70,7 +93,8 @@ export default function Home() {
     ref.current.getEditor().removeFormat(0, text.length)
 
     if (text.length > 0) {
-      removeUselessWords(text.replace(/-/g, "&#8209;")).forEach((word, i) =>
+      console.log(removeUselessWords(text))
+      removeUselessWords(text).forEach((word, i) =>
         omitWord(word, text.indexOf(word))
       )
     }
