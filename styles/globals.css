@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
+
+.ql-container {
+  @apply h-[calc(100vh-3rem-3rem)] font-sans text-base  text-content-contrast !important;
+}
+.ql-editor {
+  @apply p-0 leading-normal !important;
+}
+
+.ql-blank {
+  @apply text-content-subtle before:left-0 before:right-0 before:content-[attr(data-placeholder)] !important;
+}
+
+.ql-editor mark {
+  @apply relative cursor-pointer bg-transparent text-transparent after:absolute after:-right-0 after:-left-0 after:top-0 after:h-full after:rounded-3xl after:bg-brand-primary-500 after:content-[''] hover:text-content-contrast after:hover:opacity-10;
+}
+
+a {
+  cursor: pointer;
+}
+
 @tailwind utilities;

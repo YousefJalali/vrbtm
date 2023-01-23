@@ -2,10 +2,10 @@
 
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,json}",
     "./pages/**/*.{js,ts,jsx,tsx}",
-    "./ui/**/*.{js,ts,jsx,tsx,svg}",
-    "./public/**/*.{svg}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./libs/**/*.{js,ts,jsx,tsx,svg}",
+    "./node_modules/react-quill/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     colors: {
@@ -62,4 +62,4 @@ module.exports = {
       },
     },
   },
-};
+}
