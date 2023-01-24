@@ -1,6 +1,6 @@
 export default function Nav() {
   return (
-    <div className="mt-4 mb-4 rounded-lg bg-layout-level1 p-3">
+    <div className="mt-4 mb-4 rounded-lg bg-base-200 p-3">
       <ul className="space-y-4">
         <li>
           <div>

@@ -24,6 +24,7 @@ export default function Home() {
   const ref = useRef(null)
 
   const omitWord = (word: string, index: number) => {
+    console.log(word, index)
     if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
       if (Math.random() <= difficulty) {
         // @ts-ignore
@@ -66,6 +67,8 @@ export default function Home() {
     // console.log(">", txt.split(" "))
     // console.log(">", txt.indexOf("national"), "national".length)
 
+    // console.log(keyword_extractor.getStopwords())
+
     const txtWithoutUselessWords = keyword_extractor.extract(
       txt,
       // txt.replace(hyphen, "&#8288;"),
@@ -74,6 +77,7 @@ export default function Home() {
         remove_digits: false,
         return_changed_case: false,
         remove_duplicates: false,
+        // return_chained_words: true,
       }
     )
 
@@ -102,9 +106,10 @@ export default function Home() {
 
     if (text.length > 0) {
       console.log(removeUselessWords(text))
-      removeUselessWords(text).forEach((word, i) =>
-        omitWord(word, text.indexOf(word))
-      )
+      removeUselessWords(text).forEach((word, i) => {
+        omitWord(word, text.search(new RegExp("\\b" + word + "\\b")))
+        // omitWord(word, text.indexOf(word))
+      })
     }
   }
 
@@ -118,14 +123,17 @@ export default function Home() {
     ref.current.getEditor().formatText(0, text.length, "mark", false)
   }
 
-  const omitHandler = () => {
-    if (!isOmit) {
+  const omitHandler = (state: "omit" | "unOmit") => {
+    if (state === "omit") {
+      setOmit(true)
       omit()
-    } else {
+    }
+    if (state === "unOmit") {
+      setOmit(false)
       clearOmit()
     }
 
-    setOmit((prevState) => !prevState)
+    // setOmit((prevState) => !prevState)
   }
 
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -140,62 +148,83 @@ export default function Home() {
 
       {/* {showOptions && <Nav />} */}
 
-      {text.trim().length > 0 && (
-        <div className="mb-4 flex w-fit space-x-5">
-          {/* <button
-            onClick={omit}
-            disabled
-            className="disabled:text-content-subtle"
-          >
-            <RxReload />
-          </button> */}
+      <div className="box-border rounded-lg bg-base-200 p-2">
+        {text.trim().length > 0 && (
+          <div className="mb-2 flex h-8 w-full space-x-2 ">
+            <div className="dropdown">
+              <button className="h-full rounded-lg bg-base-300 p-2 font-sans text-sm leading-none text-base-content">
+                <span className="text-base-content">Difficulty</span>
+                <span className=" inline-block min-w-[48px]">
+                  {difficulty * 100 + "%"}
+                </span>
+              </button>
+              <div
+                tabIndex={0}
+                className="dropdown-content mt-1 h-fit rounded-lg bg-base-300 p-2 text-primary-content"
+              >
+                <input
+                  value={difficulty}
+                  onChange={difficultyHandler}
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.2"
+                  className="range range-primary range-xs"
+                />
+              </div>
+            </div>
 
-          <div className="relative ">
-            <label
-              htmlFor="omit"
-              className={`w-ful h-full cursor-pointer select-none rounded-lg px-3 py-1 ${
-                isOmit
-                  ? " bg-brand-primary-300 text-layout-level0"
-                  : "bg-layout-level1"
-              }`}
-            >
-              Omit
-            </label>
-            <input
-              id="omit"
-              type="checkbox"
-              className="absolute top-0 left-0 h-0 w-0"
-              checked={isOmit}
-              onChange={omitHandler}
-            />
+            {isOmit && (
+              <button
+                onClick={() => toggleOmit(!isVisible)}
+                className="rounded-lg bg-base-300 p-2"
+              >
+                {isVisible ? <RxEyeClosed /> : <RxEyeOpen />}
+              </button>
+            )}
           </div>
+        )}
 
-          <div>
-            <input
-              type="range"
-              value={difficulty}
-              onChange={difficultyHandler}
-              max={1}
-              step={0.2}
-            />
-          </div>
-
-          {/* <button onClick={omit}>Omit</button> */}
-
-          <button onClick={() => toggleOmit(!isVisible)}>
-            {isVisible ? <RxEyeClosed /> : <RxEyeOpen />}
-          </button>
+        <div
+          className={
+            text.trim().length > 0
+              ? `h-[calc(100vh-3rem-3rem-1rem-4rem-2.5rem)]`
+              : `h-[calc(100vh-3rem-3rem-1rem-4rem)]`
+          }
+        >
+          <TextEditor
+            readOnly={isOmit}
+            ref={ref}
+            value={htmlText}
+            onChange={changeHandler}
+            placeholder="A brief about the task..."
+            className="h-full"
+          />
         </div>
-      )}
+      </div>
 
-      <div className="space-x-2">
-        <TextEditor
-          readOnly={isOmit}
-          ref={ref}
-          value={htmlText}
-          onChange={changeHandler}
-          placeholder="A brief about the task..."
-        />
+      <div className="mt-6 h-10">
+        {!isOmit ? (
+          <button
+            onClick={() => omitHandler("omit")}
+            className=" disabled:bg-primary-300 h-full w-full rounded-lg bg-primary font-sans text-base-100"
+            disabled={text.trim().length <= 0}
+          >
+            Omit
+          </button>
+        ) : (
+          <div className="flex h-full space-x-2">
+            <button
+              onClick={() => omitHandler("unOmit")}
+              className=" h-full w-full rounded-lg bg-base-200 font-sans text-base-content "
+            >
+              cancel
+            </button>
+            <button className="h-full w-full flex-[0_0_70%] rounded-lg bg-primary font-sans text-base-100">
+              Add To Notebook
+            </button>
+          </div>
+        )}
       </div>
     </main>
   )
