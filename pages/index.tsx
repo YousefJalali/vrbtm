@@ -24,7 +24,6 @@ export default function Home() {
   const ref = useRef(null)
 
   const omitWord = (word: string, index: number) => {
-    console.log(word, index)
     if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
       if (Math.random() <= difficulty) {
         // @ts-ignore
@@ -32,12 +31,6 @@ export default function Home() {
         setOmittedWords((prevState) => [...prevState, { word, index }])
       }
     }
-
-    // if (Math.random() <= difficulty) {
-    //   // @ts-ignore
-    //   ref.current.getEditor().formatText(index, word.length, "mark", true)
-    //   setOmittedWords((prevState) => [...prevState, { word, index }])
-    // }
   }
 
   const changeHandler = (
@@ -54,39 +47,16 @@ export default function Home() {
   }
 
   const removeUselessWords = (txt: string) => {
-    // const hyphen = /(?<=\w)-(?=\w)/
-
-    // console.log(txt.replace(hyphen, "?"))
-
-    // const removeSpecialChar = txt
-    // .replace(hyphen, " ")
-    // .replace(/[^a-zA-Z0-9 ]/g, "")
-
-    // console.log(">", txt)
-    // console.log(">", removeSpecialChar)
-    // console.log(">", txt.split(" "))
-    // console.log(">", txt.indexOf("national"), "national".length)
-
-    // console.log(keyword_extractor.getStopwords())
-
-    const txtWithoutUselessWords = keyword_extractor.extract(
-      txt,
-      // txt.replace(hyphen, "&#8288;"),
-      {
-        language: "english",
-        remove_digits: false,
-        return_changed_case: false,
-        remove_duplicates: false,
-        // return_chained_words: true,
-      }
-    )
-
-    // console.log(txtWithoutUselessWords)
+    const txtWithoutUselessWords = keyword_extractor.extract(txt, {
+      language: "english",
+      remove_digits: false,
+      return_changed_case: false,
+      remove_duplicates: false,
+      // return_chained_words: true,
+    })
 
     return txtWithoutUselessWords
   }
-
-  // console.log(omittedWords)
 
   const toggleOmit = (isVisible: boolean) => {
     setVisibility(isVisible)
@@ -98,17 +68,13 @@ export default function Home() {
   }
 
   const omit = () => {
-    // console.log("here")
-    // setOmit(true)
     setOmittedWords([])
 
     clearOmit()
 
     if (text.length > 0) {
-      console.log(removeUselessWords(text))
       removeUselessWords(text).forEach((word, i) => {
         omitWord(word, text.search(new RegExp("\\b" + word + "\\b")))
-        // omitWord(word, text.indexOf(word))
       })
     }
   }
@@ -132,8 +98,6 @@ export default function Home() {
       setOmit(false)
       clearOmit()
     }
-
-    // setOmit((prevState) => !prevState)
   }
 
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
