@@ -28,8 +28,8 @@ export default function EditorToolbar() {
         <span className="ql-formats">
           <button className="ql-bold" />
           <button className="ql-italic" />
-          <button className="ql-underline" />
-          <button className="ql-strike" />
+          {/* <button className="ql-underline" />
+          <button className="ql-strike" /> */}
           {/* <button className="ql-mark" /> */}
         </span>
 

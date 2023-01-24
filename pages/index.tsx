@@ -98,7 +98,7 @@ export default function Home() {
     // setOmit(true)
     setOmittedWords([])
 
-    removeFormat()
+    clearOmit()
 
     if (text.length > 0) {
       console.log(removeUselessWords(text))
@@ -113,11 +113,16 @@ export default function Home() {
     ref.current.getEditor().removeFormat(0, text.length)
   }
 
+  const clearOmit = () => {
+    // @ts-ignore
+    ref.current.getEditor().formatText(0, text.length, "mark", false)
+  }
+
   const omitHandler = () => {
     if (!isOmit) {
       omit()
     } else {
-      removeFormat()
+      clearOmit()
     }
 
     setOmit((prevState) => !prevState)
@@ -126,7 +131,7 @@ export default function Home() {
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDifficulty(e.target.valueAsNumber)
     setOmit(false)
-    removeFormat()
+    clearOmit()
   }
 
   return (
