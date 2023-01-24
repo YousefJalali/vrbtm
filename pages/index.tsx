@@ -190,7 +190,7 @@ export default function Home() {
 
       <div className="space-x-2">
         <TextEditor
-          // readOnly={isOmit}
+          readOnly={isOmit}
           ref={ref}
           value={htmlText}
           onChange={changeHandler}
