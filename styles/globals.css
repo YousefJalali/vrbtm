@@ -13,7 +13,8 @@
 }
 
 .ql-editor mark {
-  @apply relative cursor-pointer bg-transparent text-transparent after:absolute after:-right-0 after:-left-0 after:top-0 after:h-full after:rounded-3xl after:bg-brand-primary-500 after:content-[''] hover:text-content-contrast after:hover:opacity-10;
+  @apply relative cursor-pointer rounded-3xl bg-brand-primary text-transparent  hover:bg-transparent hover:text-brand-primary;
+  /* @apply relative cursor-pointer bg-transparent text-transparent after:absolute after:-right-0 after:-left-0 after:top-0 after:h-full after:rounded-3xl after:bg-brand-primary-500 after:content-[''] hover:text-content-contrast after:hover:opacity-10; */
 }
 
 a {

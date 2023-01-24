@@ -147,7 +147,7 @@ export default function Home() {
               htmlFor="omit"
               className={`w-ful h-full cursor-pointer select-none rounded-lg px-3 py-1 ${
                 isOmit
-                  ? "border-2 border-brand-primary bg-brand-primary-300 text-layout-level0"
+                  ? " bg-brand-primary-300 text-layout-level0"
                   : "bg-layout-level1"
               }`}
             >
@@ -182,7 +182,7 @@ export default function Home() {
 
       <div className="space-x-2">
         <TextEditor
-          readOnly={isOmit}
+          // readOnly={isOmit}
           ref={ref}
           value={htmlText}
           onChange={changeHandler}
