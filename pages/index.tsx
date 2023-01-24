@@ -66,12 +66,16 @@ export default function Home() {
     // console.log(">", txt.split(" "))
     // console.log(">", txt.indexOf("national"), "national".length)
 
-    const txtWithoutUselessWords = keyword_extractor.extract(txt, {
-      language: "english",
-      remove_digits: false,
-      return_changed_case: false,
-      remove_duplicates: false,
-    })
+    const txtWithoutUselessWords = keyword_extractor.extract(
+      txt,
+      // txt.replace(hyphen, "&#8288;"),
+      {
+        language: "english",
+        remove_digits: false,
+        return_changed_case: false,
+        remove_duplicates: false,
+      }
+    )
 
     // console.log(txtWithoutUselessWords)
 
@@ -94,8 +98,7 @@ export default function Home() {
     // setOmit(true)
     setOmittedWords([])
 
-    // @ts-ignore
-    ref.current.getEditor().removeFormat(0, text.length)
+    removeFormat()
 
     if (text.length > 0) {
       console.log(removeUselessWords(text))
@@ -105,7 +108,7 @@ export default function Home() {
     }
   }
 
-  const clearOmit = () => {
+  const removeFormat = () => {
     // @ts-ignore
     ref.current.getEditor().removeFormat(0, text.length)
   }
@@ -114,7 +117,7 @@ export default function Home() {
     if (!isOmit) {
       omit()
     } else {
-      clearOmit()
+      removeFormat()
     }
 
     setOmit((prevState) => !prevState)
@@ -123,7 +126,7 @@ export default function Home() {
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDifficulty(e.target.valueAsNumber)
     setOmit(false)
-    clearOmit()
+    removeFormat()
   }
 
   return (
