@@ -15,8 +15,6 @@ const ReactQuill = dynamic(
     BoldBlot.tagName = "mark"
     RQ.Quill.register("formats/mark", BoldBlot)
 
-    console.log(RQ.Quill)
-
     function undoChange() {
       // @ts-ignore
       this.quill.history.undo()

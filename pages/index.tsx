@@ -5,7 +5,7 @@ import { DeltaStatic, Sources } from "quill"
 import { UnprivilegedEditor } from "react-quill"
 import Header from "@/components/layout/Header"
 import { RxEyeClosed, RxEyeOpen, RxReload } from "react-icons/rx"
-import useWindowSize from "@/hooks/useWindowSize"
+import Layout from "@/components/layout/Layout"
 
 export default function Home() {
   // const [showOptions, toggleOptions] = useState(false)
@@ -20,7 +20,6 @@ export default function Home() {
   // const [loading, setLoading] = useState(false)
   const [isVisible, setVisibility] = useState(true)
   const [isOmit, setOmit] = useState(false)
-  const { height } = useWindowSize()
 
   const ref = useRef(null)
 
@@ -123,12 +122,7 @@ export default function Home() {
   }
 
   return (
-    <main
-      className="min-w-screen relative mx-auto flex max-w-xl flex-col p-6 "
-      style={{ minHeight: height }}
-    >
-      <Header />
-
+    <>
       {/* {showOptions && <Nav />} */}
 
       <div className="box-border flex flex-1 flex-col rounded-lg bg-base-200 p-2">
@@ -202,6 +196,6 @@ export default function Home() {
           </button>
         </div>
       )}
-    </main>
+    </>
   )
 }
