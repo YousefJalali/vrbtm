@@ -1,27 +1,20 @@
+import { FiHome } from "react-icons/fi"
+
 export default function Nav() {
   return (
-    <div className="mt-4 mb-4 rounded-lg bg-base-200 p-3">
-      <ul className="space-y-4">
-        <li>
-          <div>
-            <div className="relative flex pt-1">
-              <label htmlFor="customRange1" className="form-label">
-                Difficulty
-              </label>
-              {/* <input
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.valueAsNumber)}
-            type="range"
-            className="form-range  h-6  w-full  appearance-none  bg-transparent  p-0  focus:shadow-none focus:outline-none focus:ring-0"
-            id="customRange1"
-          /> */}
-            </div>
-          </div>
+    <nav className="flex w-12 bg-base-200">
+      <ul className="mt-[calc(1rem+3rem)] w-full ">
+        <li className="active h-12 rounded-tl-2xl rounded-bl-2xl bg-base-100">
+          <a className=" flex h-full w-full items-center justify-center ">
+            <FiHome className="h-6 w-6 stroke-primary" />
+          </a>
         </li>
-        <li>Word length</li>
-        <li>Word length</li>
-        <li>Word length</li>
+        <li className="active h-12 ">
+          <a className=" flex h-full w-full items-center justify-center ">
+            <FiHome className="h-6 w-6 stroke-base-100" />
+          </a>
+        </li>
       </ul>
-    </div>
+    </nav>
   )
 }

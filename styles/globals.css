@@ -2,10 +2,10 @@
 @tailwind components;
 
 .ql-container {
-  @apply h-full font-sans text-base  text-base-content !important;
+  @apply flex h-full flex-1 flex-col font-sans text-base  text-base-content !important;
 }
 .ql-editor {
-  @apply p-0 leading-normal !important;
+  @apply flex-1  p-0 leading-normal !important;
 }
 
 .ql-blank {
@@ -13,7 +13,7 @@
 }
 
 .ql-editor mark {
-  @apply relative cursor-pointer whitespace-nowrap rounded-3xl bg-primary text-transparent  hover:bg-transparent hover:text-primary;
+  @apply relative cursor-pointer whitespace-nowrap rounded-3xl bg-primary text-transparent  hover:text-primary active:bg-transparent;
   /* @apply relative cursor-pointer bg-transparent text-transparent after:absolute after:-right-0 after:-left-0 after:top-0 after:h-full after:rounded-3xl after:bg-primary-500 after:content-[''] hover:text-base-content after:hover:opacity-10; */
 }
 

@@ -1,3 +1,4 @@
+import { FiMenu } from "react-icons/fi"
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2"
 
 export default function Header() {
@@ -8,7 +9,7 @@ export default function Header() {
       </h1>
       <a>
         {/* <a onClick={() => toggleOptions(!showOptions)}> */}
-        {/* <HiOutlineAdjustmentsHorizontal className="text-2xl" /> */}
+        <FiMenu className="text-2xl" />
       </a>
     </header>
   )
