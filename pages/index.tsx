@@ -3,9 +3,7 @@ import keyword_extractor from "keyword-extractor"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
 import { DeltaStatic, Sources } from "quill"
 import { UnprivilegedEditor } from "react-quill"
-import Header from "@/components/layout/Header"
 import { RxEyeClosed, RxEyeOpen, RxReload } from "react-icons/rx"
-import Layout from "@/components/layout/Layout"
 
 export default function Home() {
   // const [showOptions, toggleOptions] = useState(false)
@@ -30,6 +28,10 @@ export default function Home() {
         // console.log(word)
         // @ts-ignore
         ref.current.getEditor().formatText(index, word.length, "mark", true)
+        // @ts-ignore
+        ref.current
+          .getEditor()
+          .formatText(index, word.length, { color: "#4E63F2" }, true)
         setOmittedWords((prevState) => [...prevState, { word, index }])
       }
     }
@@ -90,6 +92,10 @@ export default function Home() {
   const clearOmit = () => {
     // @ts-ignore
     ref.current.getEditor().formatText(0, text.length, "mark", false)
+    // @ts-ignore
+    ref.current
+      .getEditor()
+      .formatText(0, text.length, { color: "inherit" }, true)
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
@@ -179,7 +185,6 @@ export default function Home() {
             onChange={changeHandler}
             placeholder="A brief about the task..."
             className={`flex flex-1 flex-col  ${isOmit ? "select-none" : ""}`}
-            onFocus={() => console.log("focused")}
           />
         </div>
       </div>
