@@ -18,7 +18,7 @@ export default function Home() {
     { word: string; index: number }[]
   >([])
   // const [loading, setLoading] = useState(false)
-  const [isVisible, setVisibility] = useState(true)
+  const [isEyeOpen, setEye] = useState(true)
   const [isOmit, setOmit] = useState(false)
 
   const ref = useRef(null)
@@ -62,7 +62,7 @@ export default function Home() {
   }
 
   const toggleOmit = (isVisible: boolean) => {
-    setVisibility(isVisible)
+    setEye(isVisible)
 
     omittedWords.forEach(({ word, index }) => {
       // @ts-ignore
@@ -93,6 +93,8 @@ export default function Home() {
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
+    setEye(true)
+
     if (state === "omit") {
       setOmit(true)
       omit()
@@ -147,10 +149,10 @@ export default function Home() {
 
               {isOmit && (
                 <button
-                  onClick={() => toggleOmit(!isVisible)}
+                  onClick={() => toggleOmit(!isEyeOpen)}
                   className="rounded-lg bg-base-300 p-2"
                 >
-                  {isVisible ? <RxEyeClosed /> : <RxEyeOpen />}
+                  {isEyeOpen ? <RxEyeClosed /> : <RxEyeOpen />}
                 </button>
               )}
             </div>
