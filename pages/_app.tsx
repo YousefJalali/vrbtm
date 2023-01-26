@@ -7,7 +7,7 @@ const font = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" })
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={` ${font.variable}`}>
+    <div className={` ${font.variable} font-sans`}>
       <Layout>
         <Component {...pageProps} />
       </Layout>

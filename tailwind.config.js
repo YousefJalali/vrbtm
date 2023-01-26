@@ -7,13 +7,13 @@ module.exports = {
     "./libs/**/*.{js,ts,jsx,tsx,svg}",
     "./node_modules/react-quill/**/*.{js,ts,jsx,tsx}",
   ],
-  // theme: {
-  //   extend: {
-  //     fontFamily: {
-  //       sans: ["var(--font-montserrat)"],
-  //     },
-  //   },
-  // },
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-montserrat)"],
+      },
+    },
+  },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
     themes: [
