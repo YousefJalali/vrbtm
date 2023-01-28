@@ -1,5 +1,5 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import { ReactElement } from "react";
+import Document, { Html, Head, Main, NextScript } from "next/document"
+import { ReactElement } from "react"
 
 export default class MyDocument extends Document {
   render(): ReactElement {
@@ -11,11 +11,11 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <div id="modal" />
+          {/* <div id="modal" />
           <div id="prompt" />
-          <div id="notification" />
+          <div id="notification" /> */}
         </body>
       </Html>
-    );
+    )
   }
 }
