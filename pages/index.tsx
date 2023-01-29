@@ -4,7 +4,6 @@ import {
   ReactNode,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react"
@@ -12,7 +11,7 @@ import keyword_extractor from "keyword-extractor"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
 import { DeltaStatic, Sources } from "quill"
 import { Range, UnprivilegedEditor } from "react-quill"
-import { RxEyeClosed, RxEyeOpen, RxReload } from "react-icons/rx"
+import { RxEyeClosed, RxEyeOpen } from "react-icons/rx"
 import MenuContext from "@/components/MenuContext"
 
 const SelectNotebook = dynamic(
@@ -23,14 +22,11 @@ const SelectNotebook = dynamic(
 )
 
 export default function Home() {
-  // const [showOptions, toggleOptions] = useState(false)
-  // const [wordLength, setWordLength] = useState(2)
   const [difficulty, setDifficulty] = useState(0.8)
-  // const [exclude, setExclude] = useState("");
   const [text, setText] = useState("")
   const [htmlText, setHtmlText] = useState("")
   const [omittedWords, setOmittedWords] = useState<
-    { word: string; index: number }[]
+    { word: string; index: number; length: number }[]
   >([])
   // const [loading, setLoading] = useState(false)
   const [isEyeOpen, setEye] = useState(true)
@@ -39,25 +35,46 @@ export default function Home() {
     text: string
     index: number
     length: number
+    isOmitted: boolean
     pos: { x: number; y: number }
   } | null>(null)
 
   const ref = useRef(null)
 
+  const isWordOmitted = (index: number, length: number) =>
+    omittedWords.find(
+      (word) => word.index === index && word.length === length
+    ) !== undefined
+
   const omitWord = (word: string, index: number) => {
-    // console.log(word)
     if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
       if (Math.random() <= difficulty) {
-        // console.log(word)
         // @ts-ignore
         ref.current.getEditor().formatText(index, word.length, "mark", true)
+
         // @ts-ignore
         ref.current
           .getEditor()
           .formatText(index, word.length, { color: "#4E63F2" }, true)
-        setOmittedWords((prevState) => [...prevState, { word, index }])
+        setOmittedWords((prevState) => [
+          ...prevState,
+          { word, index, length: word.length },
+        ])
       }
     }
+  }
+
+  const UnOmitWord = (index: number, length: number) => {
+    // @ts-ignore
+    ref.current.getEditor().formatText(index, length, "mark", false)
+    // @ts-ignore
+    ref.current
+      .getEditor()
+      .formatText(index, length, { color: "inherit" }, true)
+
+    setOmittedWords((prevState) =>
+      prevState.filter((word) => word.index !== index)
+    )
   }
 
   const changeHandler = (
@@ -123,10 +140,14 @@ export default function Home() {
       .formatText(0, text.length, { background: "transparent" }, true)
   }
 
-  const omitHandler = (state: "omit" | "unOmit") => {
+  const reset = () => {
+    setOmit(false)
+    clearOmit()
     setSelectedText(null)
     clearSelection()
+  }
 
+  const omitHandler = (state: "omit" | "unOmit") => {
     setEye(true)
 
     if (state === "omit") {
@@ -134,8 +155,7 @@ export default function Home() {
       omit()
     }
     if (state === "unOmit") {
-      setOmit(false)
-      clearOmit()
+      reset()
     }
   }
 
@@ -153,16 +173,18 @@ export default function Home() {
 
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDifficulty(e.target.valueAsNumber)
-    setSelectedText(null)
-    setOmit(false)
-    clearOmit()
-    clearSelection()
+
+    reset()
   }
 
   const EditorWrapper = useCallback(
     ({ children }: { children: ReactNode }) =>
       isOmit ? (
-        <MenuContext editorRef={ref} selectedText={selectedText}>
+        <MenuContext
+          selectedText={selectedText}
+          omit={omitWord}
+          unOmit={UnOmitWord}
+        >
           {children}
         </MenuContext>
       ) : (
@@ -186,6 +208,7 @@ export default function Home() {
             .slice(selection.index, selection.index + selection.length),
           index: selection.index,
           length: selection.length,
+          isOmitted: isWordOmitted(selection.index, selection.length),
           pos: {
             x: editor.getBounds(selection.index, selection.length).left,
             y:

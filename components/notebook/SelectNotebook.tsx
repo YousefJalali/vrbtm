@@ -2,7 +2,7 @@ import Modal from "@/libs/ui/modal/Modal"
 import dynamic from "next/dynamic"
 import { SlPlus } from "react-icons/sl"
 import { ImBook } from "react-icons/im"
-import { useId, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import sortBy from "lodash.sortby"
 import { v4 as uuidv4 } from "uuid"
 
