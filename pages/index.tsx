@@ -150,6 +150,7 @@ export default function Home() {
 
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDifficulty(e.target.valueAsNumber)
+    setSelectedText(null)
     setOmit(false)
     clearOmit()
     clearSelection()
