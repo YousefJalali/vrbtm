@@ -3,31 +3,28 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { ReactNode } from "react"
 import { FiMenu } from "react-icons/fi"
+import Header from "./Header"
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { height } = useWindowSize()
   const router = useRouter()
 
   return (
-    <div className="drawer drawer-mobile drawer-end bg-base-100 ">
+    <div className="drawer-mobile drawer drawer-end bg-base-100 ">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex w-full flex-col items-center justify-center">
         <main
           className="min-w-screen relative mx-auto flex w-full flex-col p-6"
           style={{ minHeight: height }}
         >
-          <header className="mb-6 flex h-6 w-full items-center justify-between">
-            <h1 className="font-sans text-2xl font-bold leading-none text-primary">
-              VRBTM
-            </h1>
-
+          <Header>
             <label
               htmlFor="my-drawer-2"
               className="btn-primary drawer-button btn h-8 min-h-fit w-8 p-0 lg:hidden"
             >
               <FiMenu />
             </label>
-          </header>
+          </Header>
           {children}
         </main>
       </div>
@@ -37,15 +34,23 @@ export default function Layout({ children }: { children: ReactNode }) {
           {/* <!-- Sidebar content here --> */}
           <li>
             <Link href="/" className={router.pathname === "/" ? "active" : ""}>
-              Home
+              Vrbtm
             </Link>
           </li>
           <li>
             <Link
-              href="/notebook"
-              className={router.pathname === "/notebook" ? "active" : ""}
+              href="/notebooks"
+              className={router.pathname === "/notebooks" ? "active" : ""}
             >
               Notebooks
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/flashcards"
+              className={router.pathname === "/flashcards" ? "active" : ""}
+            >
+              Flashcards
             </Link>
           </li>
         </ul>

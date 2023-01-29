@@ -1,10 +1,20 @@
 import dynamic from "next/dynamic"
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import {
+  ChangeEvent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import keyword_extractor from "keyword-extractor"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
 import { DeltaStatic, Sources } from "quill"
-import { UnprivilegedEditor } from "react-quill"
+import { Range, UnprivilegedEditor } from "react-quill"
 import { RxEyeClosed, RxEyeOpen, RxReload } from "react-icons/rx"
+import MenuContextHook from "@/components/MenuContext"
+import MenuContext from "@/components/MenuContext"
 
 const SelectNotebook = dynamic(
   () => import("@/components/notebook/SelectNotebook"),
@@ -26,6 +36,12 @@ export default function Home() {
   // const [loading, setLoading] = useState(false)
   const [isEyeOpen, setEye] = useState(true)
   const [isOmit, setOmit] = useState(false)
+  const [selectedText, setSelectedText] = useState<{
+    text: string
+    index: number
+    length: number
+    pos: { x: number; y: number }
+  } | null>(null)
 
   const ref = useRef(null)
 
@@ -137,6 +153,70 @@ export default function Home() {
     clearOmit()
   }
 
+  const EditorWrapper = useCallback(
+    ({ children }: { children: ReactNode }) =>
+      isOmit ? (
+        <MenuContext editorRef={ref} selectedText={selectedText}>
+          {children}
+        </MenuContext>
+      ) : (
+        <div className="flex flex-1 flex-col">{children}</div>
+      ),
+    [isOmit, selectedText]
+  )
+
+  const changeSelectionHandler = (
+    selection: Range,
+    source: Sources,
+    editor: UnprivilegedEditor
+  ) => {
+    if (isOmit && selection) {
+      if (selection.length > 0) {
+        // Clear all selection format before
+        // @ts-ignore
+        ref.current
+          .getEditor()
+          .formatText(0, text.length, { background: "transparent" }, true)
+
+        setSelectedText({
+          text: editor
+            .getText()
+            .slice(selection.index, selection.index + selection.length),
+          index: selection.index,
+          length: selection.length,
+          pos: {
+            x: editor.getBounds(selection.index, selection.length).left,
+            y:
+              editor.getBounds(selection.index, selection.length).top +
+              editor.getBounds(selection.index, selection.length).height,
+          },
+        })
+
+        // @ts-ignore
+        ref.current
+          .getEditor()
+          .formatText(
+            selection.index,
+            selection.length,
+            { background: "yellow" },
+            true
+          )
+
+        // @ts-ignore
+        // ref.current.getEditor().setSelection(range.index, range.length)
+      } else {
+        setSelectedText(() => {
+          // @ts-ignore
+          ref.current
+            .getEditor()
+            .formatText(0, text.length, { background: "transparent" }, true)
+
+          return null
+        })
+      }
+    }
+  }
+
   return (
     <>
       {/* {showOptions && <Nav />} */}
@@ -185,16 +265,18 @@ export default function Home() {
           </div>
         )}
 
-        <div className="flex flex-1 flex-col">
+        <EditorWrapper>
           <TextEditor
             readOnly={isOmit}
             ref={ref}
             value={htmlText}
             onChange={changeHandler}
             placeholder="A brief about the task..."
-            className={`flex flex-1 flex-col  ${isOmit ? "select-none" : ""}`}
+            className="flex flex-1 flex-col"
+            onChangeSelection={changeSelectionHandler}
+            // className={`flex flex-1 flex-col  ${isOmit ? "select-none" : ""}`}
           />
-        </div>
+        </EditorWrapper>
       </div>
 
       {isOmit && (
