@@ -124,6 +124,8 @@ export default function Home() {
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
+    setSelectedText(null)
+
     setEye(true)
 
     if (state === "omit") {
