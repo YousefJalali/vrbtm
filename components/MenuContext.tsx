@@ -1,7 +1,7 @@
 import useContextMenu from "@/libs/hooks/useContextMenu"
 import useOnClickOutside from "@/libs/hooks/useOnClickOutside"
 import dynamic from "next/dynamic"
-import { ReactNode, Ref, TouchEvent, useEffect, useRef } from "react"
+import { ReactNode, Ref, useRef } from "react"
 
 const NewFlashcard = dynamic(
   () => import("@/components/flashcard/NewFlashcard"),

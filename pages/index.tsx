@@ -13,7 +13,6 @@ import { TextEditor } from "@/libs/ui/rich-text-editor"
 import { DeltaStatic, Sources } from "quill"
 import { Range, UnprivilegedEditor } from "react-quill"
 import { RxEyeClosed, RxEyeOpen, RxReload } from "react-icons/rx"
-import MenuContextHook from "@/components/MenuContext"
 import MenuContext from "@/components/MenuContext"
 
 const SelectNotebook = dynamic(
@@ -108,11 +107,6 @@ export default function Home() {
     }
   }
 
-  const removeFormat = () => {
-    // @ts-ignore
-    ref.current.getEditor().removeFormat(0, text.length)
-  }
-
   const clearOmit = () => {
     // @ts-ignore
     ref.current.getEditor().formatText(0, text.length, "mark", false)
@@ -120,6 +114,13 @@ export default function Home() {
     ref.current
       .getEditor()
       .formatText(0, text.length, { color: "inherit" }, true)
+  }
+
+  const clearSelection = () => {
+    // @ts-ignore
+    ref.current
+      .getEditor()
+      .formatText(0, text.length, { background: "transparent" }, true)
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
@@ -151,6 +152,7 @@ export default function Home() {
     setDifficulty(e.target.valueAsNumber)
     setOmit(false)
     clearOmit()
+    clearSelection()
   }
 
   const EditorWrapper = useCallback(
@@ -172,11 +174,7 @@ export default function Home() {
   ) => {
     if (isOmit && selection) {
       if (selection.length > 0) {
-        // Clear all selection format before
-        // @ts-ignore
-        ref.current
-          .getEditor()
-          .formatText(0, text.length, { background: "transparent" }, true)
+        clearSelection()
 
         setSelectedText({
           text: editor
