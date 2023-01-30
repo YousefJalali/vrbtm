@@ -62,6 +62,8 @@ export default function Home() {
         ])
       }
     }
+
+    clearSelection()
   }
 
   const UnOmitWord = (index: number, length: number) => {
@@ -75,6 +77,8 @@ export default function Home() {
     setOmittedWords((prevState) =>
       prevState.filter((word) => word.index !== index)
     )
+
+    clearSelection()
   }
 
   const changeHandler = (
@@ -133,18 +137,23 @@ export default function Home() {
       .formatText(0, text.length, { color: "inherit" }, true)
   }
 
-  const clearSelection = () => {
+  const clearSelectionFormat = () => {
     // @ts-ignore
     ref.current
       .getEditor()
       .formatText(0, text.length, { background: "transparent" }, true)
   }
 
+  const clearSelection = () => {
+    setSelectedText(null)
+    clearSelectionFormat()
+  }
+
   const reset = () => {
     setOmit(false)
     clearOmit()
     setSelectedText(null)
-    clearSelection()
+    clearSelectionFormat()
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
@@ -200,7 +209,7 @@ export default function Home() {
   ) => {
     if (isOmit && selection) {
       if (selection.length > 0) {
-        clearSelection()
+        clearSelectionFormat()
 
         setSelectedText({
           text: editor
