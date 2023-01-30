@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic"
-import { ReactNode, Ref } from "react"
+import { ReactNode } from "react"
 
 const NewFlashcard = dynamic(
   () => import("@/components/flashcard/NewFlashcard"),
@@ -22,7 +22,7 @@ const MenuContext = ({
     isOmitted: boolean
     pos: { x: number; y: number }
   } | null
-  omit: (word: string, index: number) => void
+  omit: (word: string, index: number, length: number) => void
   unOmit: (index: number, length: number) => void
 }) => {
   return (
@@ -48,7 +48,12 @@ const MenuContext = ({
                 onClick={
                   selectedText.isOmitted
                     ? () => unOmit(selectedText.index, selectedText.length)
-                    : () => omit(selectedText.text, selectedText.index)
+                    : () =>
+                        omit(
+                          selectedText.text,
+                          selectedText.index,
+                          selectedText.length
+                        )
                 }
               >
                 {selectedText.isOmitted ? "UnOmit" : "Omit"}

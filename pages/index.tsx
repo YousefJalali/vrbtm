@@ -8,10 +8,10 @@ import {
   useState,
 } from "react"
 import keyword_extractor from "keyword-extractor"
-import { TextEditor } from "@/libs/ui/rich-text-editor"
 import { DeltaStatic, Sources } from "quill"
 import { Range, UnprivilegedEditor } from "react-quill"
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx"
+import { TextEditor } from "@/libs/ui/rich-text-editor"
 import MenuContext from "@/components/MenuContext"
 
 const SelectNotebook = dynamic(
@@ -46,21 +46,28 @@ export default function Home() {
       (word) => word.index === index && word.length === length
     ) !== undefined
 
-  const omitWord = (word: string, index: number) => {
+  const randomOmit = (word: string, index: number) => {
     if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
       if (Math.random() <= difficulty) {
-        // @ts-ignore
-        ref.current.getEditor().formatText(index, word.length, "mark", true)
-
-        // @ts-ignore
-        ref.current
-          .getEditor()
-          .formatText(index, word.length, { color: "#4E63F2" }, true)
-        setOmittedWords((prevState) => [
-          ...prevState,
-          { word, index, length: word.length },
-        ])
+        omitWord(word, index, word.length)
       }
+    }
+  }
+
+  const omitWord = (word: string, index: number, length: number) => {
+    // @ts-ignore
+    ref.current.getEditor().formatText(index, word.length, "mark", true)
+
+    // @ts-ignore
+    ref.current
+      .getEditor()
+      .formatText(index, word.length, { color: "#4E63F2" }, true)
+
+    if (!isWordOmitted(index, length)) {
+      setOmittedWords((prevState) => [
+        ...prevState,
+        { word, index, length: word.length },
+      ])
     }
 
     clearSelection()
@@ -90,6 +97,8 @@ export default function Home() {
     // console.log(ref.current.getEditor().formatText(0, 5, "bold", true))
     // console.log({ delta }, editor.getLength())
 
+    console.log(delta)
+
     setText(editor.getText())
     setHtmlText(value)
   }
@@ -110,21 +119,23 @@ export default function Home() {
   const toggleOmit = (isVisible: boolean) => {
     setEye(isVisible)
 
-    omittedWords.forEach(({ word, index }) => {
+    omittedWords.forEach(({ index, length }) => {
       // @ts-ignore
-      ref.current.getEditor().formatText(index, word.length, "mark", isVisible)
+      ref.current.getEditor().formatText(index, length, "mark", isVisible)
     })
   }
 
   const omit = () => {
-    setOmittedWords([])
-
-    clearOmit()
-
     if (text.length > 0) {
-      removeUselessWords(text).forEach((word, i) => {
-        omitWord(word, text.search(new RegExp("\\b" + word + "\\b")))
-      })
+      if (omittedWords.length > 0) {
+        omittedWords.forEach((omittedWord) => {
+          omitWord(omittedWord.word, omittedWord.index, omittedWord.length)
+        })
+      } else {
+        removeUselessWords(text).forEach((word) => {
+          randomOmit(word, text.search(new RegExp("\\b" + word + "\\b")))
+        })
+      }
     }
   }
 
