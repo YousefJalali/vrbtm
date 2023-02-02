@@ -13,9 +13,13 @@
 }
 
 .ql-editor mark {
-  @apply relative cursor-pointer whitespace-nowrap rounded-3xl bg-primary text-transparent  hover:text-primary active:bg-transparent;
+  @apply relative cursor-pointer whitespace-nowrap rounded-3xl bg-primary text-transparent active:bg-transparent active:text-primary;
   /* @apply relative cursor-pointer bg-transparent text-transparent after:absolute after:-right-0 after:-left-0 after:top-0 after:h-full after:rounded-3xl after:bg-primary-500 after:content-[''] hover:text-base-content after:hover:opacity-10; */
 }
+
+/* mark {
+  all: unset;
+} */
 
 a {
   cursor: pointer;

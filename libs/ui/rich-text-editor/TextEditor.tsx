@@ -10,10 +10,21 @@ const ReactQuill = dynamic(
     const { default: RQ } = await import("react-quill")
 
     let Inline = RQ.Quill.import("blots/inline")
-    class BoldBlot extends Inline {}
-    BoldBlot.blotName = "mark"
-    BoldBlot.tagName = "mark"
-    RQ.Quill.register("formats/mark", BoldBlot)
+    class MarkBlot extends Inline {
+      // static create(value) {
+      //   // console.log(value)
+      //   let node = super.create()
+      //   // node.style.backgroundColor = value
+      //   node.setAttribute("style", `background-color: ${value}`)
+      //   return node
+      // }
+      // static formats(node) {
+      //   return node.getAttribute("style")
+      // }
+    }
+    MarkBlot.blotName = "mark"
+    MarkBlot.tagName = "mark"
+    RQ.Quill.register("formats/mark", MarkBlot)
 
     function undoChange() {
       // @ts-ignore

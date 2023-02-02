@@ -8,7 +8,7 @@ import {
   useState,
 } from "react"
 import keyword_extractor from "keyword-extractor"
-import { DeltaStatic, Sources } from "quill"
+import { Delta, DeltaStatic, Sources } from "quill"
 import { Range, UnprivilegedEditor } from "react-quill"
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
@@ -25,11 +25,11 @@ export default function Home() {
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
   const [htmlText, setHtmlText] = useState("")
-  const [omittedWords, setOmittedWords] = useState<
-    { word: string; index: number; length: number }[]
-  >([])
+  // const [omittedWords, setOmittedWords] = useState<
+  //   { word: string; index: number; length: number }[]
+  // >([])
   // const [loading, setLoading] = useState(false)
-  const [isEyeOpen, setEye] = useState(true)
+  const [isEyeOpen, setEye] = useState(false)
   const [isOmit, setOmit] = useState(false)
   const [selectedText, setSelectedText] = useState<{
     text: string
@@ -42,51 +42,49 @@ export default function Home() {
   const ref = useRef(null)
 
   const isWordOmitted = (index: number, length: number) =>
-    omittedWords.find(
-      (word) => word.index === index && word.length === length
-    ) !== undefined
+    // @ts-ignore
+    ref.current.getEditor().getFormat(index, length).mark
 
   const randomOmit = (word: string, index: number) => {
     if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
       if (Math.random() <= difficulty) {
-        omitWord(word, index, word.length)
+        omitWord(word, index, word.length, true)
       }
     }
   }
 
-  const omitWord = (word: string, index: number, length: number) => {
+  const omitWord = (
+    word: string,
+    index: number,
+    length: number,
+    mark: boolean
+  ) => {
     // @ts-ignore
-    ref.current.getEditor().formatText(index, word.length, "mark", true)
-
-    // @ts-ignore
-    ref.current
-      .getEditor()
-      .formatText(index, word.length, { color: "#4E63F2" }, true)
-
-    if (!isWordOmitted(index, length)) {
-      setOmittedWords((prevState) => [
-        ...prevState,
-        { word, index, length: word.length },
-      ])
-    }
+    ref.current.getEditor().formatText(index, word.length, "mark", mark)
 
     clearSelection()
   }
 
-  const UnOmitWord = (index: number, length: number) => {
-    // @ts-ignore
-    ref.current.getEditor().formatText(index, length, "mark", false)
-    // @ts-ignore
-    ref.current
-      .getEditor()
-      .formatText(index, length, { color: "inherit" }, true)
+  // const getOmittedWords = () => {
+  //   let words: { word: string; index: number; length: number }[] = []
 
-    setOmittedWords((prevState) =>
-      prevState.filter((word) => word.index !== index)
-    )
+  //   const textWithMarks = htmlText.match(/<mark[^>]*>(.*?)<\/mark>/g)
 
-    clearSelection()
-  }
+  //   if (!textWithMarks) return
+
+  //   textWithMarks.map((val, i) => {
+  //     const omit = {
+  //       word: val.match(/>(.*?)</g)?.[0].split(/<|>/)[1] || "",
+  //       index: Number(val.match(/"(.*?)"/g)?.[0].replace(/"/g, "")) || 0,
+  //       length: 0,
+  //     }
+  //     omit.length = omit.word.length
+
+  //     words.push(omit)
+  //   })
+
+  //   setOmittedWords(words)
+  // }
 
   const changeHandler = (
     value: string,
@@ -97,14 +95,11 @@ export default function Home() {
     // console.log(ref.current.getEditor().formatText(0, 5, "bold", true))
     // console.log({ delta }, editor.getLength())
 
-    console.log(delta)
-
     setText(editor.getText())
     setHtmlText(value)
   }
 
   const removeUselessWords = (txt: string) => {
-    // console.log(keyword_extractor.getStopwords())
     const txtWithoutUselessWords = keyword_extractor.extract(txt, {
       language: "english",
       remove_duplicates: true,
@@ -116,22 +111,9 @@ export default function Home() {
     return txtWithoutUselessWords
   }
 
-  const toggleOmit = (isVisible: boolean) => {
-    setEye(isVisible)
-
-    omittedWords.forEach(({ index, length }) => {
-      // @ts-ignore
-      ref.current.getEditor().formatText(index, length, "mark", isVisible)
-    })
-  }
-
-  const omit = () => {
+  const omitText = () => {
     if (text.length > 0) {
-      if (omittedWords.length > 0) {
-        omittedWords.forEach((omittedWord) => {
-          omitWord(omittedWord.word, omittedWord.index, omittedWord.length)
-        })
-      } else {
+      if (!htmlText.includes("<mark>")) {
         removeUselessWords(text).forEach((word) => {
           randomOmit(word, text.search(new RegExp("\\b" + word + "\\b")))
         })
@@ -140,12 +122,10 @@ export default function Home() {
   }
 
   const clearOmit = () => {
+    setOmit(false)
+
     // @ts-ignore
     ref.current.getEditor().formatText(0, text.length, "mark", false)
-    // @ts-ignore
-    ref.current
-      .getEditor()
-      .formatText(0, text.length, { color: "inherit" }, true)
   }
 
   const clearSelectionFormat = () => {
@@ -161,21 +141,19 @@ export default function Home() {
   }
 
   const reset = () => {
-    setOmit(false)
+    setEye(false)
     clearOmit()
-    setSelectedText(null)
-    clearSelectionFormat()
+    clearSelection()
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
-    setEye(true)
-
     if (state === "omit") {
       setOmit(true)
-      omit()
+      omitText()
     }
     if (state === "unOmit") {
-      reset()
+      setOmit(false)
+      setEye(false)
     }
   }
 
@@ -196,22 +174,6 @@ export default function Home() {
 
     reset()
   }
-
-  const EditorWrapper = useCallback(
-    ({ children }: { children: ReactNode }) =>
-      isOmit ? (
-        <MenuContext
-          selectedText={selectedText}
-          omit={omitWord}
-          unOmit={UnOmitWord}
-        >
-          {children}
-        </MenuContext>
-      ) : (
-        <div className="flex flex-1 flex-col">{children}</div>
-      ),
-    [isOmit, selectedText]
-  )
 
   const changeSelectionHandler = (
     selection: Range,
@@ -246,9 +208,6 @@ export default function Home() {
             { background: "yellow" },
             true
           )
-
-        // @ts-ignore
-        // ref.current.getEditor().setSelection(range.index, range.length)
       } else {
         setSelectedText(() => {
           // @ts-ignore
@@ -261,6 +220,18 @@ export default function Home() {
       }
     }
   }
+
+  const EditorWrapper = useCallback(
+    ({ children }: { children: ReactNode }) =>
+      isOmit ? (
+        <MenuContext selectedText={selectedText} omitWord={omitWord}>
+          {children}
+        </MenuContext>
+      ) : (
+        <div className="flex flex-1 flex-col">{children}</div>
+      ),
+    [isOmit, selectedText]
+  )
 
   return (
     <>
@@ -288,10 +259,10 @@ export default function Home() {
 
               {isOmit && (
                 <button
-                  onClick={() => toggleOmit(!isEyeOpen)}
+                  onClick={() => setEye((prevState) => !prevState)}
                   className="rounded-lg bg-base-300 p-2"
                 >
-                  {isEyeOpen ? <RxEyeClosed /> : <RxEyeOpen />}
+                  {isEyeOpen ? <RxEyeOpen /> : <RxEyeClosed />}
                 </button>
               )}
             </div>
@@ -317,7 +288,13 @@ export default function Home() {
             value={htmlText}
             onChange={changeHandler}
             placeholder="A brief about the task..."
-            className="flex flex-1 flex-col"
+            className={`flex flex-1 flex-col 
+            ${
+              (!isEyeOpen && isOmit && "[&_mark]:bg-primary") ||
+              "[&_mark]:bg-transparent [&_mark]:text-inherit"
+            }
+            ${isEyeOpen && "[&_mark]:text-primary"}
+            `}
             onChangeSelection={changeSelectionHandler}
             // className={`flex flex-1 flex-col  ${isOmit ? "select-none" : ""}`}
           />

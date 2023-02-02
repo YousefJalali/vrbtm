@@ -11,8 +11,7 @@ const NewFlashcard = dynamic(
 const MenuContext = ({
   children,
   selectedText,
-  omit,
-  unOmit,
+  omitWord,
 }: {
   children: ReactNode
   selectedText: {
@@ -22,8 +21,7 @@ const MenuContext = ({
     isOmitted: boolean
     pos: { x: number; y: number }
   } | null
-  omit: (word: string, index: number, length: number) => void
-  unOmit: (index: number, length: number) => void
+  omitWord: (word: string, index: number, length: number, mark: boolean) => void
 }) => {
   return (
     <div className="relative">
@@ -45,15 +43,13 @@ const MenuContext = ({
           <ul className="menu rounded-box divide-y divide-base-200 bg-base-100">
             <li>
               <a
-                onClick={
-                  selectedText.isOmitted
-                    ? () => unOmit(selectedText.index, selectedText.length)
-                    : () =>
-                        omit(
-                          selectedText.text,
-                          selectedText.index,
-                          selectedText.length
-                        )
+                onClick={() =>
+                  omitWord(
+                    selectedText.text,
+                    selectedText.index,
+                    selectedText.length,
+                    !selectedText.isOmitted
+                  )
                 }
               >
                 {selectedText.isOmitted ? "UnOmit" : "Omit"}
