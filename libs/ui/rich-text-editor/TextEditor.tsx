@@ -11,15 +11,16 @@ const ReactQuill = dynamic(
 
     let Inline = RQ.Quill.import("blots/inline")
     class MarkBlot extends Inline {
-      // static create(value) {
-      //   // console.log(value)
-      //   let node = super.create()
-      //   // node.style.backgroundColor = value
-      //   node.setAttribute("style", `background-color: ${value}`)
-      //   return node
-      // }
+      static create() {
+        // console.log(value)
+        let node = super.create()
+        node.setAttribute("contenteditable", false)
+        // node.style.backgroundColor = value
+        // node.setAttribute("style", `background-color: ${value}`)
+        return node
+      }
       // static formats(node) {
-      //   return node.getAttribute("style")
+      //   return node.getAttribute("contenteditable")
       // }
     }
     MarkBlot.blotName = "mark"

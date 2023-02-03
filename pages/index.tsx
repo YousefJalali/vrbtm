@@ -31,6 +31,7 @@ export default function Home() {
   // const [loading, setLoading] = useState(false)
   const [isEyeOpen, setEye] = useState(false)
   const [isOmit, setOmit] = useState(false)
+  const [firstOmit, setFirstOmit] = useState(true)
   const [selectedText, setSelectedText] = useState<{
     text: string
     index: number
@@ -40,6 +41,12 @@ export default function Home() {
   } | null>(null)
 
   const ref = useRef(null)
+
+  useEffect(() => {
+    if (htmlText.includes("</mark>")) {
+      setFirstOmit(false)
+    }
+  }, [htmlText])
 
   const isWordOmitted = (index: number, length: number) =>
     // @ts-ignore
@@ -95,6 +102,8 @@ export default function Home() {
     // console.log(ref.current.getEditor().formatText(0, 5, "bold", true))
     // console.log({ delta }, editor.getLength())
 
+    console.log(value)
+
     setText(editor.getText())
     setHtmlText(value)
   }
@@ -113,7 +122,7 @@ export default function Home() {
 
   const omitText = () => {
     if (text.length > 0) {
-      if (!htmlText.includes("<mark>")) {
+      if (!htmlText.includes("</mark>")) {
         removeUselessWords(text).forEach((word) => {
           randomOmit(word, text.search(new RegExp("\\b" + word + "\\b")))
         })
@@ -141,6 +150,7 @@ export default function Home() {
   }
 
   const reset = () => {
+    setFirstOmit(true)
     setEye(false)
     clearOmit()
     clearSelection()
@@ -240,34 +250,45 @@ export default function Home() {
       <div className="box-border flex flex-1 flex-col rounded-lg bg-base-200 p-2">
         {text.trim().length > 0 && (
           <div className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2">
-            <div className="flex space-x-2">
-              <div className="flex h-full space-x-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content">
-                <span className="leading-none text-base-content">
-                  Difficulty
-                </span>
+            {isOmit ? (
+              <button
+                onClick={() => setEye((prevState) => !prevState)}
+                className="rounded-lg bg-base-300 p-2"
+              >
+                {isEyeOpen ? <RxEyeOpen /> : <RxEyeClosed />}
+              </button>
+            ) : (
+              <div />
+            )}
 
-                <input
-                  value={difficulty}
-                  onChange={difficultyHandler}
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.2"
-                  className="range range-primary range-xs"
-                />
-              </div>
-
-              {isOmit && (
-                <button
-                  onClick={() => setEye((prevState) => !prevState)}
-                  className="rounded-lg bg-base-300 p-2"
+            <div className="flex-end flex space-x-2">
+              {firstOmit ? (
+                <div
+                  className={`flex h-full space-x-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content`}
                 >
-                  {isEyeOpen ? <RxEyeOpen /> : <RxEyeClosed />}
+                  <span className="leading-none text-base-content">
+                    Difficulty
+                  </span>
+
+                  <input
+                    value={difficulty}
+                    onChange={difficultyHandler}
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.2"
+                    className="range range-primary range-xs"
+                  />
+                </div>
+              ) : (
+                <button
+                  className="btn-outline btn-error btn-sm btn"
+                  onClick={reset}
+                >
+                  Reset
                 </button>
               )}
-            </div>
 
-            <div className="flex justify-end">
               {!isOmit && (
                 <button
                   onClick={() => omitHandler("omit")}
@@ -283,7 +304,7 @@ export default function Home() {
 
         <EditorWrapper>
           <TextEditor
-            readOnly={isOmit}
+            // readOnly={isOmit}
             ref={ref}
             value={htmlText}
             onChange={changeHandler}
@@ -293,7 +314,7 @@ export default function Home() {
               (!isEyeOpen && isOmit && "[&_mark]:bg-primary") ||
               "[&_mark]:bg-transparent [&_mark]:text-inherit"
             }
-            ${isEyeOpen && "[&_mark]:text-primary"}
+            ${!firstOmit && "[&_mark]:text-primary"}
             `}
             onChangeSelection={changeSelectionHandler}
             // className={`flex flex-1 flex-col  ${isOmit ? "select-none" : ""}`}
@@ -302,15 +323,18 @@ export default function Home() {
       </div>
 
       {isOmit && (
-        <div className="mt-3  flex h-10 justify-end space-x-2">
-          <button
+        <div className="mt-3  flex h-10">
+          {/* <button
             onClick={() => omitHandler("unOmit")}
             className="btn-ghost btn"
           >
             cancel
-          </button>
+          </button> */}
 
-          <label htmlFor="add-to-notebook-modal" className="btn-primary btn">
+          <label
+            htmlFor="add-to-notebook-modal"
+            className="btn-primary btn w-full"
+          >
             Add To Notebook
           </label>
         </div>
