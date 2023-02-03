@@ -43,10 +43,10 @@ export default function Home() {
   const ref = useRef(null)
 
   useEffect(() => {
-    if (htmlText.includes("</mark>")) {
+    if (htmlText.includes("</mark>") || isOmit) {
       setFirstOmit(false)
     }
-  }, [htmlText])
+  }, [htmlText, isOmit])
 
   const isWordOmitted = (index: number, length: number) =>
     // @ts-ignore
