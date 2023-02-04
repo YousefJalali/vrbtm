@@ -1,27 +1,21 @@
 import dynamic from "next/dynamic"
-import { forwardRef } from "react"
+import { forwardRef, LegacyRef } from "react"
 import { RefAttributes } from "react"
-import { ReactQuillProps } from "react-quill"
+import ReactQuill, { ReactQuillProps } from "react-quill"
 import "react-quill/dist/quill.bubble.css"
 import EditorToolbar from "./EditorToolbar"
 
-const ReactQuill = dynamic(
+const ReactQuillEditor = dynamic(
   async () => {
     const { default: RQ } = await import("react-quill")
 
     let Inline = RQ.Quill.import("blots/inline")
     class MarkBlot extends Inline {
       static create() {
-        // console.log(value)
         let node = super.create()
         node.setAttribute("contenteditable", false)
-        // node.style.backgroundColor = value
-        // node.setAttribute("style", `background-color: ${value}`)
         return node
       }
-      // static formats(node) {
-      //   return node.getAttribute("contenteditable")
-      // }
     }
     MarkBlot.blotName = "mark"
     MarkBlot.tagName = "mark"
@@ -56,9 +50,14 @@ const ReactQuill = dynamic(
       forwardedRef,
       ...props
     }: {
-      forwardedRef: any
+      forwardedRef: LegacyRef<ReactQuill>
     }) => {
-      return <RQ ref={forwardedRef} modules={modules} {...props} />
+      return (
+        <>
+          <EditorToolbar />
+          <RQ ref={forwardedRef} modules={modules} {...props} />
+        </>
+      )
     }
 
     return EditorWithRef
@@ -70,17 +69,17 @@ const ReactQuill = dynamic(
 )
 
 export const TextEditor = forwardRef(
-  (props: ReactQuillProps & RefAttributes<HTMLDivElement>, ref: any) => {
+  (
+    props: ReactQuillProps & RefAttributes<HTMLDivElement>,
+    ref: LegacyRef<ReactQuill>
+  ) => {
     return (
-      <>
-        <EditorToolbar />
-        <ReactQuill
-          forwardedRef={ref}
-          // modules={modules}
-          theme="bubble"
-          {...props}
-        />
-      </>
+      <ReactQuillEditor
+        forwardedRef={ref}
+        // modules={modules}
+        theme="bubble"
+        {...props}
+      />
     )
   }
 )
