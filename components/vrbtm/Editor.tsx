@@ -48,8 +48,6 @@ export default function Editor() {
     mark: boolean
   ) => {
     ref.current?.getEditor().formatText(index, word.length, "mark", mark)
-
-    clearSelection()
   }
 
   const changeHandler = (
@@ -90,22 +88,11 @@ export default function Editor() {
     ref.current?.getEditor().formatText(0, text.length, "mark", false)
   }
 
-  const clearSelectionFormat = () => {
-    ref.current
-      ?.getEditor()
-      .formatText(0, text.length, "background", "transparent")
-  }
-
-  const clearSelection = () => {
-    setSelectedText(null)
-    clearSelectionFormat()
-  }
-
   const reset = () => {
     setFirstOmit(true)
     setEye(false)
     clearOmit()
-    clearSelection()
+    setSelectedText(null)
   }
 
   const omitHandler = (state: "omit" | "unOmit") => {
@@ -142,8 +129,6 @@ export default function Editor() {
   ) => {
     if (isOmit && selection) {
       if (selection.length > 0) {
-        clearSelectionFormat()
-
         setSelectedText({
           text: editor
             .getText()
@@ -158,18 +143,8 @@ export default function Editor() {
               editor.getBounds(selection.index, selection.length).height,
           },
         })
-
-        ref.current
-          ?.getEditor()
-          .formatText(selection.index, selection.length, "background", "yellow")
       } else {
-        setSelectedText(() => {
-          ref.current
-            ?.getEditor()
-            .formatText(0, text.length, "background", "transparent")
-
-          return null
-        })
+        setSelectedText(null)
       }
     }
   }
