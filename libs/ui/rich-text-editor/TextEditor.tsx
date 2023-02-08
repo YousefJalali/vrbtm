@@ -8,14 +8,16 @@ import EditorToolbar from "./EditorToolbar"
 const ReactQuillEditor = dynamic(
   async () => {
     const { default: RQ } = await import("react-quill")
+    //@ts-ignore
+    await import("quill-paste-smart")
 
     let Inline = RQ.Quill.import("blots/inline")
     class MarkBlot extends Inline {
-      static create() {
-        let node = super.create()
-        node.setAttribute("contenteditable", false)
-        return node
-      }
+      // static create() {
+      //   let node = super.create()
+      //   node.setAttribute("contenteditable", true)
+      //   return node
+      // }
     }
     MarkBlot.blotName = "mark"
     MarkBlot.tagName = "mark"
@@ -36,7 +38,6 @@ const ReactQuillEditor = dynamic(
         handlers: {
           undo: undoChange,
           redo: redoChange,
-          flashCard: () => console.log("create flashcard"),
         },
       },
       history: {

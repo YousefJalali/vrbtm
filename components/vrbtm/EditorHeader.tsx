@@ -20,6 +20,7 @@ export default function EditorHeader({
   setDifficulty,
   reset,
   selectedText,
+  clearSelection,
   omitWord,
 }: {
   text: string
@@ -38,6 +39,7 @@ export default function EditorHeader({
     isOmitted: boolean
     pos: { x: number; y: number }
   } | null
+  clearSelection: () => void
   omitWord: (word: string, index: number, length: number, mark: boolean) => void
 }) {
   return (
@@ -54,14 +56,15 @@ export default function EditorHeader({
           {selectedText && (
             <>
               <button
-                onClick={() =>
+                onClick={() => {
                   omitWord(
                     selectedText.text,
                     selectedText.index,
                     selectedText.length,
                     !selectedText.isOmitted
                   )
-                }
+                  clearSelection()
+                }}
                 className="btn-sm btn"
               >
                 {selectedText.isOmitted ? "UnOmit" : "Omit"}

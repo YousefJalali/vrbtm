@@ -60,6 +60,33 @@ export default function Editor() {
     setHtmlText(value)
   }
 
+  const changeSelectionHandler = (
+    selection: Range,
+    source: Sources,
+    editor: UnprivilegedEditor
+  ) => {
+    if (isOmit && selection) {
+      if (selection.length > 0) {
+        setSelectedText({
+          text: editor
+            .getText()
+            .slice(selection.index, selection.index + selection.length),
+          index: selection.index,
+          length: selection.length,
+          isOmitted: isWordOmitted(selection.index, selection.length),
+          pos: {
+            x: editor.getBounds(selection.index, selection.length).left,
+            y:
+              editor.getBounds(selection.index, selection.length).top +
+              editor.getBounds(selection.index, selection.length).height,
+          },
+        })
+      } else {
+        setSelectedText(null)
+      }
+    }
+  }
+
   const removeUselessWords = (txt: string) => {
     const txtWithoutUselessWords = keyword_extractor.extract(txt, {
       language: "english",
@@ -86,6 +113,9 @@ export default function Editor() {
     setOmit(false)
 
     ref.current?.getEditor().formatText(0, text.length, "mark", false)
+  }
+  const clearSelection = () => {
+    ref.current?.getEditor().setSelection(0, 0)
   }
 
   const reset = () => {
@@ -122,33 +152,6 @@ export default function Editor() {
     reset()
   }
 
-  const changeSelectionHandler = (
-    selection: Range,
-    source: Sources,
-    editor: UnprivilegedEditor
-  ) => {
-    if (isOmit && selection) {
-      if (selection.length > 0) {
-        setSelectedText({
-          text: editor
-            .getText()
-            .slice(selection.index, selection.index + selection.length),
-          index: selection.index,
-          length: selection.length,
-          isOmitted: isWordOmitted(selection.index, selection.length),
-          pos: {
-            x: editor.getBounds(selection.index, selection.length).left,
-            y:
-              editor.getBounds(selection.index, selection.length).top +
-              editor.getBounds(selection.index, selection.length).height,
-          },
-        })
-      } else {
-        setSelectedText(null)
-      }
-    }
-  }
-
   return (
     <>
       <div className="box-border flex flex-1 flex-col rounded-lg bg-base-200 p-2">
@@ -164,6 +167,7 @@ export default function Editor() {
             setDifficulty={difficultyHandler}
             reset={reset}
             selectedText={selectedText}
+            clearSelection={clearSelection}
             omitWord={omitWord}
           />
         )}
