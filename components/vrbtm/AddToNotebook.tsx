@@ -7,7 +7,7 @@ const SelectNotebook = dynamic(
   }
 )
 
-export default function AddToNotebook() {
+export default function AddToNotebook({ content }: { content: string }) {
   return (
     <>
       <div className="mt-3  flex h-10">
@@ -19,7 +19,7 @@ export default function AddToNotebook() {
         </label>
       </div>
 
-      <SelectNotebook />
+      <SelectNotebook content={content} />
     </>
   )
 }

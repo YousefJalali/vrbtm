@@ -1,3 +1,13 @@
+import dynamic from "next/dynamic"
+import { FiPlus } from "react-icons/fi"
+
+const NewFlashcard = dynamic(
+  () => import("@/components/flashcard/NewFlashcard"),
+  {
+    ssr: false,
+  }
+)
+
 export default function Flashcards() {
   return (
     <main>
@@ -28,6 +38,14 @@ export default function Flashcards() {
           </label>
         </li>
       </ul>
+
+      <label
+        htmlFor="new-flashcard-modal"
+        className="btn-primary btn-circle btn fixed bottom-6 right-6 shadow-xl"
+      >
+        <FiPlus size={24} />
+      </label>
+      <NewFlashcard content="" />
     </main>
   )
 }

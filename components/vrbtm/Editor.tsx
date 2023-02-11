@@ -190,7 +190,7 @@ export default function Editor() {
         </MenuContext>
       </div>
 
-      {isOmit && <AddToNotebook />}
+      {isOmit && <AddToNotebook content={htmlText} />}
     </>
   )
 }

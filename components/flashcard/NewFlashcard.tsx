@@ -1,7 +1,7 @@
 import Modal from "@/libs/ui/modal/Modal"
 
 export default function NewFlashcard({ content = "" }: { content: string }) {
-  console.log(content)
+  // console.log(content)
   return (
     <Modal id="new-flashcard-modal">
       <h3 className="mb-4 text-lg font-bold">New Flashcard</h3>

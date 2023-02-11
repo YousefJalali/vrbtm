@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// enum Status {
+//   PROPOSED
+//   INPROGRESS
+//   COMPLETED
+// }
+
+// type Image {
+//   id     String
+//   name   String
+//   height Float
+//   width  Float
+//   path   String
+// }
+
+// model Collection {
+//   id          String      @id @default(auto()) @map("_id") @db.ObjectId
+//   title       String
+//   description String
+//   color       String
+//   notebooks   Notebook[]
+//   flashcards  Flashcard[]
+//   isHidden    Boolean     @default(false)
+//   createdAt   DateTime    @default(now())
+//   updatedAt   DateTime    @updatedAt
+// }
+
+model Notebook {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  content     String
+  flashcards  Flashcard[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Flashcard {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  content    String
+  color      String
+  notebook   Notebook @relation(fields: [notebookId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  notebookId String   @db.ObjectId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
