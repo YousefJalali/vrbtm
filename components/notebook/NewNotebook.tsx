@@ -1,11 +1,11 @@
 import { useCreateNotebook } from "@/libs/data/mutations"
 import Modal from "@/libs/ui/modal/Modal"
 import { notebookValidation } from "@/utils/validations"
-import { Notebook } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import ObjectID from "bson-objectid"
 import { useEffect, useRef } from "react"
+import { NotebookType } from "@/libs/types"
 
 export default function NewNotebook() {
   const modalLabelRef = useRef<HTMLLabelElement>(null)
@@ -28,7 +28,7 @@ export default function NewNotebook() {
     formState: { errors },
     setError,
     reset,
-  } = useForm<Notebook>({
+  } = useForm<NotebookType>({
     defaultValues: {
       id: ObjectID().toHexString(),
       title: "",
@@ -50,7 +50,7 @@ export default function NewNotebook() {
     }
   }, [error])
 
-  const submitHandler = (data: Notebook) => {
+  const submitHandler = (data: NotebookType) => {
     onSubmit(data)
   }
 
