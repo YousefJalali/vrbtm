@@ -11,6 +11,9 @@
   "prisma": {
     "schema": "./prisma/schema.prisma"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@hookform/resolvers": "^2.9.11",
     "@next/font": "13.1.2",
