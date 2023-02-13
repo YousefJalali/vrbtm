@@ -1,7 +1,7 @@
 import { useState } from "react"
 import useSWRMutation from "swr/mutation"
 import pick from "lodash.pick"
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 import { createNotebook } from "../actions"
 
 export const useCreateNotebook = (callback?: (action?: any) => void) => {

@@ -5,7 +5,7 @@ import ObjectID from "bson-objectid"
 // import { apiYupValidation } from '@the-planner/hooks'
 // import { projectSchema } from '@the-planner/utils'
 import isEmpty from "lodash.isempty"
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 
 const handler = async (
   req: NextApiRequest,

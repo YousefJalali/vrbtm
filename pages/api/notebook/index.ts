@@ -1,4 +1,4 @@
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "@/libs/db/prisma"
 import ObjectID from "bson-objectid"

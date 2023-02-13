@@ -1,4 +1,4 @@
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 import { GetStaticProps } from "next"
 import dynamic from "next/dynamic"
 import { FiPlus } from "react-icons/fi"

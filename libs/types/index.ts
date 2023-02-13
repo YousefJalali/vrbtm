@@ -1,3 +1,3 @@
-import { Notebook } from "@prisma/client"
+import { Notebook as NotebookType } from "@prisma/client"
 
-export type NotebookType = Notebook
+export type Notebook = NotebookType

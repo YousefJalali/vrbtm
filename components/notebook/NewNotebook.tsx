@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import ObjectID from "bson-objectid"
 import { useEffect, useRef } from "react"
-import { NotebookType } from "@/libs/types"
+import { Notebook } from "@/libs/types"
 
 export default function NewNotebook() {
   const modalLabelRef = useRef<HTMLLabelElement>(null)
@@ -28,7 +28,7 @@ export default function NewNotebook() {
     formState: { errors },
     setError,
     reset,
-  } = useForm<NotebookType>({
+  } = useForm<Notebook>({
     defaultValues: {
       id: ObjectID().toHexString(),
       title: "",
@@ -50,7 +50,7 @@ export default function NewNotebook() {
     }
   }, [error])
 
-  const submitHandler = (data: NotebookType) => {
+  const submitHandler = (data: Notebook) => {
     onSubmit(data)
   }
 
@@ -75,9 +75,9 @@ export default function NewNotebook() {
             {...register("title")}
           />
 
-          <label className="label">
+          {/* <label className="label">
             <span className="label-text-alt text-error">{titleError}</span>
-          </label>
+          </label> */}
         </div>
 
         <div className="form-control">

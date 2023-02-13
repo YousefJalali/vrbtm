@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { customFetch, getErrorMessage } from "@/utils"
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 
 export const useNotebooks = (query?: string) => {
   const key = `/api/notebook`

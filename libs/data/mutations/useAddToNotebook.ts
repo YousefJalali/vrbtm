@@ -1,4 +1,4 @@
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 import ObjectID from "bson-objectid"
 import { useRouter } from "next/router"
 

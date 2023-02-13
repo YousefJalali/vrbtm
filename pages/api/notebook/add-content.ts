@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "@/libs/db/prisma"
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 import omit from "lodash.omit"
 
 const handler = async (

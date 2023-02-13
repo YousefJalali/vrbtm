@@ -1,4 +1,4 @@
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 import { boolean, date, number, object, Schema, string } from "yup"
 
 export const notebookValidation: Schema<Notebook> = object({

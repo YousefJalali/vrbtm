@@ -1,5 +1,5 @@
 import { customFetch } from "@/utils/customFetch"
-import { Notebook } from "@prisma/client"
+import { Notebook } from "@/libs/types"
 
 export const createNotebook = async (
   url: string | [string, string],
