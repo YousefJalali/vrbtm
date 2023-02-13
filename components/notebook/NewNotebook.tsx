@@ -54,6 +54,8 @@ export default function NewNotebook() {
     onSubmit(data)
   }
 
+  const titleError = errors?.title?.message || ""
+
   return (
     <Modal id="new-notebook-modal">
       <h3 className="mb-4 text-lg font-bold">New Notebook</h3>
@@ -72,13 +74,10 @@ export default function NewNotebook() {
             }`}
             {...register("title")}
           />
-          {errors && errors.title && (
-            <label className="label">
-              <span className="label-text-alt text-error">
-                {errors?.title?.message}
-              </span>
-            </label>
-          )}
+
+          <label className="label">
+            <span className="label-text-alt text-error">{titleError}</span>
+          </label>
         </div>
 
         <div className="form-control">
