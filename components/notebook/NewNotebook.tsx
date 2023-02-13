@@ -72,11 +72,13 @@ export default function NewNotebook() {
             }`}
             {...register("title")}
           />
-          <label className="label">
-            <span className="label-text-alt text-error">
-              {errors?.title?.message}
-            </span>
-          </label>
+          {errors && errors.title && (
+            <label className="label">
+              <span className="label-text-alt text-error">
+                {errors?.title?.message}
+              </span>
+            </label>
+          )}
         </div>
 
         <div className="form-control">
