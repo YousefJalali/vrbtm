@@ -10,6 +10,7 @@ const NewFlashcard = dynamic(
 )
 
 export default function EditorHeader({
+  readOnly,
   text,
   isOmit,
   setOmit,
@@ -23,6 +24,7 @@ export default function EditorHeader({
   clearSelection,
   omitWord,
 }: {
+  readOnly: boolean
   text: string
   isOmit: boolean
   setOmit: (state: "omit" | "unOmit") => void
@@ -53,7 +55,7 @@ export default function EditorHeader({
             {isEyeOpen ? <RxEyeOpen /> : <RxEyeClosed />}
           </button>
 
-          {selectedText && (
+          {!readOnly && selectedText && (
             <>
               <button
                 onClick={() => {
@@ -99,7 +101,7 @@ export default function EditorHeader({
               className="range range-primary range-xs"
             />
           </div>
-        ) : !selectedText ? (
+        ) : !selectedText && !readOnly ? (
           <button className="btn-outline btn-error btn-sm btn" onClick={reset}>
             Reset
           </button>

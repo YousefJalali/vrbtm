@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { height } = useWindowSize()
 
   return (
-    <div className="drawer-mobile drawer drawer-end bg-base-100 ">
+    <div className="container drawer drawer-mobile bg-base-100">
       <input id="side-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex w-full flex-col items-center justify-center">
         <main

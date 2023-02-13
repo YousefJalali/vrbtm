@@ -3,34 +3,19 @@ import { GetStaticProps } from "next"
 import dynamic from "next/dynamic"
 import { FiPlus } from "react-icons/fi"
 import { prisma } from "@/libs/db/prisma"
-import Link from "next/link"
+import { SWRConfig, unstable_serialize } from "swr"
+import NotebookList from "@/components/notebook/NotebookList"
 
 const NewNotebook = dynamic(() => import("@/components/notebook/NewNotebook"), {
   ssr: false,
 })
 
-export default function Notebooks({ notebooks }: { notebooks: Notebook[] }) {
+export default function Notebooks({ fallback }: { [key: string]: Notebook[] }) {
   return (
     <main>
-      <input
-        type="text"
-        placeholder="Search..."
-        className="input-bordered input w-full "
-      />
-
-      <ul className="menu divide-y bg-base-100 py-2">
-        {notebooks.length === 0 ? (
-          <li>No notebooks</li>
-        ) : (
-          notebooks.map((notebook) => (
-            <li key={notebook.id}>
-              <Link href={`/notebooks/${notebook.title}`}>
-                {notebook.title}
-              </Link>
-            </li>
-          ))
-        )}
-      </ul>
+      <SWRConfig value={{ fallback }}>
+        <NotebookList />
+      </SWRConfig>
 
       <label
         htmlFor="new-notebook-modal"
@@ -48,7 +33,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      notebooks: JSON.parse(JSON.stringify(notebooks)),
+      fallback: {
+        [unstable_serialize(["/api/notebook", "?q=list"])]: JSON.parse(
+          JSON.stringify(notebooks)
+        ),
+      },
     },
   }
 }

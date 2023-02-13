@@ -5,14 +5,29 @@ import { Notebook } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import ObjectID from "bson-objectid"
+import { useEffect, useRef } from "react"
 
 export default function NewNotebook() {
-  const { onSubmit } = useCreateNotebook()
+  const modalLabelRef = useRef<HTMLLabelElement>(null)
+
+  const closeModal = () => {
+    if (modalLabelRef.current) {
+      //close modal
+      modalLabelRef.current.click()
+
+      //reset form
+      reset()
+    }
+  }
+
+  const { onSubmit, error } = useCreateNotebook(closeModal)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    reset,
   } = useForm<Notebook>({
     defaultValues: {
       id: ObjectID().toHexString(),
@@ -25,11 +40,19 @@ export default function NewNotebook() {
     resolver: yupResolver(notebookValidation),
   })
 
+  //show error in form
+  useEffect(() => {
+    if (error && error.message.includes("form-title")) {
+      setError("title", {
+        type: "custom",
+        message: error.message.replace("form-title:", ""),
+      })
+    }
+  }, [error])
+
   const submitHandler = (data: Notebook) => {
     onSubmit(data)
   }
-
-  // console.log(errors)
 
   return (
     <Modal id="new-notebook-modal">
@@ -69,10 +92,14 @@ export default function NewNotebook() {
         </div>
 
         <div className="modal-action">
-          <label htmlFor="new-notebook-modal" className="btn-ghost btn">
+          <label
+            ref={modalLabelRef}
+            htmlFor="new-notebook-modal"
+            className="btn-ghost btn"
+          >
             Cancel
           </label>
-          <button type="submit" className="btn-primary btn">
+          <button type="submit" className={`btn-primary btn`}>
             create
           </button>
         </div>

@@ -1,19 +1,19 @@
-// function logout() {
-//   window.localStorage.removeItem(localStorageKey)
-// }
-
 export async function customFetch<T>(
-  url: string,
-  method: "GET" | "POST" | "PUT" | "DELETE",
-  bodyData?: T
+  url: string | [string, string],
+  {
+    method = "GET",
+    bodyData,
+  }: {
+    method?: "GET" | "POST" | "PUT" | "DELETE"
+    bodyData?: T
+  }
 ) {
-  // const token = window.localStorage.getItem(localStorageKey)
   const headers = { "Content-Type": "application/json" }
   // if (token) {
   //   headers.Authorization = `Bearer ${token}`
   // }
 
-  const res = await fetch(url, {
+  const res = await fetch(typeof url === "string" ? url : url.join(""), {
     method,
     ...(bodyData && { body: JSON.stringify(bodyData) }),
     headers: {

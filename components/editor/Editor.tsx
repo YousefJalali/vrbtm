@@ -4,15 +4,20 @@ import { DeltaStatic, Sources } from "quill"
 import ReactQuill, { Range, UnprivilegedEditor } from "react-quill"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
 import MenuContext from "./MenuContext"
-import AddToNotebook from "./AddToNotebook"
+import AddToNotebook from "../notebook/AddToNotebook"
 import EditorHeader from "./EditorHeader"
 
-export default function Editor() {
+export default function Editor({
+  readOnly = false,
+  defaultValue = "",
+  omitMode = false,
+  notebook = false,
+}) {
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
-  const [htmlText, setHtmlText] = useState("")
+  const [htmlText, setHtmlText] = useState(defaultValue)
   const [isEyeOpen, setEye] = useState(false)
-  const [isOmit, setOmit] = useState(false)
+  const [isOmit, setOmit] = useState(omitMode)
   const [isFirstOmit, setFirstOmit] = useState(true)
   const [selectedText, setSelectedText] = useState<{
     text: string
@@ -154,9 +159,14 @@ export default function Editor() {
 
   return (
     <>
-      <div className="box-border flex flex-1 flex-col rounded-lg bg-base-200 p-2">
+      <div
+        className={`box-border flex flex-1 flex-col rounded-lg p-2 ${
+          readOnly ? "border" : "bg-base-200"
+        }`}
+      >
         {text.trim().length > 0 && (
           <EditorHeader
+            readOnly={readOnly}
             text={text}
             isOmit={isOmit}
             setOmit={omitHandler}
@@ -175,6 +185,7 @@ export default function Editor() {
         <MenuContext isOmit={isOmit}>
           <TextEditor
             ref={ref}
+            readOnly={readOnly}
             value={htmlText}
             onChange={changeHandler}
             placeholder="A brief about the task..."
@@ -190,7 +201,7 @@ export default function Editor() {
         </MenuContext>
       </div>
 
-      {isOmit && <AddToNotebook content={htmlText} />}
+      {!notebook && isOmit && <AddToNotebook content={htmlText} />}
     </>
   )
 }

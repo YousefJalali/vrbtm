@@ -4,6 +4,7 @@ import dynamic from "next/dynamic"
 import { FiArrowLeft, FiPlus } from "react-icons/fi"
 import { prisma } from "@/libs/db/prisma"
 import Link from "next/link"
+import Editor from "@/components/editor/Editor"
 
 export default function NotebookDetails({ notebook }: { notebook: Notebook }) {
   if (!notebook) {
@@ -15,17 +16,22 @@ export default function NotebookDetails({ notebook }: { notebook: Notebook }) {
   }
   return (
     <main className="prose">
-      <Link href="/notebooks">
-        <FiArrowLeft size={24} />
-      </Link>
-      <h1>{notebook.title}</h1>
+      <h3>{notebook.title}</h3>
+      <p>{notebook.description}</p>
+      {notebook.content.length > 0 && (
+        <div>
+          <Editor readOnly defaultValue={notebook.content} notebook omitMode />
+        </div>
+      )}
     </main>
   )
 }
 
 export async function getStaticPaths() {
   const notebooks = await prisma.notebook.findMany({})
-  const paths = notebooks.map(({ title }) => ({ params: { slug: title } }))
+  const paths = notebooks
+    .slice(0, 10)
+    .map(({ title }) => ({ params: { slug: title } }))
   return {
     paths,
     fallback: false, // can also be true or 'blocking'
@@ -39,7 +45,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }
 
-  console.log(context)
   const notebook = await prisma.notebook.findFirst({
     where: {
       title: context.params.slug,

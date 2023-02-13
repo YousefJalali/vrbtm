@@ -17,8 +17,6 @@ const handler = async (
 ) => {
   const notebook = req.body
 
-  console.log(notebook)
-
   if (!notebook) {
     return res
       .status(400)
@@ -44,21 +42,7 @@ const handler = async (
         ...notebook,
         id,
       },
-      // include: {
-      //   tasks: {
-      //     select: {
-      //       status: true,
-      //     },
-      //   },
-      //   _count: {
-      //     select: {
-      //       tasks: true,
-      //     },
-      //   },
-      // },
     })
-
-    console.log(createdNotebook)
 
     res.json({ data: createdNotebook })
   } catch (error) {
