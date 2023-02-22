@@ -20,10 +20,18 @@ export const useCreateNotebook = (query: string = "") => {
         data: [
           ...notebooks,
           {
-            ...formData,
+            ...(query === "list"
+              ? {
+                  id: formData.id,
+                  title: formData.title,
+                  color: formData.color,
+                }
+              : { ...formData }),
+
             ...(query === "with-flashcards-count" && {
               _count: { flashcards: 0 },
             }),
+
             ...(query === "with-flashcards" && {
               flashcards: [],
               _count: { flashcards: 0 },

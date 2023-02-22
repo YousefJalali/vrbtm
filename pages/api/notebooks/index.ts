@@ -30,6 +30,16 @@ const handler = async (
               },
             },
           }),
+
+        ...(q &&
+          q !== "undefined" &&
+          q === "list" && {
+            select: {
+              id: true,
+              title: true,
+              color: true,
+            },
+          }),
       })
 
       return res.status(200).json({ data: notebooks })

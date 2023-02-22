@@ -4,16 +4,16 @@ import { ReactNode, useState } from "react"
 import NotebookForm from "./NotebookForm"
 
 export default function CreateNotebook({
+  query = "with-flashcards-count",
   className,
   children,
 }: {
+  query?: "with-flashcards-count" | "list"
   className?: string
   children: ReactNode
 }) {
   const [showModal, setModal] = useState(false)
-  const { onSubmit, error, isMutating } = useCreateNotebook(
-    "with-flashcards-count"
-  )
+  const { onSubmit, error, isMutating } = useCreateNotebook(query)
 
   return (
     <>
