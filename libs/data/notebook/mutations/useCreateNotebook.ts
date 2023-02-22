@@ -3,9 +3,9 @@ import { Notebook } from "@/libs/types"
 import { createNotebook } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
 
-export const useCreateNotebook = () => {
+export const useCreateNotebook = (query: string = "") => {
   const { trigger, error, isMutating } = useSWRMutation(
-    "/api/notebooks",
+    `/api/notebooks${query ? `?q=${query}` : ""}`,
     createNotebook
   )
 
@@ -16,9 +16,20 @@ export const useCreateNotebook = () => {
     callback?: (action?: any) => void
   ) => {
     trigger(formData, {
-      optimisticData: (notebooks: Notebook[]) => ({
-        ...notebooks,
-        formData,
+      optimisticData: ({ data: notebooks }: { data: Notebook[] }) => ({
+        data: [
+          ...notebooks,
+          {
+            ...formData,
+            ...(query === "with-flashcards-count" && {
+              _count: { flashcards: 0 },
+            }),
+            ...(query === "with-flashcards" && {
+              flashcards: [],
+              _count: { flashcards: 0 },
+            }),
+          },
+        ],
       }),
       rollbackOnError: true,
       throwOnError: false,

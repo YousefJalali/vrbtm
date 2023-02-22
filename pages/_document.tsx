@@ -15,9 +15,6 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          {/* <div id="modal" />
-          <div id="prompt" />
-          <div id="notification" /> */}
         </body>
       </Html>
     )

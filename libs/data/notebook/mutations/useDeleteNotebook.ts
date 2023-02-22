@@ -5,10 +5,11 @@ import { useNotification } from "@/libs/hooks/useNotification"
 
 export const useDeleteNotebook = (
   notebookId: string | null,
+  query: string = "",
   callback?: (action?: any) => void
 ) => {
   const { trigger, error } = useSWRMutation(
-    notebookId ? "/api/notebooks" : null,
+    notebookId ? `/api/notebooks${query ? `?q=${query}` : ""}` : null,
     (url, arg) => deleteNotebook([url, `/${notebookId}`], arg)
   )
 

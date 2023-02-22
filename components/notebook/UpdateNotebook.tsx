@@ -13,7 +13,7 @@ export default function UpdateNotebook({
   className?: string
   children: ReactNode
 }) {
-  const { onSubmit, error } = useUpdateNotebook()
+  const { onSubmit, error } = useUpdateNotebook("with-flashcards-count")
   const [showModal, setModal] = useState(false)
 
   return (

@@ -2,8 +2,11 @@ import useSWRMutation from "swr/mutation"
 import { Notebook } from "@/libs/types"
 import { updateNotebook } from "../actions"
 
-export function useUpdateNotebook() {
-  const { trigger, error } = useSWRMutation("/api/notebooks", updateNotebook)
+export function useUpdateNotebook(query: string = "") {
+  const { trigger, error } = useSWRMutation(
+    `/api/notebooks${query ? `?q=${query}` : ""}`,
+    updateNotebook
+  )
 
   const onSubmit = async (
     formData: Notebook,

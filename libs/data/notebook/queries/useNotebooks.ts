@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { customFetch, getErrorMessage } from "@/utils"
-import { Notebook, NotebookWithFlashcards } from "@/libs/types"
+import { Notebook } from "@/libs/types"
 
 export const useNotebooks = <T = Notebook[]>(query: string = "") => {
   const url = `/api/notebooks` + `${query ? `?q=${query}` : ""}`

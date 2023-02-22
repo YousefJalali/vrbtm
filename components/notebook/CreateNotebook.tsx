@@ -11,7 +11,9 @@ export default function CreateNotebook({
   children: ReactNode
 }) {
   const [showModal, setModal] = useState(false)
-  const { onSubmit, error, isMutating } = useCreateNotebook()
+  const { onSubmit, error, isMutating } = useCreateNotebook(
+    "with-flashcards-count"
+  )
 
   return (
     <>

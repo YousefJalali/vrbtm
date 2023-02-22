@@ -1,5 +1,5 @@
 import { useDeleteNotebook } from "@/libs/data/notebook"
-import { Notebook, NotebookWithFlashcardsCount } from "@/libs/types"
+import { NotebookWithFlashcardsCount } from "@/libs/types"
 import chroma from "chroma-js"
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -18,7 +18,10 @@ export default function NotebookCard({
 }: {
   notebook: NotebookWithFlashcardsCount
 }) {
-  const { onSubmit: deleteHandler, error } = useDeleteNotebook(notebook.id)
+  const { onSubmit: deleteHandler, error } = useDeleteNotebook(
+    notebook.id,
+    "with-flashcards-count"
+  )
 
   const color = `${chroma(notebook.color).darken(2)}`
   const bgColor = [
