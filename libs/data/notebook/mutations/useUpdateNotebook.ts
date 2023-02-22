@@ -1,12 +1,15 @@
 import useSWRMutation from "swr/mutation"
 import { Notebook } from "@/libs/types"
 import { updateNotebook } from "../actions"
+import { useNotification } from "@/libs/hooks/useNotification"
 
 export function useUpdateNotebook(query: string = "") {
-  const { trigger, error } = useSWRMutation(
+  const { trigger, error, isMutating } = useSWRMutation(
     `/api/notebooks${query ? `?q=${query}` : ""}`,
     updateNotebook
   )
+
+  const { setNotification } = useNotification()
 
   const onSubmit = async (
     formData: Notebook,
@@ -28,6 +31,11 @@ export function useUpdateNotebook(query: string = "") {
       rollbackOnError: true,
       throwOnError: false,
       onSuccess: () => {
+        setNotification({
+          message: "notebook updated!",
+          variant: "success",
+        })
+
         if (callback) {
           callback()
         }
@@ -35,5 +43,5 @@ export function useUpdateNotebook(query: string = "") {
     })
   }
 
-  return { onSubmit, error }
+  return { onSubmit, error, isMutating }
 }
