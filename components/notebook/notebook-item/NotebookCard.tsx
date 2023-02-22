@@ -38,7 +38,10 @@ export default function NotebookCard({
             background: `linear-gradient(180deg, ${bgColor[0]}, ${bgColor[1]})`,
           }}
         >
-          <h3 className="mb-3 mt-5 pr-14 text-xl capitalize" style={{ color }}>
+          <h3
+            className="mb-3 mt-5 pr-14 text-xl capitalize line-clamp-3"
+            style={{ color }}
+          >
             {notebook.title}
           </h3>
 
@@ -52,8 +55,8 @@ export default function NotebookCard({
         </div>
       </Link>
 
-      <div className="dropdown-bottom dropdown-end active: dropdown absolute top-1 right-0 rounded-full p-0 active:bg-transparent">
-        <label tabIndex={0} className="btn-link btn-sm btn-square btn p-0 ">
+      <div className="active: dropdown-bottom dropdown-end dropdown absolute top-1 right-0 rounded-full p-0 active:bg-transparent">
+        <label tabIndex={0} className="btn-link btn-square btn-sm btn p-0 ">
           <FiMoreVertical size={18} color={color} />
         </label>
         <ul
