@@ -1,25 +1,28 @@
-import dynamic from "next/dynamic"
-
-const SelectNotebook = dynamic(
-  () => import("@/components/notebook/SelectNotebook"),
-  {
-    ssr: false,
-  }
-)
+import Modal from "@/libs/ui/modal/Modal"
+import { useState } from "react"
+import SelectNotebook from "./SelectNotebook"
 
 export default function AddToNotebook({ content }: { content: string }) {
+  const [showModal, setModal] = useState(false)
+
   return (
     <>
-      <div className="mt-3  flex h-10">
-        <label
-          htmlFor="add-to-notebook-modal"
-          className="btn-primary btn w-full"
-        >
-          Add To Notebook
-        </label>
-      </div>
+      <button
+        className="btn-primary btn mt-3 w-full"
+        onClick={() => setModal(true)}
+      >
+        Add To Notebook
+      </button>
 
-      <SelectNotebook content={content} />
+      <Modal
+        id="add-to-notebook-modal"
+        isOpen={showModal}
+        dismiss={() => setModal(false)}
+      >
+        {showModal && (
+          <SelectNotebook content={content} callback={() => setModal(false)} />
+        )}
+      </Modal>
     </>
   )
 }

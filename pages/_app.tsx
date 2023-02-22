@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react"
 import "@/styles/globals.css"
 import { Montserrat } from "@next/font/google"
 import Layout from "@/components/layout/Layout"
+import { NotificationCtxProvider } from "@/libs/contexts/NotificationCtx"
 
 const font = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" })
 
@@ -13,11 +14,14 @@ export default function MyApp({
   return (
     <SessionProvider session={session}>
       <div className={`${font.variable} font-sans`}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <NotificationCtxProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
 
-        <div id="modal" />
+          <div id="modal" />
+          <div id="notification" />
+        </NotificationCtxProvider>
       </div>
     </SessionProvider>
   )

@@ -1,51 +1,38 @@
-import dynamic from "next/dynamic"
-import { FiPlus } from "react-icons/fi"
+import { Notebook } from "@/libs/types"
+import { GetStaticProps } from "next"
+import { prisma } from "@/libs/db/prisma"
+import { SWRConfig, unstable_serialize } from "swr"
+import Header from "@/components/layout/Header"
+import FlashcardList from "@/components/flashcard/FlashcardList"
 
-const NewFlashcard = dynamic(
-  () => import("@/components/flashcard/NewFlashcard"),
-  {
-    ssr: false,
-  }
-)
-
-export default function Flashcards() {
+export default function Flashcards({
+  fallback,
+}: {
+  [key: string]: Notebook[]
+}) {
   return (
-    <main>
-      <input
-        type="text"
-        placeholder="Search..."
-        className="input-bordered input w-full "
-      />
+    <>
+      <Header title="Flashcards" />
 
-      <ul className="mt-6 space-y-6">
-        <li>
-          <label className="swap swap-flip">
-            <input type="checkbox" />
-
-            <div className=" card swap-off w-full bg-base-100 shadow-xl">
-              <div className="card-body flex items-center justify-center">
-                <h2 className="card-title">Dog</h2>
-              </div>
-            </div>
-
-            <div className=" card swap-on w-full bg-base-100 shadow-xl">
-              <div className="card-body flex items-center justify-center">
-                <p className="text-center">
-                  If a dog chews shoes whose shoes does he choose?
-                </p>
-              </div>
-            </div>
-          </label>
-        </li>
-      </ul>
-
-      <label
-        htmlFor="new-flashcard-modal"
-        className="btn-primary btn-circle btn fixed bottom-6 right-6 shadow-xl"
-      >
-        <FiPlus size={24} />
-      </label>
-      <NewFlashcard content="" />
-    </main>
+      <main className="px-6">
+        <SWRConfig value={{ fallback }}>
+          <FlashcardList />
+        </SWRConfig>
+      </main>
+    </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const flashcards = await prisma.flashcard.findMany({})
+
+  return {
+    props: {
+      fallback: {
+        [unstable_serialize(["/api/flashcards", ""])]: JSON.parse(
+          JSON.stringify(flashcards)
+        ),
+      },
+    },
+  }
 }

@@ -1,21 +1,45 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react"
-import keyword_extractor from "keyword-extractor"
+import { ChangeEvent, forwardRef, useEffect, useRef, useState } from "react"
 import { DeltaStatic, Sources } from "quill"
 import ReactQuill, { Range, UnprivilegedEditor } from "react-quill"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
 import MenuContext from "./MenuContext"
-import AddToNotebook from "../notebook/AddToNotebook"
-import EditorHeader from "./EditorHeader"
 
-export default function Editor({
+import { removeUselessWords } from "@/utils"
+import Eye from "./toolbar/Eye"
+import Omit from "./toolbar/Omit"
+import DifficultyInput from "./toolbar/Difficulty"
+import Reset from "./toolbar/Reset"
+import OmitFullText from "./toolbar/OmitFullText"
+import CreateFlashcard from "../flashcard/CreateFlashcard"
+import dynamic from "next/dynamic"
+
+const AddToNotebook = dynamic(
+  () => import("@/components/notebook/AddToNotebook"),
+  {
+    ssr: false,
+  }
+)
+
+type Props = {
+  readOnly?: boolean
+  defaultValue?: string
+  htmlText: string
+  onChange: (value: string) => void
+  omitMode?: boolean
+  notebook?: string
+}
+
+const Editor = ({
   readOnly = false,
-  defaultValue = "",
+  defaultValue,
+  htmlText = "",
+  onChange,
   omitMode = false,
-  notebook = false,
-}) {
+  notebook,
+}: Props) => {
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
-  const [htmlText, setHtmlText] = useState(defaultValue)
+  // const [htmlText, setHtmlText] = useState(value)
   const [isEyeOpen, setEye] = useState(false)
   const [isOmit, setOmit] = useState(omitMode)
   const [isFirstOmit, setFirstOmit] = useState(true)
@@ -27,7 +51,17 @@ export default function Editor({
     pos: { x: number; y: number }
   } | null>(null)
 
-  const ref = useRef<ReactQuill>(null)
+  const editorRef = useRef<ReactQuill>(null)
+
+  useEffect(() => {
+    if (editorRef.current) {
+      if (isOmit) {
+        editorRef.current.blur()
+      } else {
+        editorRef.current.focus()
+      }
+    }
+  }, [isOmit])
 
   useEffect(() => {
     if (htmlText.includes("</mark>") || isOmit) {
@@ -35,8 +69,20 @@ export default function Editor({
     }
   }, [htmlText, isOmit])
 
+  useEffect(() => {
+    if (readOnly) {
+      setEye(false)
+    }
+  }, [readOnly])
+
+  useEffect(() => {
+    if (typeof editorRef.current?.getEditor().getText() === "string") {
+      setText(editorRef.current?.getEditor().getText())
+    }
+  }, [htmlText])
+
   const isWordOmitted = (index: number, length: number) =>
-    ref.current?.getEditor().getFormat(index, length).mark
+    editorRef.current?.getEditor().getFormat(index, length).mark
 
   const randomOmit = (word: string, index: number) => {
     if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
@@ -52,7 +98,7 @@ export default function Editor({
     length: number,
     mark: boolean
   ) => {
-    ref.current?.getEditor().formatText(index, word.length, "mark", mark)
+    editorRef.current?.getEditor().formatText(index, word.length, "mark", mark)
   }
 
   const changeHandler = (
@@ -61,8 +107,7 @@ export default function Editor({
     source: Sources,
     editor: UnprivilegedEditor
   ) => {
-    setText(editor.getText())
-    setHtmlText(value)
+    onChange(value)
   }
 
   const changeSelectionHandler = (
@@ -92,18 +137,6 @@ export default function Editor({
     }
   }
 
-  const removeUselessWords = (txt: string) => {
-    const txtWithoutUselessWords = keyword_extractor.extract(txt, {
-      language: "english",
-      remove_duplicates: true,
-      remove_digits: false,
-      return_changed_case: false,
-      // return_chained_words: true,
-    })
-
-    return txtWithoutUselessWords
-  }
-
   const omitText = () => {
     if (text.length > 0) {
       if (!htmlText.includes("</mark>")) {
@@ -116,14 +149,14 @@ export default function Editor({
 
   const clearOmit = () => {
     setOmit(false)
-
-    ref.current?.getEditor().formatText(0, text.length, "mark", false)
+    editorRef.current?.getEditor().formatText(0, text.length, "mark", false)
   }
+
   const clearSelection = () => {
-    ref.current?.getEditor().setSelection(0, 0)
+    editorRef.current?.getEditor().setSelection(0, 0)
   }
 
-  const reset = () => {
+  const resetHandler = () => {
     setFirstOmit(true)
     setEye(false)
     clearOmit()
@@ -141,60 +174,79 @@ export default function Editor({
     }
   }
 
-  useEffect(() => {
-    if (ref.current) {
-      if (isOmit) {
-        ref.current.blur()
-      } else {
-        ref.current.focus()
-      }
-    }
-  }, [isOmit])
-
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDifficulty(e.target.valueAsNumber)
 
-    reset()
+    resetHandler()
   }
 
+  console.log(readOnly, text)
+
   return (
-    <>
+    <main className="flex h-full flex-col px-6 pb-6">
       <div
         className={`box-border flex flex-1 flex-col rounded-lg p-2 ${
-          readOnly ? "border" : "bg-base-200"
+          readOnly ? "p-0" : "bg-base-200"
         }`}
       >
-        {text.trim().length > 0 && (
-          <EditorHeader
-            readOnly={readOnly}
-            text={text}
-            isOmit={isOmit}
-            setOmit={omitHandler}
-            isEyeOpen={isEyeOpen}
-            setEye={setEye}
-            isFirstOmit={isFirstOmit}
-            difficulty={difficulty}
-            setDifficulty={difficultyHandler}
-            reset={reset}
-            selectedText={selectedText}
-            clearSelection={clearSelection}
-            omitWord={omitWord}
-          />
+        {!readOnly && text.trim().length > 0 && (
+          <div className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2">
+            <div className="flex space-x-2">
+              {isOmit && <Eye isEyeOpen={isEyeOpen} setEye={setEye} />}
+
+              {isOmit && selectedText && (
+                <Omit
+                  selectedText={selectedText}
+                  clearSelection={clearSelection}
+                  omitWord={omitWord}
+                />
+              )}
+
+              {isOmit && selectedText && notebook && (
+                <CreateFlashcard
+                  className="btn-sm btn"
+                  defaultValues={{
+                    notebookId: notebook,
+                    question: selectedText.text,
+                  }}
+                >
+                  Create flashcard...
+                </CreateFlashcard>
+              )}
+            </div>
+
+            <div className="flex-end flex space-x-2">
+              {isFirstOmit && (
+                <DifficultyInput
+                  difficulty={difficulty}
+                  setDifficulty={difficultyHandler}
+                />
+              )}
+
+              {!isFirstOmit && !selectedText && (
+                <Reset resetHandler={resetHandler} />
+              )}
+
+              {!isOmit && (
+                <OmitFullText
+                  setOmit={omitHandler}
+                  isDisabled={text.trim().length <= 0}
+                />
+              )}
+            </div>
+          </div>
         )}
 
         <MenuContext isOmit={isOmit}>
           <TextEditor
-            ref={ref}
+            ref={editorRef}
             readOnly={readOnly}
+            defaultValue={defaultValue}
             value={htmlText}
             onChange={changeHandler}
             placeholder="A brief about the task..."
-            className={`flex flex-1 flex-col 
-            ${
-              (!isEyeOpen && isOmit && "[&_mark]:bg-primary") ||
-              "[&_mark]:bg-transparent [&_mark]:text-inherit"
-            }
-            ${!isFirstOmit && "[&_mark]:text-primary"}
+            className={`flex flex-1 flex-col [&_mark]:bg-primary
+              ${isEyeOpen && "[&_mark]:bg-transparent [&_mark]:text-primary"}
             `}
             onChangeSelection={changeSelectionHandler}
           />
@@ -202,6 +254,8 @@ export default function Editor({
       </div>
 
       {!notebook && isOmit && <AddToNotebook content={htmlText} />}
-    </>
+    </main>
   )
 }
+
+export default Editor

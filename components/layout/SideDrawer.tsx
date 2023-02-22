@@ -18,14 +18,14 @@ export default function SideDrawer() {
   }
 
   return (
-    <div className="drawer-side">
+    <div className="drawer-side border-r">
       <label
         ref={labelRef}
         htmlFor="side-drawer"
         className="drawer-overlay"
       ></label>
 
-      <ul className="menu w-80 bg-base-100 p-4 text-base-content">
+      <ul className="menu w-80 space-y-2 bg-base-100 p-4 text-base-content">
         {/* <!-- Sidebar content here --> */}
         <li>
           <Link
@@ -41,7 +41,7 @@ export default function SideDrawer() {
           <Link
             href="/notebooks"
             onClick={clickHandler}
-            className={router.pathname === "/notebooks" ? "active" : ""}
+            className={router.pathname.includes("/notebooks") ? "active" : ""}
           >
             <BsJournalText />
             Notebooks

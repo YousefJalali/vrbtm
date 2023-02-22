@@ -1,7 +1,8 @@
 const baseURL = "/api"
 // const baseURL = ''
 
-export const notebookKey = () => `${baseURL}/notebook`
+export const notebookKey = () => `${baseURL}/notebook/:id`
+export const notebooksKey = () => `${baseURL}/notebook`
 // export const projectKey = (id: string) => `${baseURL}/projects/${id}`
 
 // export const projectsKey = () => `${baseURL}/projects`

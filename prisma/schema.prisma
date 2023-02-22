@@ -2,8 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -40,6 +39,7 @@ datasource db {
 model Notebook {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   title       String
+  color       String
   description String
   content     String
   flashcards  Flashcard[]
@@ -49,9 +49,8 @@ model Notebook {
 
 model Flashcard {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  title      String
-  content    String
-  color      String
+  question   String
+  answer     String
   notebook   Notebook @relation(fields: [notebookId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   notebookId String   @db.ObjectId
   createdAt  DateTime @default(now())

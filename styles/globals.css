@@ -5,7 +5,7 @@
   @apply flex h-full flex-1 flex-col font-sans text-base  text-base-content !important;
 }
 .ql-editor {
-  @apply flex-1  p-0 leading-normal !important;
+  @apply flex-1  p-0 leading-7 !important;
 }
 
 .ql-blank {

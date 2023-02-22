@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function Login() {
   return (
     <form className="prose space-y-4">
@@ -21,7 +23,9 @@ export default function Login() {
       <div className="form-control w-full ">
         <label className="label">
           <span className="label-text">Password</span>
-          {/* <span className="label-text-alt">Alt label</span> */}
+          <span className="label-text-alt">
+            <Link href="/forgot_password">Forgot password?</Link>
+          </span>
         </label>
         <input
           type="password"

@@ -1,30 +1,21 @@
 import { Notebook } from "@/libs/types"
 import { GetStaticProps } from "next"
-import dynamic from "next/dynamic"
-import { FiPlus } from "react-icons/fi"
 import { prisma } from "@/libs/db/prisma"
 import { SWRConfig, unstable_serialize } from "swr"
 import NotebookList from "@/components/notebook/NotebookList"
-
-const NewNotebook = dynamic(() => import("@/components/notebook/NewNotebook"), {
-  ssr: false,
-})
+import Header from "@/components/layout/Header"
 
 export default function Notebooks({ fallback }: { [key: string]: Notebook[] }) {
   return (
-    <main>
-      <SWRConfig value={{ fallback }}>
-        <NotebookList />
-      </SWRConfig>
+    <>
+      <Header title="Notebooks" />
 
-      <label
-        htmlFor="new-notebook-modal"
-        className="btn-primary btn-circle btn fixed bottom-6 right-6 shadow-xl"
-      >
-        <FiPlus size={24} />
-      </label>
-      <NewNotebook />
-    </main>
+      <main className="px-6">
+        <SWRConfig value={{ fallback }}>
+          <NotebookList />
+        </SWRConfig>
+      </main>
+    </>
   )
 }
 
