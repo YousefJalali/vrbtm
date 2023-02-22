@@ -2,6 +2,7 @@ import useSWRMutation from "swr/mutation"
 import { Notebook } from "@/libs/types"
 import { deleteNotebook } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
+import { getErrorMessage } from "@/utils"
 
 export const useDeleteNotebook = (
   notebookId: string | null,
@@ -10,7 +11,7 @@ export const useDeleteNotebook = (
 ) => {
   const { trigger, error } = useSWRMutation(
     notebookId ? `/api/notebooks${query ? `?q=${query}` : ""}` : null,
-    (url, arg) => deleteNotebook([url, `/${notebookId}`], arg)
+    (url, arg) => deleteNotebook([url, `&id=${notebookId}`], arg)
   )
 
   const { setNotification } = useNotification()
@@ -23,6 +24,12 @@ export const useDeleteNotebook = (
       }),
       rollbackOnError: true,
       throwOnError: false,
+      onError: (error) => {
+        setNotification({
+          message: getErrorMessage(error),
+          variant: "error",
+        })
+      },
       onSuccess: () => {
         setNotification({
           message: "notebook deleted!",

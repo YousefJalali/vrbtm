@@ -70,24 +70,24 @@ const handler = async (
     }
   }
 
-  if (req.method === "DELETE") {
-    const { id } = req.query
-    if (!id || typeof id !== "string") return
+  // if (req.method === "DELETE") {
+  //   const { id } = req.query
+  //   if (!id || typeof id !== "string") return
 
-    try {
-      const deletedNotebook = await prisma.notebook.delete({
-        where: { id },
-        include: {
-          flashcards: {},
-        },
-      })
+  //   try {
+  //     const deletedNotebook = await prisma.notebook.delete({
+  //       where: { id },
+  //       include: {
+  //         flashcards: {},
+  //       },
+  //     })
 
-      return res.status(200).json({ data: deletedNotebook })
-    } catch (error) {
-      console.log(error)
-      res.status(500).json({ error })
-    }
-  }
+  //     return res.status(200).json({ data: deletedNotebook })
+  //   } catch (error) {
+  //     console.log(error)
+  //     res.status(500).json({ error })
+  //   }
+  // }
 }
 
 export default handler

@@ -183,6 +183,25 @@ const handler = async (
       res.status(400).json({ error })
     }
   }
+
+  if (req.method === "DELETE") {
+    const { q, id } = req.query
+    if (!id || typeof id !== "string") return
+
+    try {
+      const deletedNotebook = await prisma.notebook.delete({
+        where: { id },
+        include: {
+          flashcards: {},
+        },
+      })
+
+      return res.status(200).json({ data: deletedNotebook })
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error })
+    }
+  }
 }
 
 export default handler
