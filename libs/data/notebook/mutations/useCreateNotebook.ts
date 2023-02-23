@@ -2,9 +2,10 @@ import useSWRMutation from "swr/mutation"
 import { Notebook } from "@/libs/types"
 import { createNotebook } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
+import { getErrorMessage } from "@/utils"
 
 export const useCreateNotebook = (query: string = "") => {
-  const { trigger, error, isMutating } = useSWRMutation(
+  const { trigger, error, isMutating, reset } = useSWRMutation(
     `/api/notebooks${query ? `?q=${query}` : ""}`,
     createNotebook
   )
@@ -41,7 +42,15 @@ export const useCreateNotebook = (query: string = "") => {
       }),
       rollbackOnError: true,
       throwOnError: false,
-      onError: (error) => console.log(error),
+      onError: (error) => {
+        if (error.hasOwnProperty("error")) {
+          getErrorMessage(error.error).replace("{}", "") &&
+            setNotification({
+              message: getErrorMessage(error.error),
+              variant: "error",
+            })
+        }
+      },
       onSuccess: () => {
         setNotification({
           message: "notebook created!",
@@ -55,7 +64,7 @@ export const useCreateNotebook = (query: string = "") => {
     })
   }
 
-  return { onSubmit, error, isMutating }
+  return { onSubmit, error, isMutating, reset }
 }
 
 export default useCreateNotebook

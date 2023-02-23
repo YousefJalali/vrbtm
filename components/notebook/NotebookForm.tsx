@@ -5,8 +5,9 @@ import ObjectID from "bson-objectid"
 import { useEffect, useMemo } from "react"
 import { Notebook } from "@/libs/types"
 import ColorInput from "@/libs/ui/color-input/ColorInput"
+import { addServerErrors } from "@/utils"
 
-const initialValues = {
+const initialValues = () => ({
   id: ObjectID().toHexString(),
   title: "",
   color:
@@ -18,7 +19,7 @@ const initialValues = {
   content: "",
   updatedAt: new Date(),
   createdAt: new Date(),
-}
+})
 
 export default function NotebookForm({
   id,
@@ -26,6 +27,7 @@ export default function NotebookForm({
   onSubmit,
   onCancel,
   error,
+  reset,
   loading,
   defaultValues,
 }: {
@@ -34,21 +36,21 @@ export default function NotebookForm({
   onSubmit: (data: Notebook, callback?: () => void) => void
   onCancel?: () => void
   error: any
+  reset: () => void
   loading?: boolean
   defaultValues?: Notebook
 }) {
   const cancelHandler = () => {
-    // clearErrors()
-
     if (onCancel) {
+      reset()
       onCancel()
     }
 
     if (type === "edit") {
-      reset(defaultValues)
+      resetForm(defaultValues)
     }
     if (type === "create") {
-      reset(initialValues)
+      resetForm(initialValues())
     }
   }
 
@@ -58,11 +60,11 @@ export default function NotebookForm({
     handleSubmit,
     formState: { errors },
     setError,
-    reset,
+    reset: resetForm,
     clearErrors,
   } = useForm<Notebook>({
     defaultValues: useMemo(
-      () => defaultValues || initialValues,
+      () => defaultValues || initialValues(),
       [defaultValues]
     ),
     resolver: yupResolver(notebookValidation),
@@ -70,16 +72,20 @@ export default function NotebookForm({
 
   //show error in form
   useEffect(() => {
-    if (error && error?.message?.includes("form-title")) {
-      setError("title", {
-        type: "custom",
-        message: error.message.replace("form-title:", ""),
-      })
+    if (error) {
+      if (error.hasOwnProperty("validationErrors")) {
+        addServerErrors(error.validationErrors, setError)
+      }
     }
-  }, [error, setError])
+
+    return () => {
+      clearErrors()
+    }
+  }, [error, setError, clearErrors])
 
   const submitHandler = (data: Notebook) => {
-    onSubmit({ ...initialValues, ...data }, cancelHandler)
+    console.log(data)
+    onSubmit({ ...initialValues(), ...data }, cancelHandler)
   }
 
   const titleError = errors?.title?.message || ""

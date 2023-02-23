@@ -28,11 +28,11 @@ export async function customFetch<T>(
   // }
 
   if (!res.ok) {
-    const err = new Error(res.statusText)
-    const { error } = await res.json()
-    err.message = error
-    throw err
-    // throw getErrorMessage(err)
+    const error = new Error(res.statusText)
+    const { error: err, validationErrors } = await res.json()
+
+    error.message = err
+    throw { error, validationErrors }
   }
 
   return await res.json()

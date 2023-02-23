@@ -13,7 +13,7 @@ export default function CreateNotebook({
   children: ReactNode
 }) {
   const [showModal, setModal] = useState(false)
-  const { onSubmit, error, isMutating } = useCreateNotebook(query)
+  const { onSubmit, error, isMutating, reset } = useCreateNotebook(query)
 
   return (
     <>
@@ -37,6 +37,7 @@ export default function CreateNotebook({
             onCancel={() => setModal(false)}
             error={error}
             loading={isMutating}
+            reset={reset}
           />
         )}
       </Modal>

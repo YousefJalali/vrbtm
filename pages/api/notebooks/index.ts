@@ -117,14 +117,19 @@ const handler = async (
 
       const isTitleExist = await prisma.notebook.findFirst({
         where: {
-          title: notebook.title,
+          title: notebook.title.trim().toLowerCase(),
         },
       })
 
       if (isTitleExist) {
-        return res
-          .status(400)
-          .json({ error: "form-title:Title already exist!" })
+        return res.status(400).json({
+          validationErrors: {
+            title: {
+              type: "required",
+              message: "Title already exist!",
+            },
+          },
+        })
       }
 
       let id = notebook.id
@@ -136,6 +141,7 @@ const handler = async (
       const createdNotebook = await prisma.notebook.create({
         data: {
           ...notebook,
+          title: notebook.title.trim().toLowerCase(),
           id,
         },
       })
