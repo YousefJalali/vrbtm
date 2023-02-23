@@ -2,6 +2,7 @@ import { FieldError, FieldErrors, Path, UseFormSetError } from "react-hook-form"
 
 export function addServerErrors<T>(
   errors: FieldErrors,
+  //@ts-ignore
   setError: UseFormSetError<T>
 ) {
   for (const [key, value] of Object.entries(errors)) {

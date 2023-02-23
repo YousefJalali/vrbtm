@@ -4,7 +4,7 @@ import { updateNotebook } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
 
 export function useUpdateNotebook(query: string = "") {
-  const { trigger, error, isMutating } = useSWRMutation(
+  const { trigger, error, isMutating, reset } = useSWRMutation(
     `/api/notebooks${query ? `?q=${query}` : ""}`,
     updateNotebook
   )
@@ -43,5 +43,5 @@ export function useUpdateNotebook(query: string = "") {
     })
   }
 
-  return { onSubmit, error, isMutating }
+  return { onSubmit, error, isMutating, reset }
 }
