@@ -42,7 +42,7 @@ export default function NotebookCard({
           }}
         >
           <h3
-            className="mb-3 mt-5 pr-14 text-xl capitalize line-clamp-3"
+            className="mb-3 mt-5 pr-14 text-xl capitalize line-clamp-4"
             style={{ color }}
           >
             {notebook.title}

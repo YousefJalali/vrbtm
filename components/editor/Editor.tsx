@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { DeltaStatic, Sources } from "quill"
 import ReactQuill, { Range, UnprivilegedEditor } from "react-quill"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
@@ -17,6 +17,9 @@ const AddToNotebook = dynamic(
   () => import("@/components/notebook/AddToNotebook"),
   {
     ssr: false,
+    loading: () => (
+      <button className="loading btn-primary btn mt-3 w-full"></button>
+    ),
   }
 )
 
@@ -179,8 +182,6 @@ const Editor = ({
 
     resetHandler()
   }
-
-  console.log(readOnly, text)
 
   return (
     <main className="flex h-full flex-col px-6 pb-6">

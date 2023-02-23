@@ -13,7 +13,7 @@ export default function NotebookDetailsPage({
   const router = useRouter()
 
   if (typeof router.query.id !== "string") {
-    return "Notebook not found"
+    return "Notebook not found!!!"
   }
 
   return (
@@ -49,8 +49,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       // notebook: JSON.parse(JSON.stringify(notebook)),
       fallback: {
-        [unstable_serialize(["/api/notebooks", `/${context.params.id}`])]:
-          JSON.parse(JSON.stringify(notebook)),
+        [unstable_serialize(["/api/notebooks", `/${context.params.id}`])]: {
+          data: JSON.parse(JSON.stringify(notebook)),
+        },
       },
     },
   }

@@ -36,21 +36,28 @@ const handler = async (
   if (req.method === "PUT") {
     const { type } = req.query
 
-    if (type === "add") {
-      const content = req.body
-      const { id } = req.query
+    const content = req.body
+    const { id } = req.query
 
-      if (!content || !id || typeof id !== "string") return
+    if (!content || !id || typeof id !== "string") return
 
+    let existedNotebook = null
+
+    try {
+      //check if task exist in DB
+      existedNotebook = await prisma.notebook.findUnique({
+        where: { id },
+      })
+    } catch (error) {
+      res.status(500).json({ error })
+    }
+
+    if (!existedNotebook) {
+      return res.status(400).json({ error: "Notebook not found" })
+    }
+
+    if (type === "concat") {
       try {
-        //check if task exist in DB
-        const existedNotebook = await prisma.notebook.findUnique({
-          where: { id },
-        })
-        if (!existedNotebook) {
-          return res.status(400).json({ error: "Notebook not found" })
-        }
-
         const notebook = {
           ...existedNotebook,
           content: existedNotebook.content.concat(content),
@@ -68,26 +75,26 @@ const handler = async (
         res.status(500).json({ error })
       }
     }
+
+    if (type === "replace") {
+      try {
+        const notebook = {
+          ...existedNotebook,
+          content: content,
+        }
+
+        const updatedNotebook = await prisma.notebook.update({
+          where: { id: notebook.id },
+          data: omit(notebook, "id"),
+        })
+
+        res.status(200).json({ data: updatedNotebook })
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error })
+      }
+    }
   }
-
-  // if (req.method === "DELETE") {
-  //   const { id } = req.query
-  //   if (!id || typeof id !== "string") return
-
-  //   try {
-  //     const deletedNotebook = await prisma.notebook.delete({
-  //       where: { id },
-  //       include: {
-  //         flashcards: {},
-  //       },
-  //     })
-
-  //     return res.status(200).json({ data: deletedNotebook })
-  //   } catch (error) {
-  //     console.log(error)
-  //     res.status(500).json({ error })
-  //   }
-  // }
 }
 
 export default handler

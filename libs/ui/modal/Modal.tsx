@@ -1,5 +1,10 @@
-import { ReactNode } from "react"
+import { ReactNode, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
+import {
+  disableBodyScroll,
+  enableBodyScroll,
+  clearAllBodyScrollLocks,
+} from "body-scroll-lock"
 
 export default function Modal({
   isOpen,
@@ -12,6 +17,22 @@ export default function Modal({
   children: ReactNode
   id: string
 }) {
+  const targetRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (targetRef.current) {
+      if (isOpen) {
+        disableBodyScroll(targetRef.current)
+      } else {
+        enableBodyScroll(targetRef.current)
+      }
+
+      return () => {
+        clearAllBodyScrollLocks()
+      }
+    }
+  }, [isOpen])
+
   if (typeof window === "undefined") return null
 
   return createPortal
@@ -22,6 +43,7 @@ export default function Modal({
             <input type="checkbox" id={id} className="modal-toggle" />
           )}
           <div
+            ref={targetRef}
             className={`modal modal-bottom sm:modal-middle ${
               isOpen === undefined ? "" : isOpen ? "modal-open" : "modal-close"
             }`}

@@ -2,7 +2,7 @@ import { SlPlus } from "react-icons/sl"
 import { useCallback, useMemo, useState } from "react"
 import sortBy from "lodash.sortby"
 import useNotebooks from "@/libs/data/notebook/queries/useNotebooks"
-import { useAddToNotebook } from "@/libs/data/notebook"
+import { useUpdateNotebookContent } from "@/libs/data/notebook"
 import CreateNotebook from "./CreateNotebook"
 
 export default function SelectNotebook({
@@ -18,8 +18,9 @@ export default function SelectNotebook({
   const [filter, setFilter] = useState("")
 
   const { notebooks, isLoading } = useNotebooks("list")
-  const { onSubmit, isMutating } = useAddToNotebook(
+  const { onSubmit, isMutating } = useUpdateNotebookContent(
     selectedNotebookId,
+    "concat",
     callback
   )
 

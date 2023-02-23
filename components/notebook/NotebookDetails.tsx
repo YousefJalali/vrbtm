@@ -1,6 +1,6 @@
 import Editor from "@/components/editor/Editor"
+import { useUpdateNotebookContent } from "@/libs/data/notebook"
 import useNotebook from "@/libs/data/notebook/queries/useNotebook"
-import isEqual from "lodash.isequal"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { FiChevronLeft } from "react-icons/fi"
@@ -8,12 +8,23 @@ import Header from "../layout/Header"
 
 export default function NotebookDetails({ id }: { id: string }) {
   const [value, setValue] = useState("")
+  const [initialValue, setInitialValue] = useState("")
   const [isReadOnly, setReadOnly] = useState(true)
+
   const { notebook, isLoading } = useNotebook(id)
+  const { onSubmit, isMutating } = useUpdateNotebookContent(
+    id,
+    "replace",
+    () => {
+      setInitialValue(value)
+      setReadOnly(true)
+    }
+  )
 
   useEffect(() => {
     if (notebook) {
       setValue(notebook.content)
+      setInitialValue(notebook.content)
     }
   }, [notebook])
 
@@ -25,26 +36,19 @@ export default function NotebookDetails({ id }: { id: string }) {
     )
   }
   if (!notebook) {
-    return <div />
+    return (
+      <main>
+        <div>Notebook not found</div>
+      </main>
+    )
   }
 
   const editHandler = () => {
     setReadOnly((prevState) => !prevState)
 
-    if (!isReadOnly) {
-      const v = value.split("")
-      const content = notebook.content.split("")
-
-      // console.log(value === notebook.content)
-
-      // console.log(value.slice(916, 946))
-      // console.log(notebook.content.slice(916, 946))
-
-      // for (let i = 0; i < v.length; i++) {
-      //   if (v[i] !== content[i]) {
-      //     console.log(i)
-      //   }
-      // }
+    if (!isReadOnly && value !== initialValue) {
+      onSubmit(value)
+      return
     }
   }
 
@@ -58,8 +62,11 @@ export default function NotebookDetails({ id }: { id: string }) {
         }
         title=""
         rightIcon={
-          <button className="btn-link btn" onClick={editHandler}>
-            {isReadOnly ? "Edit" : "save"}
+          <button
+            className={`btn-link btn ${isMutating ? "loading" : ""}`}
+            onClick={editHandler}
+          >
+            {isMutating ? "" : isReadOnly ? "Edit" : "save"}
           </button>
         }
       />
