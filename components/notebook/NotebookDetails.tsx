@@ -56,15 +56,27 @@ export default function NotebookDetails({ id }: { id: string }) {
     <>
       <Header
         leftIcon={
-          <Link href="/notebooks" className="btn-ghost btn-square btn -ml-5">
-            <FiChevronLeft size={24} />
-          </Link>
+          isReadOnly ? (
+            <Link href="/notebooks" className="btn-ghost btn-square btn -ml-5">
+              <FiChevronLeft size={24} />
+            </Link>
+          ) : (
+            <button
+              className="btn-ghost btn-sm btn -ml-3 text-error"
+              onClick={() => setReadOnly(true)}
+            >
+              cancel
+            </button>
+          )
         }
         title=""
         rightIcon={
           <button
-            className={`btn-link btn ${isMutating ? "loading" : ""}`}
+            className={`btn-link btn-sm btn disabled:bg-transparent ${
+              isMutating ? "loading" : ""
+            }`}
             onClick={editHandler}
+            disabled={!isReadOnly && value === initialValue}
           >
             {isMutating ? "" : isReadOnly ? "Edit" : "save"}
           </button>
@@ -72,7 +84,7 @@ export default function NotebookDetails({ id }: { id: string }) {
       />
       <div>
         <div className="prose mb-6 px-6">
-          <h3>{notebook.title}</h3>
+          <h2>{notebook.title}</h2>
           <p className="opacity-60">{notebook.description}</p>
         </div>
 

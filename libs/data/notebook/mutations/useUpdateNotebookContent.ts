@@ -32,9 +32,12 @@ export const useUpdateNotebookContent = (
       },
       onSuccess: () => {
         setNotification({
-          message: "Content added to notebook!",
+          message:
+            query === "concat"
+              ? "Content added to notebook!"
+              : "Content updated!",
           variant: "success",
-          link: `/notebooks/${notebookId}`,
+          link: query === "concat" ? `/notebooks/${notebookId}` : undefined,
         })
 
         if (callback) {
