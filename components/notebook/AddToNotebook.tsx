@@ -19,9 +19,7 @@ export default function AddToNotebook({ content }: { content: string }) {
         isOpen={showModal}
         dismiss={() => setModal(false)}
       >
-        {showModal && (
-          <SelectNotebook content={content} callback={() => setModal(false)} />
-        )}
+        <SelectNotebook content={content} callback={() => setModal(false)} />
       </Modal>
     </>
   )

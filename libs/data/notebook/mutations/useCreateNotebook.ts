@@ -19,7 +19,6 @@ export const useCreateNotebook = (query: string = "") => {
     trigger(formData, {
       optimisticData: ({ data: notebooks }: { data: Notebook[] }) => ({
         data: [
-          ...notebooks,
           {
             ...(query === "list"
               ? {
@@ -38,6 +37,7 @@ export const useCreateNotebook = (query: string = "") => {
               _count: { flashcards: 0 },
             }),
           },
+          ...notebooks,
         ],
       }),
       rollbackOnError: true,

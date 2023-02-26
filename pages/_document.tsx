@@ -8,7 +8,7 @@ export default class MyDocument extends Document {
         <Head>
           <meta name="description" content="VRBTM"></meta>
         </Head>
-        <body>
+        <body className="w-full">
           <Main />
           <NextScript />
         </body>

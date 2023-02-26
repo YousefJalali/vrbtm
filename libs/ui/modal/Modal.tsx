@@ -19,19 +19,43 @@ export default function Modal({
 }) {
   const targetRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (targetRef.current) {
-      if (isOpen) {
-        disableBodyScroll(targetRef.current)
-      } else {
-        enableBodyScroll(targetRef.current)
-      }
+  // useEffect(() => {
+  //   console.log("Called")
+  //   let elem = document.getElementById("modal")
+  //   console.log(elem)
+  //   console.log(targetRef.current)
 
-      return () => {
-        clearAllBodyScrollLocks()
-      }
-    }
-  }, [isOpen])
+  //   if (elem !== null && targetRef.current) {
+  //     const arr = Array.from(elem.children)
+
+  //     console.log(arr.some((child) => child.className.includes("modal-open")))
+
+  //     if (arr.some((child) => child.className.includes("modal-open"))) {
+  //       console.log("here")
+  //       disableBodyScroll(targetRef.current)
+  //     } else {
+  //       console.log("here 2")
+  //       enableBodyScroll(targetRef.current)
+  //     }
+  //   }
+  //   return () => {
+  //     clearAllBodyScrollLocks()
+  //   }
+  // }, [isOpen])
+
+  // useEffect(() => {
+  //   if (targetRef.current) {
+  //     if (isOpen) {
+  //       disableBodyScroll(targetRef.current)
+  //     } else {
+  //       enableBodyScroll(targetRef.current)
+  //     }
+  //   }
+
+  //   // return () => {
+  //   //   clearAllBodyScrollLocks()
+  //   // }
+  // }, [isOpen])
 
   if (typeof window === "undefined") return null
 
@@ -53,7 +77,9 @@ export default function Modal({
               className="absolute top-0 left-0 h-full w-full bg-black opacity-5"
               onClick={dismiss}
             />
-            <div className="modal-box">{children}</div>
+            <div className="modal-box" id={`${id}-box`}>
+              {isOpen && children}
+            </div>
           </div>
         </>,
         document.getElementById("modal") as HTMLDivElement,

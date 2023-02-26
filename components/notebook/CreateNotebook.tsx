@@ -30,16 +30,14 @@ export default function CreateNotebook({
         isOpen={showModal}
         dismiss={() => setModal(false)}
       >
-        {showModal && (
-          <NotebookForm
-            id="new-notebook-modal"
-            onSubmit={onSubmit}
-            onCancel={() => setModal(false)}
-            error={error}
-            loading={isMutating}
-            reset={reset}
-          />
-        )}
+        <NotebookForm
+          id="new-notebook-modal"
+          onSubmit={onSubmit}
+          onCancel={() => setModal(false)}
+          error={error}
+          loading={isMutating}
+          reset={reset}
+        />
       </Modal>
     </>
   )
