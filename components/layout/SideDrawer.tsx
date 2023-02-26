@@ -58,19 +58,31 @@ export default function SideDrawer() {
           </Link>
         </li>
 
-        <ul className="menu flex flex-1 justify-end space-y-2">
-          <li className="btn-primary btn rounded-lg text-primary-content">
+        <ul className="menu flex flex-1 justify-end">
+          <li>
             <Link href="/signup" onClick={clickHandler}>
               Sign Up
             </Link>
           </li>
 
-          <li className="btn-primary btn-outline btn rounded-lg">
+          <li>
             <Link href="/login" onClick={clickHandler}>
               Login
             </Link>
           </li>
         </ul>
+
+        <li className="form-control w-full border-t pt-2">
+          <label className="label cursor-pointer">
+            <span>Dark Mode</span>
+            <input
+              type="checkbox"
+              className="toggle-primary toggle"
+              data-toggle-theme="dark,light"
+              data-act-class="ACTIVECLASS"
+            />
+          </label>
+        </li>
       </ul>
     </div>
   )

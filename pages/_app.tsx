@@ -1,10 +1,12 @@
 import type { AppProps } from "next/app"
+import { themeChange } from "theme-change"
 import { SessionProvider } from "next-auth/react"
 import "@/styles/globals.css"
 import { Montserrat } from "@next/font/google"
 import Layout from "@/components/layout/Layout"
 import { NotificationCtxProvider } from "@/libs/contexts/NotificationCtx"
 import Head from "next/head"
+import { useEffect } from "react"
 
 const font = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" })
 
@@ -12,6 +14,11 @@ export default function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
+  useEffect(() => {
+    themeChange(false)
+    // 👆 false parameter is required for react project
+  }, [])
+
   return (
     <>
       <Head>

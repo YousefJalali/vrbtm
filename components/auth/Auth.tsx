@@ -5,7 +5,6 @@ import SignUp from "./SignUp"
 export default function Auth({ login = false }: { login: boolean }) {
   const [isLogin, setLogin] = useState(login)
 
-  console.log(isLogin)
   return (
     <>
       {isLogin ? (

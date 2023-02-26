@@ -47,13 +47,13 @@ export default function FlashcardList() {
           (notebook) =>
             notebook.flashcards.length > 0 && (
               <section key={notebook.id} className="mt-6">
-                <div className="flex w-full items-center justify-between space-x-2">
+                <div className="mb-1 flex w-full items-center justify-between">
                   <span className="truncate font-bold">{notebook.title}</span>
                   <Link
                     href="/flashcards"
-                    className=" btn-ghost btn-xs btn p-0 opacity-60"
+                    className="btn-ghost btn-xs btn -mr-1 p-1 opacity-60"
                   >
-                    view all
+                    more
                   </Link>
                 </div>
 
