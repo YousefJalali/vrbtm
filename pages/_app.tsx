@@ -16,7 +16,6 @@ export default function MyApp({
 }: AppProps) {
   useEffect(() => {
     themeChange(false)
-    // 👆 false parameter is required for react project
   }, [])
 
   return (

@@ -12,6 +12,10 @@
   @apply text-base-content before:left-0 before:right-0 before:content-[attr(data-placeholder)] !important;
 }
 
+.ql-editor.ql-blank::before {
+  @apply text-base-content opacity-50 !important;
+}
+
 .ql-editor mark {
   @apply relative cursor-pointer whitespace-nowrap rounded-3xl bg-primary text-transparent hover:bg-transparent hover:text-primary;
 }

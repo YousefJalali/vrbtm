@@ -78,7 +78,7 @@ export default function SideDrawer() {
             <input
               type="checkbox"
               className="toggle-primary toggle"
-              data-toggle-theme="dark,light"
+              data-toggle-theme="light, dark"
               data-act-class="ACTIVECLASS"
             />
           </label>
