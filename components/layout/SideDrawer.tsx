@@ -5,9 +5,10 @@ import {
 } from "react-icons/bs"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export default function SideDrawer() {
+  const [theme, setTheme] = useState<string | null>(null)
   const labelRef = useRef<HTMLLabelElement>(null)
   const router = useRouter()
 
@@ -16,6 +17,10 @@ export default function SideDrawer() {
       labelRef.current.click()
     }
   }
+
+  useEffect(() => {
+    setTheme(localStorage.getItem("theme"))
+  }, [])
 
   return (
     <div className="drawer-side border-r">
@@ -77,9 +82,14 @@ export default function SideDrawer() {
             <span>Dark Mode</span>
             <input
               type="checkbox"
-              className="toggle-primary toggle"
+              checked={theme?.trim() === "dark"}
+              onChange={() =>
+                setTheme((prevState) =>
+                  prevState === "light" ? "dark" : "light"
+                )
+              }
+              className="checked toggle-primary toggle"
               data-toggle-theme="light, dark"
-              data-act-class="ACTIVECLASS"
             />
           </label>
         </li>
