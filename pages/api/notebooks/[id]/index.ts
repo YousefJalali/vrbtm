@@ -13,12 +13,23 @@ const handler = async (
   }>
 ) => {
   if (req.method === "GET") {
-    const { id } = req.query
+    const { id, q } = req.query
     if (!id || typeof id !== "string") return
 
     try {
       const notebook: Notebook | null = await prisma.notebook.findUnique({
         where: { id },
+        ...(q &&
+          q === "with-flashcards" && {
+            include: {
+              flashcards: true,
+              _count: {
+                select: {
+                  flashcards: true,
+                },
+              },
+            },
+          }),
       })
 
       if (!notebook) {

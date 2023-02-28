@@ -5,7 +5,8 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { FiChevronLeft } from "react-icons/fi"
-import Header from "../layout/Header"
+import Header from "../../layout/Header"
+import NotebookDetailsOptions from "./NotebookDetailsOptions"
 
 const Prompt = dynamic(() => import("@/libs/ui/prompt/Prompt"), {
   ssr: false,
@@ -57,13 +58,9 @@ export default function NotebookDetails({ id }: { id: string }) {
     )
   }
 
-  const editHandler = () => {
+  const saveHandler = () => {
     setReadOnly((prevState) => !prevState)
-
-    if (!isReadOnly && value !== initialValue) {
-      onSubmit(value)
-      return
-    }
+    onSubmit(value)
   }
 
   const cancelHandler = () => {
@@ -85,12 +82,15 @@ export default function NotebookDetails({ id }: { id: string }) {
       <Header
         leftIcon={
           isReadOnly ? (
-            <Link href="/notebooks" className="btn-ghost btn-square btn -ml-5">
+            <Link
+              href="/notebooks"
+              className="btn-ghost btn-sm btn-square btn -ml-3"
+            >
               <FiChevronLeft size={24} />
             </Link>
           ) : (
             <button
-              className="btn-ghost btn-sm btn -ml-3 text-error"
+              className="btn-ghost btn-sm btn -ml-3 text-error hover:bg-transparent hover:underline"
               onClick={cancelHandler}
             >
               cancel
@@ -99,18 +99,16 @@ export default function NotebookDetails({ id }: { id: string }) {
         }
         title=""
         rightIcon={
-          <button
-            className={`btn-link btn-sm btn disabled:bg-transparent ${
-              isMutating ? "loading" : ""
-            }`}
-            onClick={editHandler}
-            disabled={
-              (!isReadOnly && value === initialValue) ||
-              (isReadOnly && notebook.content === "")
-            }
-          >
-            {isMutating ? "" : isReadOnly ? "Edit" : "save"}
-          </button>
+          <NotebookDetailsOptions
+            {...{
+              ...{ notebookId: notebook.id },
+              ...{ onEdit: () => setReadOnly(false) },
+              ...{ onSave: saveHandler },
+              isReadOnly,
+              isMutating,
+              ...{ disabled: value === initialValue },
+            }}
+          />
         }
       />
       <div>

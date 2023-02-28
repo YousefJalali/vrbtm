@@ -50,7 +50,7 @@ export default function FlashcardList() {
                 <div className="mb-1 flex w-full items-center justify-between">
                   <span className="truncate font-bold">{notebook.title}</span>
                   <Link
-                    href="/flashcards"
+                    href={`/flashcards/${notebook.id}`}
                     className="btn-ghost btn-xs btn -mr-1 p-1 opacity-60"
                   >
                     more

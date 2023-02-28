@@ -3,7 +3,7 @@ import { GetStaticProps } from "next"
 import { prisma } from "@/libs/db/prisma"
 import { SWRConfig, unstable_serialize } from "swr"
 import { useRouter } from "next/router"
-import NotebookDetails from "@/components/notebook/NotebookDetails"
+import NotebookDetails from "@/components/notebook/notebook-details/NotebookDetails"
 
 export default function NotebookDetailsPage({
   fallback,
