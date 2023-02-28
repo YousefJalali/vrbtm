@@ -34,6 +34,7 @@ export default function MyApp({
             </Layout>
 
             <div id="modal" />
+            <div id="prompt" />
             <div id="notification" />
           </NotificationCtxProvider>
         </div>

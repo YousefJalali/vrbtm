@@ -42,14 +42,14 @@ export default function NotebookList() {
         <FiPlus size={24} />
       </CreateNotebook>
 
-      <ul className="mt-3 columns-2 gap-4 bg-base-100 py-2">
+      <ul className="mt-4 columns-2 gap-5 bg-base-100 py-2">
         {notebooks.length === 0 ? (
           <li>You do not have any notebooks.</li>
         ) : filteredNotebooks(notebooks).length > 0 ? (
           filteredNotebooks(notebooks).map((notebook) => (
             <li
               key={notebook.id}
-              className="relative mb-4 inline-block w-full rounded-lg"
+              className="relative mb-5 inline-block w-full rounded-lg"
             >
               <NotebookCard notebook={notebook} />
             </li>
