@@ -29,7 +29,7 @@ type Props = {
   htmlText: string
   onChange: (value: string) => void
   omitMode?: boolean
-  notebook?: string
+  notebookId?: string
 }
 
 const Editor = ({
@@ -38,11 +38,10 @@ const Editor = ({
   htmlText = "",
   onChange,
   omitMode = false,
-  notebook,
+  notebookId,
 }: Props) => {
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
-  // const [htmlText, setHtmlText] = useState(value)
   const [isEyeOpen, setEye] = useState(false)
   const [isOmit, setOmit] = useState(omitMode)
   const [isFirstOmit, setFirstOmit] = useState(true)
@@ -65,6 +64,14 @@ const Editor = ({
       }
     }
   }, [isOmit])
+
+  useEffect(() => {
+    if (!readOnly) {
+      if (editorRef.current) {
+        editorRef.current.focus()
+      }
+    }
+  }, [readOnly])
 
   useEffect(() => {
     if (htmlText.includes("</mark>") || isOmit) {
@@ -203,11 +210,11 @@ const Editor = ({
                 />
               )}
 
-              {isOmit && selectedText && notebook && (
+              {isOmit && selectedText && notebookId && (
                 <CreateFlashcard
                   className="btn-sm btn"
                   defaultValues={{
-                    notebookId: notebook,
+                    notebookId,
                     question: selectedText.text,
                   }}
                 >
@@ -254,7 +261,7 @@ const Editor = ({
         </MenuContext>
       </div>
 
-      {!notebook && isOmit && <AddToNotebook content={htmlText} />}
+      {!notebookId && isOmit && <AddToNotebook content={htmlText} />}
     </main>
   )
 }

@@ -39,7 +39,13 @@ const handler = async (
     const content = req.body
     const { id } = req.query
 
-    if (!content || !id || typeof id !== "string") return
+    if (
+      !content ||
+      !id ||
+      typeof id !== "string" ||
+      typeof content !== "string"
+    )
+      return res.status(400).json({ error: "unsupported type" })
 
     let existedNotebook = null
 

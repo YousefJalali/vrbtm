@@ -14,6 +14,7 @@ const Prompt = dynamic(() => import("@/libs/ui/prompt/Prompt"), {
 
 export default function NotebookDetails({ id }: { id: string }) {
   const [value, setValue] = useState("")
+  const [txtValue, setTxtValue] = useState("")
   const [initialValue, setInitialValue] = useState("")
   const [isReadOnly, setReadOnly] = useState(true)
   const [undoChange, setUndoChange] = useState(false)
@@ -27,6 +28,12 @@ export default function NotebookDetails({ id }: { id: string }) {
       setReadOnly(true)
     }
   )
+
+  useEffect(() => {
+    var span = new DOMParser().parseFromString(notebook.content, "text/html")
+      .documentElement.textContent
+    setTxtValue(span || "")
+  }, [notebook])
 
   useEffect(() => {
     if (notebook) {
@@ -112,24 +119,19 @@ export default function NotebookDetails({ id }: { id: string }) {
           <p className="opacity-60">{notebook.description}</p>
         </div>
 
-        {isReadOnly && notebook.content === "" ? (
-          <div className="flex w-full flex-col items-center space-y-2 px-6">
-            <span className="block opacity-50">
-              This note book has no content.
-            </span>
-            <button
-              className="btn-primary btn-sm btn w-fit"
-              onClick={() => setReadOnly(false)}
-            >
-              Add content
-            </button>
-          </div>
+        {txtValue.trim().length === 0 && isReadOnly ? (
+          <button
+            className=" w-full px-6 text-left italic opacity-50"
+            onClick={() => setReadOnly(false)}
+          >
+            A brief about the task...
+          </button>
         ) : (
           <Editor
             htmlText={value}
             onChange={setValue}
             readOnly={isReadOnly}
-            notebook={notebook.id}
+            notebookId={notebook.id}
             omitMode
           />
         )}
