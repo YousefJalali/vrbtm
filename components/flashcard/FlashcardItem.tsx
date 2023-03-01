@@ -25,7 +25,7 @@ export default function FlashcardItem({
       } h-32 w-[calc(100vw-3rem)]  sm:w-full`}
       style={{ backgroundColor: bgColor, color }}
     >
-      <div className="card-body flex items-center justify-center">
+      <div className="card-body flex h-full items-center justify-center">
         {children}
       </div>
     </div>
