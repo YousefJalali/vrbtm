@@ -80,6 +80,7 @@ export default function NotebookDetails({ id }: { id: string }) {
   return (
     <>
       <Header
+        sticky
         leftIcon={
           isReadOnly ? (
             <Link
@@ -98,6 +99,7 @@ export default function NotebookDetails({ id }: { id: string }) {
           )
         }
         title=""
+        sectionTitle={notebook.title}
         rightIcon={
           <NotebookDetailsOptions
             {...{
@@ -112,11 +114,6 @@ export default function NotebookDetails({ id }: { id: string }) {
         }
       />
       <div>
-        <div className="prose mb-6 px-6">
-          <h2>{notebook.title}</h2>
-          <p className="opacity-60">{notebook.description}</p>
-        </div>
-
         {txtValue.trim().length === 0 && isReadOnly ? (
           <button
             className=" w-full px-6 text-left italic opacity-50"

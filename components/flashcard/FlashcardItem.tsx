@@ -32,7 +32,7 @@ export default function FlashcardItem({
   )
 
   return (
-    <label className="swap swap-flip w-full sm:w-fit">
+    <label className="swap swap-flip h-32 w-full sm:w-fit">
       <input type="checkbox" className="w-full" />
 
       <Wrapper>

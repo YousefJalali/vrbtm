@@ -1,7 +1,5 @@
-import Header from "@/components/layout/Header"
 import { NotebookWithFlashcards } from "@/libs/types"
 import { GetStaticProps } from "next"
-import Link from "next/link"
 import { useRouter } from "next/router"
 import { FiChevronLeft } from "react-icons/fi"
 import { SWRConfig, unstable_serialize } from "swr"
@@ -16,28 +14,17 @@ export default function NotebookFlashcards({
   const router = useRouter()
 
   if (typeof router.query.notebookId !== "string") {
-    return "Notebook not found!!!"
+    return (
+      <main className="px-6">
+        <div>Flashcards not found</div>
+      </main>
+    )
   }
 
   return (
-    <>
-      <Header
-        leftIcon={
-          <a
-            onClick={router.back}
-            className="btn-ghost btn-sm btn-square btn -ml-3"
-          >
-            <FiChevronLeft size={24} />
-          </a>
-        }
-        title=""
-        rightIcon={<button className="btn-ghost btn-sm btn">select</button>}
-      />
-
-      <SWRConfig value={{ fallback }}>
-        <NotebookFlashcardsList id={router.query.notebookId} />
-      </SWRConfig>
-    </>
+    <SWRConfig value={{ fallback }}>
+      <NotebookFlashcardsList id={router.query.notebookId} />
+    </SWRConfig>
   )
 }
 

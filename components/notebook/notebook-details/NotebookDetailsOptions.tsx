@@ -18,10 +18,10 @@ export default function NotebookDetailsOptions({
   onSave: () => void
 }) {
   return isMutating ? (
-    <button className="loading btn-ghost btn-square btn text-primary"></button>
+    <button className="btn-ghost loading btn-square btn text-primary"></button>
   ) : isReadOnly ? (
     <div className="dropdown-bottom dropdown-end dropdown rounded-full p-0">
-      <label tabIndex={0} className="btn-ghost btn-sm btn-square btn p-0">
+      <label tabIndex={0} className="btn-ghost btn-sm btn-square btn -mr-3 p-0">
         <FiMoreVertical size={18} />
       </label>
       <ul
