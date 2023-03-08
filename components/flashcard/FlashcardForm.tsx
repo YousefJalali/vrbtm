@@ -4,14 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import ObjectID from "bson-objectid"
 import { useForm } from "react-hook-form"
 
-const initialValues: Flashcard = {
+const initialValues = () => ({
   id: ObjectID().toHexString(),
   question: "",
   answer: "",
   notebookId: "",
   updatedAt: new Date(),
   createdAt: new Date(),
-}
+})
 
 export default function FlashcardForm({
   id,
@@ -19,6 +19,7 @@ export default function FlashcardForm({
   onSubmit,
   onCancel,
   error,
+  loading,
   defaultValues,
 }: {
   id: string
@@ -26,6 +27,7 @@ export default function FlashcardForm({
   onSubmit: (data: Flashcard, callback?: () => void) => void
   onCancel?: () => void
   error: any
+  loading?: boolean
   defaultValues?: Partial<Flashcard>
 }) {
   const cancelHandler = () => {
@@ -34,10 +36,10 @@ export default function FlashcardForm({
     }
 
     if (type === "edit") {
-      reset({ ...initialValues, ...defaultValues })
+      reset({ ...initialValues(), ...defaultValues })
     }
     if (type === "create") {
-      reset(initialValues)
+      reset(initialValues())
     }
   }
 
@@ -48,12 +50,12 @@ export default function FlashcardForm({
     setError,
     reset,
   } = useForm<Flashcard>({
-    defaultValues: { ...initialValues, ...defaultValues },
+    defaultValues: { ...initialValues(), ...defaultValues },
     resolver: yupResolver(flashcardValidation),
   })
 
   const submitHandler = (data: Flashcard) => {
-    onSubmit({ ...initialValues, ...data }, cancelHandler)
+    onSubmit({ ...initialValues(), ...data }, cancelHandler)
   }
 
   return (
@@ -89,7 +91,7 @@ export default function FlashcardForm({
         <button className="btn-ghost btn" onClick={cancelHandler}>
           Cancel
         </button>
-        <button className="btn-primary btn">
+        <button className={`btn-primary btn ${loading ? "loading" : ""}`}>
           {type === "create" ? "create" : "Update"}
         </button>
       </div>

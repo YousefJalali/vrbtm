@@ -213,8 +213,8 @@ const Editor = ({
               {isOmit && selectedText && notebookId && (
                 <CreateFlashcard
                   className="btn-sm btn"
+                  notebookId={notebookId}
                   defaultValues={{
-                    notebookId,
                     question: selectedText.text,
                   }}
                 >
@@ -245,7 +245,8 @@ const Editor = ({
           </div>
         )}
 
-        <MenuContext isOmit={isOmit}>
+        <div className="flex flex-1 flex-col">
+          {/* <MenuContext isOmit={isOmit}> */}
           <TextEditor
             ref={editorRef}
             readOnly={readOnly}
@@ -258,7 +259,8 @@ const Editor = ({
             `}
             onChangeSelection={changeSelectionHandler}
           />
-        </MenuContext>
+          {/* </MenuContext> */}
+        </div>
       </div>
 
       {!notebookId && isOmit && <AddToNotebook content={htmlText} />}

@@ -30,7 +30,7 @@ export default function SideDrawer() {
         className="drawer-overlay"
       ></label>
 
-      <ul className="menu w-80 space-y-2 bg-base-100 p-4 text-base-content">
+      <ul className="menu w-80 space-y-2 bg-base-100 p-6 text-base-content">
         {/* <!-- Sidebar content here --> */}
         <li>
           <Link

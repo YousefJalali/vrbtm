@@ -38,11 +38,11 @@ export default function NotebookList() {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <CreateNotebook className="btn-primary btn-circle btn fixed bottom-5 right-6 z-50 mt-4 shadow">
+      <CreateNotebook className="btn-primary btn btn-circle fixed bottom-5 right-6 z-50 mt-4 shadow">
         <FiPlus size={24} />
       </CreateNotebook>
 
-      <ul className="mt-4 columns-2 gap-5 bg-base-100 py-2">
+      <ul className="mt-4 columns-2 gap-5 bg-base-100 py-2 sm:columns-3xs">
         {notebooks.length === 0 ? (
           <li>You do not have any notebooks.</li>
         ) : filteredNotebooks(notebooks).length > 0 ? (

@@ -1,6 +1,9 @@
 import Editor from "@/components/editor/Editor"
+import FlashcardItem from "@/components/flashcard/FlashcardItem"
+import NotebookFlashcardsList from "@/components/flashcard/notebook-flashcards-list/NotebookFlashcardsList"
 import { useUpdateNotebookContent } from "@/libs/data/notebook"
 import useNotebook from "@/libs/data/notebook/queries/useNotebook"
+import { Notebook } from "@/libs/types"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -20,7 +23,7 @@ export default function NotebookDetails({ id }: { id: string }) {
   const [isReadOnly, setReadOnly] = useState(true)
   const [undoChange, setUndoChange] = useState(false)
 
-  const { notebook, isLoading } = useNotebook(id)
+  const { notebook, isLoading } = useNotebook<Notebook>(id)
   const { onSubmit, isMutating } = useUpdateNotebookContent(
     id,
     "replace",
@@ -78,69 +81,81 @@ export default function NotebookDetails({ id }: { id: string }) {
   }
 
   return (
-    <>
-      <Header
-        sticky
-        leftIcon={
-          isReadOnly ? (
-            <Link
-              href="/notebooks"
-              className="btn-ghost btn-sm btn-square btn -ml-3"
-            >
-              <FiChevronLeft size={24} />
-            </Link>
-          ) : (
-            <button
-              className="btn-ghost btn-sm btn -ml-3 text-error hover:bg-transparent hover:underline"
-              onClick={cancelHandler}
-            >
-              cancel
-            </button>
-          )
-        }
-        title=""
-        sectionTitle={notebook.title}
-        rightIcon={
-          <NotebookDetailsOptions
-            {...{
-              ...{ notebookId: notebook.id },
-              ...{ onEdit: () => setReadOnly(false) },
-              ...{ onSave: saveHandler },
-              isReadOnly,
-              isMutating,
-              ...{ disabled: value === initialValue },
-            }}
+    <div className="drawer-mobile drawer drawer-end">
+      <input id="flashcards-drawer" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content flex flex-col">
+        <>
+          <Header
+            sticky
+            leftIcon={
+              isReadOnly ? (
+                <Link
+                  href="/notebooks"
+                  className="btn-ghost btn btn-sm btn-square -ml-3"
+                >
+                  <FiChevronLeft size={24} />
+                </Link>
+              ) : (
+                <button
+                  className="btn-ghost btn btn-sm -ml-3 text-error hover:bg-transparent hover:underline"
+                  onClick={cancelHandler}
+                >
+                  cancel
+                </button>
+              )
+            }
+            title=""
+            sectionTitle={notebook.title}
+            rightIcon={
+              <NotebookDetailsOptions
+                {...{
+                  ...{ notebookId: notebook.id },
+                  ...{ onEdit: () => setReadOnly(false) },
+                  ...{ onSave: saveHandler },
+                  isReadOnly,
+                  isMutating,
+                  ...{ disabled: value === initialValue },
+                }}
+              />
+            }
           />
-        }
-      />
-      <div>
-        {txtValue.trim().length === 0 && isReadOnly ? (
-          <button
-            className=" w-full px-6 text-left italic opacity-50"
-            onClick={() => setReadOnly(false)}
-          >
-            A brief about the task...
-          </button>
-        ) : (
-          <Editor
-            htmlText={value}
-            onChange={setValue}
-            readOnly={isReadOnly}
-            notebookId={notebook.id}
-            omitMode
+          <div>
+            {txtValue.trim().length === 0 && isReadOnly ? (
+              <button
+                className=" w-full px-6 text-left italic opacity-50"
+                onClick={() => setReadOnly(false)}
+              >
+                A brief about the task...
+              </button>
+            ) : (
+              <Editor
+                htmlText={value}
+                onChange={setValue}
+                readOnly={isReadOnly}
+                notebookId={notebook.id}
+                omitMode
+              />
+            )}
+          </div>
+
+          <Prompt
+            title="Are you sure?"
+            description="All the changes will be discarded."
+            actionTitle="Discard"
+            actionType="error"
+            action={discardHandler}
+            isOpen={undoChange}
+            dismiss={() => setUndoChange(false)}
           />
-        )}
+        </>
       </div>
 
-      <Prompt
-        title="Are you sure?"
-        description="All the changes will be discarded."
-        actionTitle="Discard"
-        actionType="error"
-        action={discardHandler}
-        isOpen={undoChange}
-        dismiss={() => setUndoChange(false)}
-      />
-    </>
+      <div className="drawer-side border-l">
+        <label htmlFor="flashcards-drawer" className="drawer-overlay"></label>
+        <div className="relative w-full bg-base-100 text-base-content sm:w-80">
+          <NotebookFlashcardsList aside notebookId={notebook.id} />
+        </div>
+      </div>
+    </div>
   )
 }

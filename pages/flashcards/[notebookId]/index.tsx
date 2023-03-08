@@ -1,10 +1,9 @@
 import { NotebookWithFlashcards } from "@/libs/types"
 import { GetStaticProps } from "next"
 import { useRouter } from "next/router"
-import { FiChevronLeft } from "react-icons/fi"
 import { SWRConfig, unstable_serialize } from "swr"
 import { prisma } from "@/libs/db/prisma"
-import NotebookFlashcardsList from "@/components/flashcard/NotebookFlashcardsList"
+import NotebookFlashcardsList from "@/components/flashcard/notebook-flashcards-list/NotebookFlashcardsList"
 
 export default function NotebookFlashcards({
   fallback,
@@ -15,7 +14,7 @@ export default function NotebookFlashcards({
 
   if (typeof router.query.notebookId !== "string") {
     return (
-      <main className="px-6">
+      <main className="p-6">
         <div>Flashcards not found</div>
       </main>
     )
@@ -23,7 +22,7 @@ export default function NotebookFlashcards({
 
   return (
     <SWRConfig value={{ fallback }}>
-      <NotebookFlashcardsList id={router.query.notebookId} />
+      <NotebookFlashcardsList notebookId={router.query.notebookId} />
     </SWRConfig>
   )
 }
@@ -33,7 +32,7 @@ export async function getStaticPaths() {
   const paths = notebooks.map(({ id }) => ({ params: { notebookId: id } }))
   return {
     paths,
-    fallback: false, // can also be true or 'blocking'
+    fallback: false,
   }
 }
 
@@ -52,7 +51,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      // notebook: JSON.parse(JSON.stringify(notebook)),
       fallback: {
         [unstable_serialize([
           "/api/notebooks",

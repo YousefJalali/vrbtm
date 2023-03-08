@@ -43,7 +43,7 @@ export default function Header({
     <>
       <header
         ref={element1Ref}
-        className={`min-h-12 z-50 my-3 flex w-full items-center justify-between space-x-6 bg-base-100 px-6 ${
+        className={`min-h-12 z-50 my-4 flex w-full items-center justify-between space-x-6 bg-base-100 px-6 ${
           sticky ? "sticky top-0" : ""
         }`}
       >
@@ -69,7 +69,7 @@ export default function Header({
           <div>
             <label
               htmlFor="side-drawer"
-              className="btn-ghost drawer-button btn-sm btn-square btn -mr-1 p-0 lg:hidden"
+              className="btn-ghost btn drawer-button btn-sm btn-square -mr-1 p-0 lg:hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

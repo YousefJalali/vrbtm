@@ -1,4 +1,4 @@
-import { Flashcard, FlashcardWithNotebook } from "@/libs/types"
+import { Flashcard } from "@/libs/types"
 import chroma from "chroma-js"
 import { ReactNode } from "react"
 
@@ -32,7 +32,7 @@ export default function FlashcardItem({
   )
 
   return (
-    <label className="swap swap-flip h-32 w-full sm:w-fit">
+    <label className="swap swap-flip h-32 place-content-stretch sm:w-full">
       <input type="checkbox" className="w-full" />
 
       <Wrapper>

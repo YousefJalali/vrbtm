@@ -43,6 +43,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     where: {
       id: context.params.id,
     },
+    include: {
+      flashcards: true,
+    },
   })
 
   return {

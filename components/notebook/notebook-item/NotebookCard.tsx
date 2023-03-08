@@ -1,9 +1,9 @@
-import { useDeleteNotebook } from "@/libs/data/notebook"
 import { NotebookWithFlashcardsCount } from "@/libs/types"
 import chroma from "chroma-js"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { FiEdit2, FiMoreVertical, FiTrash2 } from "react-icons/fi"
+import { FiEdit2, FiMoreVertical } from "react-icons/fi"
+import DeleteNotebook from "../DeleteNotebook"
 
 const UpdateNotebook = dynamic(
   () => import("@/components/notebook/UpdateNotebook"),
@@ -18,11 +18,6 @@ export default function NotebookCard({
 }: {
   notebook: NotebookWithFlashcardsCount
 }) {
-  const { onSubmit: deleteHandler, error } = useDeleteNotebook(
-    notebook.id,
-    "with-flashcards-count"
-  )
-
   const color = `${chroma(notebook.color).darken(2)}`
   const bgColor = [
     `${chroma(notebook.color).alpha(0.3)}`,
@@ -72,10 +67,7 @@ export default function NotebookCard({
             </UpdateNotebook>
           </li>
           <li>
-            <a className="text-error" onClick={deleteHandler}>
-              <FiTrash2 />
-              Delete
-            </a>
+            <DeleteNotebook notebookId={notebook.id} />
           </li>
         </ul>
       </div>

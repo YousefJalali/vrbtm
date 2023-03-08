@@ -27,5 +27,5 @@ export type NotebookWithFlashcardsCount = Prisma.NotebookGetPayload<{
 
 export type Flashcard = FlashcardType
 export type FlashcardWithNotebook = Prisma.FlashcardGetPayload<{
-  include: { notebook: { select: { title: true; color: true } } }
+  include: { notebook: { select: { id: true; title: true; color: true } } }
 }>

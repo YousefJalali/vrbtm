@@ -13,13 +13,20 @@ const handler = async (
   }>
 ) => {
   if (req.method === "GET") {
-    const { cursor, limit, q } = req.query
+    const { notebookId, q } = req.query
 
     try {
       const flashcards: Partial<Flashcard>[] = await prisma.flashcard.findMany({
-        orderBy: { notebook: { title: "asc" } },
-        // orderBy: { createdAt: "desc" },
-        include: { notebook: { select: { title: true, color: true } } },
+        ...(notebookId &&
+          typeof notebookId === "string" && {
+            where: {
+              notebookId,
+            },
+          }),
+        orderBy: { createdAt: "desc" },
+        include: {
+          notebook: { select: { id: true, title: true, color: true } },
+        },
       })
 
       return res.status(200).json({ data: flashcards })

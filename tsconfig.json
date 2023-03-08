@@ -23,6 +23,7 @@
 
     "paths": {
       "@/*": ["./*"],
+      "@/components/*": ["components/*"],
       "@/ui/*": ["libs/ui/*"],
       "@/hooks/*": ["libs/hooks/*"],
       "@/data/*": ["libs/data/*"],

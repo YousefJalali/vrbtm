@@ -20,31 +20,25 @@ export default function UpdateNotebook({
 
   return (
     <>
-      <label
-        htmlFor="update-notebook-modal"
-        className={className}
-        onClick={() => setModal(true)}
-      >
+      <button className={className} onClick={() => setModal(true)}>
         {children}
-      </label>
+      </button>
 
       <Modal
         id="update-notebook-modal"
         isOpen={showModal}
         dismiss={() => setModal(false)}
       >
-        {showModal && (
-          <NotebookForm
-            id="update-notebook-modal"
-            type="edit"
-            defaultValues={notebook}
-            onSubmit={onSubmit}
-            onCancel={() => setModal(false)}
-            error={error}
-            reset={reset}
-            loading={isMutating}
-          />
-        )}
+        <NotebookForm
+          id="update-notebook-modal"
+          type="edit"
+          defaultValues={notebook}
+          onSubmit={onSubmit}
+          onCancel={() => setModal(false)}
+          error={error}
+          reset={reset}
+          loading={isMutating}
+        />
       </Modal>
     </>
   )

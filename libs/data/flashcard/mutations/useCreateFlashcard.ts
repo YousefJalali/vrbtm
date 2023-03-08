@@ -1,10 +1,13 @@
 import useSWRMutation from "swr/mutation"
-import { Flashcard } from "@/libs/types"
+import { Flashcard, FlashcardWithNotebook, Notebook } from "@/libs/types"
 import { createFlashcard } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
 
-export const useCreateFlashcard = () => {
-  const { trigger, error } = useSWRMutation("/api/flashcards", createFlashcard)
+export const useCreateFlashcard = (notebookId: string) => {
+  const { trigger, error, isMutating } = useSWRMutation(
+    ["/api/flashcards", `?notebookId=${notebookId}`],
+    createFlashcard
+  )
 
   const { setNotification } = useNotification()
 
@@ -13,12 +16,41 @@ export const useCreateFlashcard = () => {
     callback?: (action?: any) => void
   ) => {
     trigger(formData, {
-      optimisticData: (flashcards: Flashcard[]) => ({
-        ...flashcards,
-        formData,
-      }),
+      optimisticData: ({
+        data: notebookFlashcards,
+      }: {
+        data: FlashcardWithNotebook[]
+      }) => {
+        if (notebookFlashcards.length > 0) {
+          console.log("here", {
+            ...formData,
+            notebook: {
+              id: notebookFlashcards[0].notebook.id,
+              title: notebookFlashcards[0].notebook.title,
+              color: notebookFlashcards[0].notebook.color,
+            },
+          })
+          return {
+            data: [
+              {
+                ...formData,
+                notebook: {
+                  id: notebookFlashcards[0].notebook.id,
+                  title: notebookFlashcards[0].notebook.title,
+                  color: notebookFlashcards[0].notebook.color,
+                },
+              },
+              ...notebookFlashcards,
+            ],
+          }
+        }
+        return { data: notebookFlashcards }
+      },
       rollbackOnError: true,
       throwOnError: false,
+      onError: (err) => {
+        console.log(err)
+      },
       onSuccess: () => {
         setNotification({
           message: "flashcard created!",
@@ -32,7 +64,7 @@ export const useCreateFlashcard = () => {
     })
   }
 
-  return { onSubmit, error }
+  return { onSubmit, error, isMutating }
 }
 
 export default useCreateFlashcard

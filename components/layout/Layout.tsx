@@ -7,11 +7,11 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { height } = useWindowSize()
 
   return (
-    <div className="container drawer-mobile drawer bg-base-100">
+    <div className="drawer-mobile drawer bg-base-100">
       <input id="side-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex w-full flex-col items-center justify-center">
+      <div className="drawer-content flex w-full flex-col justify-center">
         <div
-          className="min-w-screen relative mx-auto flex w-full flex-col"
+          className="min-w-screen relative flex w-full flex-col"
           style={{ minHeight: height }}
         >
           {children}

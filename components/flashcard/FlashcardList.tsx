@@ -51,15 +51,18 @@ export default function FlashcardList() {
                   <span className="truncate font-bold">{notebook.title}</span>
                   <Link
                     href={`/flashcards/${notebook.id}`}
-                    className="btn-ghost btn-xs btn -mr-1 p-1 opacity-60"
+                    className="btn-ghost btn btn-xs -mr-1 p-1 opacity-60"
                   >
                     more
                   </Link>
                 </div>
 
-                <div className="carousel-center carousel -mx-6 max-w-md space-x-3 px-6">
+                <div className="carousel-center carousel -mx-6 space-x-3 px-6 sm:mx-0 sm:space-x-6 sm:px-0">
                   {notebook.flashcards.map((flashcard) => (
-                    <div key={flashcard.id} className="carousel-item">
+                    <div
+                      key={flashcard.id}
+                      className="carousel-item sm:w-[calc(50%-2rem)] sm:px-0 lg:w-64"
+                    >
                       <FlashcardItem
                         flashcard={flashcard}
                         notebookColor={notebook.color}
