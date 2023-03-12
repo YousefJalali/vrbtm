@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <header className="flex items-center justify-between p-6 pb-0 lg:hidden">
-        <div className="prose w-full">
+        <div className="prose-sm prose w-full">
           <h1 className="m-0 text-primary">Verbatim</h1>
         </div>
         <SideDrawerButton />
