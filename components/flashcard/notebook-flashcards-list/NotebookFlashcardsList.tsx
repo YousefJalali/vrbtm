@@ -46,7 +46,7 @@ export default function NotebookFlashcardsList({
 
   return (
     <>
-      <Header
+      {/* <Header
         sticky
         leftIcon={
           selectMode ? (
@@ -100,7 +100,40 @@ export default function NotebookFlashcardsList({
             <div />
           )
         }
-      />
+      /> */}
+
+      <div className=" sticky top-0 z-10 mb-2 flex justify-between bg-base-100 p-6 pb-4">
+        {selectMode ? (
+          <button
+            className="btn-ghost btn-sm btn -ml-3"
+            onClick={() => {
+              setSelectMode(false)
+              setSelected([])
+            }}
+          >
+            cancel
+          </button>
+        ) : (
+          <div className="relative flex items-center justify-center">
+            <label
+              htmlFor="flashcards-drawer"
+              className="absolute top-0 left-0 h-full w-full sm:hidden"
+            ></label>
+            <FiChevronLeft size={24} className="sm:hidden" />
+
+            <div className="prose">
+              <h3>Flashcards</h3>
+            </div>
+          </div>
+        )}
+
+        <NotebookFlashcardsOptions
+          notebookId={flashcardsWithNotebook[0].notebook.id}
+          selectMode={selectMode}
+          setSelectMode={setSelectMode}
+          selected={selected}
+        />
+      </div>
 
       {flashcardsWithNotebook.length === 0 && (
         <div className="card mx-6 border">
@@ -109,7 +142,7 @@ export default function NotebookFlashcardsList({
             <p>This notebook has no associated flashcards.</p>
             <div className="cards-actions">
               <CreateFlashcard
-                className="btn-primary btn btn-sm mt-3"
+                className="btn-primary btn-sm btn mt-3"
                 notebookId={notebookId}
               >
                 new flashcard

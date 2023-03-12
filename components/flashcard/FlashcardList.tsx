@@ -1,14 +1,12 @@
 import { useNotebooks } from "@/libs/data/notebook"
 import { NotebookWithFlashcards } from "@/libs/types"
 import Link from "next/link"
-import { useState } from "react"
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 import FlashcardItem from "./FlashcardItem"
 
-export default function FlashcardList() {
-  // const { flashcards, isLoading } = useFlashcards()
+export default function FlashcardList({ search }: { search: string }) {
   const { notebooks: notebooksWithFlashcards, isLoading } =
     useNotebooks<NotebookWithFlashcards[]>("with-flashcards")
-  const [search, setSearch] = useState("")
 
   const filteredData = (data: NotebookWithFlashcards[]) =>
     data.filter((notebook) => {
@@ -28,14 +26,6 @@ export default function FlashcardList() {
 
   return (
     <>
-      <input
-        type="search"
-        placeholder="Search..."
-        className="input-bordered input w-full"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-
       {notebooksWithFlashcards.length === 0 ? (
         <span className="my-2 block">You do not have any flashcards.</span>
       ) : filteredData(notebooksWithFlashcards).length === 0 ? (
@@ -46,14 +36,14 @@ export default function FlashcardList() {
         filteredData(notebooksWithFlashcards).map(
           (notebook) =>
             notebook.flashcards.length > 0 && (
-              <section key={notebook.id} className="mt-6">
-                <div className="mb-1 flex w-full items-center justify-between">
-                  <span className="truncate font-bold">{notebook.title}</span>
+              <section key={notebook.id} className="mb-6">
+                <div className="mb-1 w-full">
                   <Link
-                    href={`/flashcards/${notebook.id}`}
-                    className="btn-ghost btn btn-xs -mr-1 p-1 opacity-60"
+                    href={`/notebooks/${notebook.id}`}
+                    className="link-hover link flex items-center"
                   >
-                    more
+                    <span className="truncate font-bold">{notebook.title}</span>
+                    <FiChevronRight size={18} />
                   </Link>
                 </div>
 

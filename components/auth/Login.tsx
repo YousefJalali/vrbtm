@@ -3,7 +3,7 @@ import Link from "next/link"
 export default function Login() {
   return (
     <form className="prose space-y-4">
-      <h2>Login</h2>
+      <h1>Login</h1>
 
       <div className="form-control w-full ">
         <label className="label">

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --coverage"
   },
   "prisma": {
     "schema": "./prisma/schema.prisma"
@@ -68,6 +69,8 @@
     "@types/react-color": "^3.0.6",
     "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.13",
+    "babel-plugin-transform-dynamic-import": "^2.1.0",
+    "jest-next-dynamic": "^1.0.1",
     "postcss": "^8.4.20",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",

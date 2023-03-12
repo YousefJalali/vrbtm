@@ -31,6 +31,9 @@ export default function SideDrawer() {
       ></label>
 
       <ul className="menu w-80 space-y-2 bg-base-100 p-6 text-base-content">
+        <li className="prose mb-6 flex">
+          <h1 className="p-0 text-primary">VRBTM</h1>
+        </li>
         {/* <!-- Sidebar content here --> */}
         <li>
           <Link
@@ -39,7 +42,7 @@ export default function SideDrawer() {
             className={router.pathname === "/" ? "active" : ""}
           >
             <BsReverseLayoutTextSidebarReverse />
-            Vrbtm
+            Verbatim
           </Link>
         </li>
         <li>

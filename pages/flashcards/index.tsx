@@ -2,24 +2,44 @@ import { Notebook } from "@/libs/types"
 import { GetStaticProps } from "next"
 import { prisma } from "@/libs/db/prisma"
 import { SWRConfig, unstable_serialize } from "swr"
-import Header from "@/components/layout/Header"
 import FlashcardList from "@/components/flashcard/FlashcardList"
+import { useState } from "react"
+import SideDrawerButton from "@/components/layout/SideDrawerButton"
 
 export default function Flashcards({
   fallback,
 }: {
   [key: string]: Notebook[]
 }) {
-  return (
-    <>
-      <Header title="Flashcards" />
+  const [search, setSearch] = useState("")
 
-      <main className="px-6">
-        <SWRConfig value={{ fallback }}>
-          <FlashcardList />
-        </SWRConfig>
-      </main>
-    </>
+  return (
+    <main className="px-6">
+      <header className="flex w-full flex-col items-center justify-between py-6 lg:mb-6 lg:flex-row">
+        <div className="flex w-full justify-between">
+          <div className="prose lg:hidden">
+            <h1 className="m-0 text-primary">Flashcards</h1>
+          </div>
+          <div className="lg:hidden">
+            <SideDrawerButton />
+          </div>
+        </div>
+
+        <div className="flex w-full space-x-4 p-0">
+          <input
+            type="search"
+            placeholder="Search..."
+            className="input-bordered input mt-6 w-full lg:m-0 lg:max-w-lg lg:flex-1"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </header>
+
+      <SWRConfig value={{ fallback }}>
+        <FlashcardList search={search} />
+      </SWRConfig>
+    </main>
   )
 }
 

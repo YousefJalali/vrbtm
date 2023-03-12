@@ -15,7 +15,7 @@ const ReactQuillEditor = dynamic(
     class MarkBlot extends Inline {
       // static create() {
       //   let node = super.create()
-      //   node.setAttribute("contenteditable", true)
+      //   node.setAttribute("data-testid", "rich-text-editor")
       //   return node
       // }
     }
@@ -65,7 +65,7 @@ const ReactQuillEditor = dynamic(
   },
   {
     ssr: false,
-    loading: () => <p>Loading ...</p>,
+    loading: () => <p data-testid="editor-loading">Loading ...</p>,
   }
 )
 
@@ -74,14 +74,7 @@ export const TextEditor = forwardRef(
     props: ReactQuillProps & RefAttributes<HTMLDivElement>,
     ref: LegacyRef<ReactQuill>
   ) => {
-    return (
-      <ReactQuillEditor
-        forwardedRef={ref}
-        // modules={modules}
-        theme="bubble"
-        {...props}
-      />
-    )
+    return <ReactQuillEditor forwardedRef={ref} theme="bubble" {...props} />
   }
 )
 

@@ -1,7 +1,7 @@
 export default function SignUp() {
   return (
     <form className="prose space-y-4">
-      <h2>Create a free account!</h2>
+      <h1>Create a free account!</h1>
 
       <div className="form-control w-full ">
         <label className="label">

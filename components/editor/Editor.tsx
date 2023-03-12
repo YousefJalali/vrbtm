@@ -4,7 +4,7 @@ import ReactQuill, { Range, UnprivilegedEditor } from "react-quill"
 import { TextEditor } from "@/libs/ui/rich-text-editor"
 import MenuContext from "./MenuContext"
 
-import { removeUselessWords } from "@/utils"
+import { getTextFromHtml, removeUselessWords } from "@/utils"
 import Eye from "./toolbar/Eye"
 import Omit from "./toolbar/Omit"
 import DifficultyInput from "./toolbar/Difficulty"
@@ -18,7 +18,7 @@ const AddToNotebook = dynamic(
   {
     ssr: false,
     loading: () => (
-      <button className="loading btn-primary btn mt-3 w-full"></button>
+      <button className="btn-primary loading btn mt-3 w-full"></button>
     ),
   }
 )
@@ -86,8 +86,10 @@ const Editor = ({
   }, [readOnly])
 
   useEffect(() => {
-    if (typeof editorRef.current?.getEditor().getText() === "string") {
-      setText(editorRef.current?.getEditor().getText())
+    const extractedText = getTextFromHtml(htmlText)
+
+    if (typeof extractedText === "string") {
+      setText(extractedText || "")
     }
   }, [htmlText])
 
@@ -118,6 +120,7 @@ const Editor = ({
     editor: UnprivilegedEditor
   ) => {
     onChange(value)
+    setText(editor.getText())
   }
 
   const changeSelectionHandler = (
@@ -191,14 +194,21 @@ const Editor = ({
   }
 
   return (
-    <main className="flex h-full flex-col px-6 pb-6">
+    <div
+      id="rich-text-editor"
+      aria-label="rich-text-editor"
+      className="flex h-full flex-col px-6 pb-6"
+    >
       <div
-        className={`box-border flex flex-1 flex-col rounded-lg p-2 ${
+        className={`mt-6 box-border flex flex-1 flex-col rounded-lg p-2 ${
           readOnly ? "p-0" : "bg-base-200"
         }`}
       >
         {!readOnly && text.trim().length > 0 && (
-          <div className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2">
+          <div
+            className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2"
+            data-testid="editor-action-bar"
+          >
             <div className="flex space-x-2">
               {isOmit && <Eye isEyeOpen={isEyeOpen} setEye={setEye} />}
 
@@ -264,7 +274,7 @@ const Editor = ({
       </div>
 
       {!notebookId && isOmit && <AddToNotebook content={htmlText} />}
-    </main>
+    </div>
   )
 }
 

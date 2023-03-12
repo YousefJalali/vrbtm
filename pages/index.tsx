@@ -1,5 +1,6 @@
 import Editor from "@/components/editor/Editor"
 import Header from "@/components/layout/Header"
+import SideDrawerButton from "@/components/layout/SideDrawerButton"
 import { useState } from "react"
 import { FiX } from "react-icons/fi"
 
@@ -8,7 +9,12 @@ export default function Home() {
 
   return (
     <>
-      <Header />
+      <header className="flex items-center justify-between p-6 pb-0 lg:hidden">
+        <div className="prose w-full">
+          <h1 className="m-0 text-primary">Verbatim</h1>
+        </div>
+        <SideDrawerButton />
+      </header>
       <Editor htmlText={value} onChange={setValue} />
     </>
   )
