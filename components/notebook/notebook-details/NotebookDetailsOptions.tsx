@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
+import { useCallback, useMemo } from "react"
 import { BsCardText } from "react-icons/bs"
 import { FiEdit2, FiMoreVertical, FiTrash2 } from "react-icons/fi"
 // import DeleteNotebook from "../DeleteNotebook"
@@ -32,26 +33,31 @@ export default function NotebookDetailsOptions({
   onEdit: () => void
   onSave: () => void
 }) {
+  const Menu = () => (
+    <>
+      <li className="lg:hidden">
+        <label htmlFor="flashcards-drawer">
+          <BsCardText /> Flashcards
+        </label>
+      </li>
+
+      <li>
+        <button onClick={onEdit}>
+          <FiEdit2 /> Edit content
+        </button>
+      </li>
+      <li>
+        <DeleteNotebook notebookId={notebookId} />
+      </li>
+    </>
+  )
+
   return isMutating ? (
-    <button className="loading btn-ghost btn-square btn text-primary"></button>
+    <button className="btn-ghost loading btn-square btn text-primary"></button>
   ) : isReadOnly ? (
     <>
-      <ul className="hidden lg:menu lg:menu-horizontal">
-        <li>
-          <DeleteNotebook
-            notebookId={notebookId}
-            className="hover:bg-transparent hover:text-error"
-          />
-        </li>
-
-        <li>
-          <button
-            onClick={onEdit}
-            className="hover:bg-transparent hover:text-primary"
-          >
-            <FiEdit2 /> Edit content
-          </button>
-        </li>
+      <ul className="hidden space-x-6 lg:flex [&>li>button]:flex [&>li>button]:items-center [&>li>button]:gap-2 [&>li>button]:link-hover [&>li>button]:link">
+        <Menu />
       </ul>
 
       <div className="dropdown-bottom dropdown-end dropdown rounded-full p-0 lg:hidden">
@@ -65,33 +71,17 @@ export default function NotebookDetailsOptions({
           tabIndex={0}
           className="dropdown-content menu rounded-box w-56 bg-base-100 p-2 shadow"
         >
-          <li>
-            {/* <Link href={`/flashcards/${notebookId}`}>
-            <BsCardText /> Flashcards
-          </Link> */}
-            <label htmlFor="flashcards-drawer">
-              <BsCardText /> Flashcards
-            </label>
-          </li>
-
-          <li>
-            <button onClick={onEdit}>
-              <FiEdit2 /> Edit content
-            </button>
-          </li>
-          <li>
-            <DeleteNotebook notebookId={notebookId} />
-          </li>
+          <Menu />
         </ul>
       </div>
     </>
   ) : (
     <button
-      className="btn-ghost btn-sm btn text-primary hover:bg-transparent hover:underline disabled:bg-transparent disabled:hover:bg-transparent"
+      className="link-hover link text-primary"
       disabled={disabled}
       onClick={onSave}
     >
-      save
+      Save
     </button>
   )
 }

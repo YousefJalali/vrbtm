@@ -66,15 +66,23 @@ export default function SideDrawer() {
           </Link>
         </li>
 
-        <ul className="menu flex flex-1 justify-end">
+        <ul className="menu flex flex-1 justify-end space-y-2">
           <li>
-            <Link href="/signup" onClick={clickHandler}>
+            <Link
+              href="/signup"
+              onClick={clickHandler}
+              className={router.pathname === "/signup" ? "active" : ""}
+            >
               Sign Up
             </Link>
           </li>
 
           <li>
-            <Link href="/login" onClick={clickHandler}>
+            <Link
+              href="/login"
+              onClick={clickHandler}
+              className={router.pathname === "/login" ? "active" : ""}
+            >
               Login
             </Link>
           </li>

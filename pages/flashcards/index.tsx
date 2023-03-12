@@ -14,8 +14,8 @@ export default function Flashcards({
   const [search, setSearch] = useState("")
 
   return (
-    <main className="px-6">
-      <header className="flex w-full flex-col items-center justify-between py-6 lg:mb-6 lg:flex-row">
+    <main>
+      <header className="flex w-full flex-col items-center justify-between py-6 px-6 lg:mb-6 lg:flex-row lg:border-b">
         <div className="flex w-full justify-between">
           <div className="prose lg:hidden">
             <h1 className="m-0 text-primary">Flashcards</h1>
@@ -36,9 +36,11 @@ export default function Flashcards({
         </div>
       </header>
 
-      <SWRConfig value={{ fallback }}>
-        <FlashcardList search={search} />
-      </SWRConfig>
+      <section className="px-6">
+        <SWRConfig value={{ fallback }}>
+          <FlashcardList search={search} />
+        </SWRConfig>
+      </section>
     </main>
   )
 }

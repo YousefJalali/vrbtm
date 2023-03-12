@@ -1,11 +1,7 @@
 import { useFlashcards } from "@/libs/data/flashcard"
-import { useNotebook } from "@/libs/data/notebook"
-import { Flashcard } from "@/libs/types"
-import { useRouter } from "next/router"
 import { useState } from "react"
-import { FiChevronLeft, FiEdit, FiEdit2 } from "react-icons/fi"
-import Header from "../../layout/Header"
-import CreateFlashcard from "../CreateFlashcard"
+import { FiChevronLeft } from "react-icons/fi"
+import EmptyFlashcards from "../EmptyFlashcards"
 import FlashcardItem from "../FlashcardItem"
 import NotebookFlashcardsOptions from "./NotebookFlashcardsOptions"
 
@@ -19,11 +15,10 @@ export default function NotebookFlashcardsList({
   const [selectMode, setSelectMode] = useState(false)
   const [selected, setSelected] = useState<string[]>([])
   const { flashcardsWithNotebook, isLoading } = useFlashcards(notebookId)
-  const router = useRouter()
 
   if (isLoading) {
     return (
-      <main className="px-6">
+      <main className="p-6">
         <div>Loading...</div>
       </main>
     )
@@ -46,63 +41,7 @@ export default function NotebookFlashcardsList({
 
   return (
     <>
-      {/* <Header
-        sticky
-        leftIcon={
-          selectMode ? (
-            <button
-              className="btn-ghost btn btn-sm -ml-3"
-              onClick={() => {
-                setSelectMode(false)
-                setSelected([])
-              }}
-            >
-              cancel
-            </button>
-          ) : !aside ? (
-            <button
-              onClick={router.back}
-              className="btn-ghost btn btn-sm btn-square -ml-3"
-            >
-              <FiChevronLeft size={24} />
-            </button>
-          ) : (
-            <div className="space-x-0">
-              <label
-                htmlFor="flashcards-drawer"
-                className="btn-ghost btn btn-sm btn-square -ml-3 lg:hidden"
-              >
-                <FiChevronLeft size={24} />
-              </label>
-              <div className="prose m-0 hidden lg:block">
-                <h3>Flashcards</h3>
-              </div>
-            </div>
-          )
-        }
-        title=""
-        sectionTitle={
-          aside
-            ? undefined
-            : flashcardsWithNotebook.length > 0
-            ? flashcardsWithNotebook[0].notebook.title
-            : ""
-        }
-        rightIcon={
-          flashcardsWithNotebook.length > 0 ? (
-            <NotebookFlashcardsOptions
-              notebookId={flashcardsWithNotebook[0].notebook.id}
-              selectMode={selectMode}
-              setSelectMode={setSelectMode}
-              selected={selected}
-            />
-          ) : (
-            <div />
-          )
-        }
-      /> */}
-
-      <div className=" sticky top-0 z-10 mb-2 flex justify-between bg-base-100 p-6 pb-4">
+      <div className="sticky top-0 z-10 mb-2 flex justify-between border-b bg-base-100 p-6">
         {selectMode ? (
           <button
             className="btn-ghost btn-sm btn -ml-3"
@@ -114,21 +53,22 @@ export default function NotebookFlashcardsList({
             cancel
           </button>
         ) : (
-          <div className="relative flex items-center justify-center">
+          <div className="relative flex items-center justify-center ">
             <label
               htmlFor="flashcards-drawer"
-              className="absolute top-0 left-0 h-full w-full sm:hidden"
-            ></label>
-            <FiChevronLeft size={24} className="sm:hidden" />
+              className="link-hover link flex sm:hidden"
+            >
+              <FiChevronLeft size={24} className="sm:hidden" /> Notebook
+            </label>
 
-            <div className="prose">
-              <h3>Flashcards</h3>
+            <div className="prose hidden lg:inline-block">
+              <h4>Flashcards</h4>
             </div>
           </div>
         )}
 
         <NotebookFlashcardsOptions
-          notebookId={flashcardsWithNotebook[0].notebook.id}
+          notebookId={notebookId}
           selectMode={selectMode}
           setSelectMode={setSelectMode}
           selected={selected}
@@ -136,20 +76,7 @@ export default function NotebookFlashcardsList({
       </div>
 
       {flashcardsWithNotebook.length === 0 && (
-        <div className="card mx-6 border">
-          <div className="card-body">
-            <h4 className="card-title">No flashcards</h4>
-            <p>This notebook has no associated flashcards.</p>
-            <div className="cards-actions">
-              <CreateFlashcard
-                className="btn-primary btn-sm btn mt-3"
-                notebookId={notebookId}
-              >
-                new flashcard
-              </CreateFlashcard>
-            </div>
-          </div>
-        </div>
+        <EmptyFlashcards notebookId={notebookId} />
       )}
 
       <div

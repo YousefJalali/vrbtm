@@ -1,6 +1,4 @@
 import { FiMoreVertical } from "react-icons/fi"
-import { Flashcard } from "@/libs/types"
-import { BsHandIndex } from "react-icons/bs"
 import { SlPencil, SlPlus } from "react-icons/sl"
 import CreateFlashcard from "../CreateFlashcard"
 import { Dispatch, SetStateAction } from "react"
@@ -17,8 +15,8 @@ export default function NotebookFlashcardsOptions({
   selected: string[]
 }) {
   return !selectMode ? (
-    <div className="dropdown-bottom dropdown-end dropdown rounded-full p-0">
-      <label tabIndex={0} className="btn-ghost btn-sm btn-square btn -mr-3 p-0">
+    <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0">
+      <label tabIndex={0} className="btn-ghost btn-square btn-xs btn -mr-3 p-0">
         <FiMoreVertical size={18} />
       </label>
       <ul

@@ -47,7 +47,7 @@ export default function NotebookDetails({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <main>
+      <main className="p-6">
         <h1>Loading...</h1>
       </main>
     )
@@ -83,7 +83,7 @@ export default function NotebookDetails({ id }: { id: string }) {
     <div className="drawer-mobile drawer drawer-end">
       <input id="flashcards-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <header className="sticky top-0 z-10 mb-2 flex w-full items-center justify-between bg-base-100 p-6 pb-4">
+        <header className="sticky top-0 z-10 mb-2 flex w-full items-center justify-between bg-base-100 p-6 lg:mb-6 lg:border-b">
           {isReadOnly ? (
             <Link href="/notebooks" className="link-hover link -ml-2 flex">
               <FiChevronLeft size={24} />

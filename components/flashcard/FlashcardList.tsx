@@ -1,7 +1,7 @@
 import { useNotebooks } from "@/libs/data/notebook"
 import { NotebookWithFlashcards } from "@/libs/types"
 import Link from "next/link"
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import { FiChevronRight } from "react-icons/fi"
 import FlashcardItem from "./FlashcardItem"
 
 export default function FlashcardList({ search }: { search: string }) {

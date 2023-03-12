@@ -19,39 +19,39 @@ export default function Notebooks({ fallback }: { [key: string]: Notebook[] }) {
   const [search, setSearch] = useState("")
 
   return (
-    <>
-      <main className="w-full px-6">
-        <header className="flex w-full flex-col items-center justify-between py-6 lg:mb-6 lg:flex-row">
-          <div className="flex w-full justify-between">
-            <div className="prose lg:hidden">
-              <h1 className="m-0 text-primary">Notebooks</h1>
-            </div>
-            <div className="lg:hidden">
-              <SideDrawerButton />
-            </div>
+    <main>
+      <header className="flex w-full flex-col items-center justify-between py-6 px-6 lg:mb-6 lg:flex-row lg:border-b">
+        <div className="flex w-full justify-between">
+          <div className="prose lg:hidden">
+            <h1 className="m-0 text-primary">Notebooks</h1>
           </div>
-
-          <div className="flex w-full space-x-4 p-0">
-            <input
-              type="search"
-              placeholder="Search..."
-              className="input-bordered input mt-6 w-full lg:m-0 lg:max-w-lg lg:flex-1"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-
-            <CreateNotebook className="btn-primary btn-circle btn fixed bottom-5 right-6 z-50 mt-4 shadow lg:relative lg:bottom-0 lg:right-0 lg:m-0 lg:w-fit lg:rounded-lg lg:px-3">
-              <span className="mr-2 hidden lg:inline-block">New Notebook</span>
-              <FiPlus size={24} />
-            </CreateNotebook>
+          <div className="lg:hidden">
+            <SideDrawerButton />
           </div>
-        </header>
+        </div>
 
+        <div className="flex w-full space-x-4 p-0">
+          <input
+            type="search"
+            placeholder="Search..."
+            className="input-bordered input mt-6 w-full lg:m-0 lg:max-w-lg lg:flex-1"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <CreateNotebook className="btn-primary btn-circle btn fixed bottom-5 right-6 z-50 mt-4 shadow lg:relative lg:bottom-0 lg:right-0 lg:m-0 lg:w-fit lg:rounded-lg lg:px-3">
+            <span className="mr-2 hidden lg:inline-block">New Notebook</span>
+            <FiPlus size={24} />
+          </CreateNotebook>
+        </div>
+      </header>
+
+      <section className="w-full px-6">
         <SWRConfig value={{ fallback }}>
           <NotebookCards search={search} />
         </SWRConfig>
-      </main>
-    </>
+      </section>
+    </main>
   )
 }
 
