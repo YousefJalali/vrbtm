@@ -200,7 +200,7 @@ const Editor = ({
       className="flex h-full flex-col px-6 pb-6"
     >
       <div
-        className={`mt-6 box-border flex flex-1 flex-col rounded-lg p-2 ${
+        className={`mt-6 box-border flex flex-1 flex-col rounded-lg ${
           readOnly ? "p-0" : "bg-base-200"
         }`}
       >
