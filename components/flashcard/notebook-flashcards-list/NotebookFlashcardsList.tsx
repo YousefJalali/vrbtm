@@ -56,7 +56,7 @@ export default function NotebookFlashcardsList({
           <div className="relative flex items-center justify-center ">
             <label
               htmlFor="flashcards-drawer"
-              className="link-hover link flex sm:hidden"
+              className="link-hover link -ml-2 flex sm:hidden"
             >
               <FiChevronLeft size={24} className="sm:hidden" /> Notebook
             </label>
