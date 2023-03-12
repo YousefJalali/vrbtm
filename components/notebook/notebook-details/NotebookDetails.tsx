@@ -108,7 +108,7 @@ export default function NotebookDetails({ id }: { id: string }) {
         </header>
 
         <section>
-          <div className="prose-sm mb-6 px-6 sm:prose">
+          <div className="prose-sm prose mb-6 px-6">
             <h1>{notebook.title}</h1>
           </div>
           {txtValue.trim().length === 0 && isReadOnly ? (

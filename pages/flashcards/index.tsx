@@ -16,8 +16,8 @@ export default function Flashcards({
   return (
     <main>
       <header className="flex w-full flex-col items-center justify-between py-6 px-6 lg:mb-6 lg:flex-row lg:border-b">
-        <div className="flex w-full justify-between">
-          <div className="prose lg:hidden">
+        <div className="flex w-full items-center justify-between">
+          <div className="prose-sm prose lg:hidden">
             <h1 className="m-0 text-primary">Flashcards</h1>
           </div>
           <div className="lg:hidden">

@@ -44,13 +44,13 @@ export default function NotebookFlashcardsList({
       <div className="sticky top-0 z-10 mb-2 flex justify-between border-b bg-base-100 p-6">
         {selectMode ? (
           <button
-            className="btn-ghost btn-sm btn -ml-3"
+            className="link-hover link"
             onClick={() => {
               setSelectMode(false)
               setSelected([])
             }}
           >
-            cancel
+            Cancel
           </button>
         ) : (
           <div className="relative flex items-center justify-center ">

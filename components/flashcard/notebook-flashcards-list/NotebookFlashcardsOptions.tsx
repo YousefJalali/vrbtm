@@ -16,7 +16,7 @@ export default function NotebookFlashcardsOptions({
 }) {
   return !selectMode ? (
     <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0">
-      <label tabIndex={0} className="btn-ghost btn-square btn-xs btn -mr-3 p-0">
+      <label tabIndex={0} className="btn-ghost btn-square btn-xs btn -mr-2 p-0">
         <FiMoreVertical size={18} />
       </label>
       <ul
@@ -38,15 +38,15 @@ export default function NotebookFlashcardsOptions({
       </ul>
     </div>
   ) : (
-    <div>
+    <div className="space-x-4">
       <button
-        className="btn-ghost btn-sm btn -mr-3 text-error hover:bg-transparent hover:underline disabled:bg-transparent disabled:hover:bg-transparent"
+        className="link-hover link-error link"
         disabled={selected.length === 0}
       >
         {selected.length > 1 ? "Delete all" : "Delete"}
       </button>
       <button
-        className="btn-ghost btn-sm btn -mr-3 text-primary hover:bg-transparent hover:underline disabled:bg-transparent disabled:hover:bg-transparent"
+        className="link-hover link disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:no-underline"
         disabled={selected.length === 0 || selected.length > 1}
       >
         Edit
