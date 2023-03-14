@@ -39,7 +39,7 @@ export default function Notebooks({ fallback }: { [key: string]: Notebook[] }) {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <CreateNotebook className="btn-primary btn-circle btn fixed bottom-5 right-6 z-50 mt-4 shadow lg:relative lg:bottom-0 lg:right-0 lg:m-0 lg:w-fit lg:rounded-lg lg:px-3">
+          <CreateNotebook className="btn-primary btn btn-circle fixed bottom-5 right-6 z-50 mt-4 shadow lg:relative lg:bottom-0 lg:right-0 lg:m-0 lg:w-fit lg:rounded-lg lg:px-3">
             <span className="mr-2 hidden lg:inline-block">New Notebook</span>
             <FiPlus size={24} />
           </CreateNotebook>

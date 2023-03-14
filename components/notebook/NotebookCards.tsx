@@ -31,7 +31,9 @@ export default function NotebookCards({ search }: { search: string }) {
           </li>
         ))
       ) : (
-        <li className="opacity-50">No results found for “{search}”</li>
+        <li className="opacity-50">
+          <span>No results found for “{search}”</span>
+        </li>
       )}
     </ul>
   )
