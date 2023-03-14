@@ -56,6 +56,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
           data: JSON.parse(JSON.stringify(notebook)),
         },
       },
+      revalidate: 1,
     },
   }
 }
