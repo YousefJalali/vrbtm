@@ -5,8 +5,8 @@ import { useNotification } from "@/libs/hooks/useNotification"
 
 export const useCreateFlashcard = (notebookId: string) => {
   const { trigger, error, isMutating } = useSWRMutation(
-    ["/api/flashcards", `?notebookId=${notebookId}`],
-    createFlashcard
+    "/api/flashcards",
+    (url, arg) => createFlashcard([url, `?notebookId=${notebookId}`], arg)
   )
 
   const { setNotification } = useNotification()
@@ -22,14 +22,6 @@ export const useCreateFlashcard = (notebookId: string) => {
         data: FlashcardWithNotebook[]
       }) => {
         if (notebookFlashcards.length > 0) {
-          console.log("here", {
-            ...formData,
-            notebook: {
-              id: notebookFlashcards[0].notebook.id,
-              title: notebookFlashcards[0].notebook.title,
-              color: notebookFlashcards[0].notebook.color,
-            },
-          })
           return {
             data: [
               {

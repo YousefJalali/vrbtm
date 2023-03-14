@@ -53,17 +53,17 @@ export default function NotebookDetailsOptions({
   )
 
   return isMutating ? (
-    <button className="btn-ghost loading btn-square btn text-primary"></button>
+    <button className="btn loading btn-ghost btn-square text-primary"></button>
   ) : isReadOnly ? (
     <>
-      <ul className="hidden space-x-6 lg:flex [&>li>button]:flex [&>li>button]:items-center [&>li>button]:gap-2 [&>li>button]:link-hover [&>li>button]:link">
+      <ul className="-mr-3 hidden lg:flex [&>li>button]:gap-2 [&>li>button]:btn-ghost [&>li>button]:btn-sm [&>li>button]:btn">
         <Menu />
       </ul>
 
       <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0 lg:hidden">
         <label
           tabIndex={0}
-          className="btn-ghost btn-square btn-xs btn -mr-2 p-0"
+          className="btn btn-ghost btn-square btn-xs -mr-2 p-0"
         >
           <FiMoreVertical size={18} />
         </label>
@@ -77,7 +77,7 @@ export default function NotebookDetailsOptions({
     </>
   ) : (
     <button
-      className="link-hover link text-primary"
+      className="btn btn-primary btn-sm"
       disabled={disabled}
       onClick={onSave}
     >

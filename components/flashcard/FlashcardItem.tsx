@@ -36,7 +36,7 @@ export default function FlashcardItem({
       <input type="checkbox" className="w-full" />
 
       <Wrapper>
-        <h2 className="card-title">{flashcard.question}?</h2>
+        <h2 className="card-title">{flashcard.question}</h2>
       </Wrapper>
 
       <Wrapper on>{flashcard.answer}</Wrapper>

@@ -6,10 +6,7 @@ import MenuContext from "./MenuContext"
 
 import { getTextFromHtml, removeUselessWords } from "@/utils"
 import Eye from "./toolbar/Eye"
-import Omit from "./toolbar/Omit"
 import DifficultyInput from "./toolbar/Difficulty"
-import Reset from "./toolbar/Reset"
-import OmitFullText from "./toolbar/OmitFullText"
 import CreateFlashcard from "../flashcard/CreateFlashcard"
 import dynamic from "next/dynamic"
 
@@ -18,7 +15,7 @@ const AddToNotebook = dynamic(
   {
     ssr: false,
     loading: () => (
-      <button className="btn-primary loading btn mt-3 w-full"></button>
+      <button className="btn loading btn-primary mt-3 w-full"></button>
     ),
   }
 )
@@ -44,13 +41,11 @@ const Editor = ({
   const [text, setText] = useState("")
   const [isEyeOpen, setEye] = useState(false)
   const [isOmit, setOmit] = useState(omitMode)
-  const [isFirstOmit, setFirstOmit] = useState(true)
   const [selectedText, setSelectedText] = useState<{
     text: string
     index: number
     length: number
     isOmitted: boolean
-    pos: { x: number; y: number }
   } | null>(null)
 
   const editorRef = useRef<ReactQuill>(null)
@@ -65,25 +60,19 @@ const Editor = ({
     }
   }, [isOmit])
 
-  useEffect(() => {
-    if (!readOnly) {
-      if (editorRef.current) {
-        editorRef.current.focus()
-      }
-    }
-  }, [readOnly])
+  // useEffect(() => {
+  //   if (!readOnly) {
+  //     if (editorRef.current) {
+  //       editorRef.current.focus()
+  //     }
+  //   }
+  // }, [readOnly])
 
-  useEffect(() => {
-    if (htmlText.includes("</mark>") || isOmit) {
-      setFirstOmit(false)
-    }
-  }, [htmlText, isOmit])
-
-  useEffect(() => {
-    if (readOnly) {
-      setEye(false)
-    }
-  }, [readOnly])
+  // useEffect(() => {
+  //   if (readOnly) {
+  //     setEye(false)
+  //   }
+  // }, [readOnly])
 
   useEffect(() => {
     const extractedText = getTextFromHtml(htmlText)
@@ -91,18 +80,16 @@ const Editor = ({
     if (typeof extractedText === "string") {
       setText(extractedText || "")
     }
-  }, [htmlText])
+
+    if (htmlText.includes("</mark>")) {
+      setOmit(true)
+    }
+  }, [])
 
   const isWordOmitted = (index: number, length: number) =>
-    editorRef.current?.getEditor().getFormat(index, length).mark
+    editorRef.current?.getEditor().getFormat(index, length).mark as boolean
 
-  const randomOmit = (word: string, index: number) => {
-    if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
-      if (Math.random() <= difficulty) {
-        omitWord(word, index, word.length, true)
-      }
-    }
-  }
+  // const textHasOmittedWord = () => isWordOmitted(0, text.length)
 
   const omitWord = (
     word: string,
@@ -110,7 +97,34 @@ const Editor = ({
     length: number,
     mark: boolean
   ) => {
-    editorRef.current?.getEditor().formatText(index, word.length, "mark", mark)
+    word
+      .trim()
+      .split(" ")
+      .forEach((w, i) => {
+        editorRef.current
+          ?.getEditor()
+          .formatText(
+            i === 0
+              ? index
+              : index + word.split(" ").slice(0, i).join(" ").length + 1,
+            w.length,
+            "mark",
+            mark
+          )
+      })
+    // editorRef.current?.getEditor().formatText(index, word.length, "mark", mark)
+  }
+
+  const omitSelectedWord = () => {
+    if (selectedText) {
+      omitWord(
+        selectedText.text,
+        selectedText.index,
+        selectedText.length,
+        !selectedText.isOmitted
+      )
+      clearSelection()
+    }
   }
 
   const changeHandler = (
@@ -121,6 +135,9 @@ const Editor = ({
   ) => {
     onChange(value)
     setText(editor.getText())
+    if (editor.getText().length === 0) {
+      reset()
+    }
   }
 
   const changeSelectionHandler = (
@@ -128,7 +145,7 @@ const Editor = ({
     source: Sources,
     editor: UnprivilegedEditor
   ) => {
-    if (isOmit && selection) {
+    if (selection) {
       if (selection.length > 0) {
         setSelectedText({
           text: editor
@@ -137,12 +154,6 @@ const Editor = ({
           index: selection.index,
           length: selection.length,
           isOmitted: isWordOmitted(selection.index, selection.length),
-          pos: {
-            x: editor.getBounds(selection.index, selection.length).left,
-            y:
-              editor.getBounds(selection.index, selection.length).top +
-              editor.getBounds(selection.index, selection.length).height,
-          },
         })
       } else {
         setSelectedText(null)
@@ -153,47 +164,55 @@ const Editor = ({
   const omitText = () => {
     if (text.length > 0) {
       if (!htmlText.includes("</mark>")) {
-        removeUselessWords(text).forEach((word) => {
-          randomOmit(word, text.search(new RegExp("\\b" + word + "\\b")))
+        const arrToBeOmitted = removeUselessWords(text)
+
+        let startIndex = Math.floor(
+          Math.random() *
+            (arrToBeOmitted.length -
+              Math.floor(arrToBeOmitted.length * difficulty) +
+              1)
+        )
+
+        let slicedArray = arrToBeOmitted.slice(
+          startIndex,
+          startIndex + Math.floor(arrToBeOmitted.length * difficulty)
+        )
+
+        slicedArray.forEach((word) => {
+          if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
+            omitWord(
+              word,
+              text.search(new RegExp("\\b" + word + "\\b")), //index
+              word.length,
+              true
+            )
+          }
         })
+
+        setOmit(true)
       }
     }
   }
 
   const clearOmit = () => {
-    setOmit(false)
     editorRef.current?.getEditor().formatText(0, text.length, "mark", false)
+    setOmit(false)
   }
 
   const clearSelection = () => {
     editorRef.current?.getEditor().setSelection(0, 0)
   }
 
-  const resetHandler = () => {
-    setFirstOmit(true)
+  const reset = () => {
     setEye(false)
     clearOmit()
     setSelectedText(null)
   }
 
-  const omitHandler = (state: "omit" | "unOmit") => {
-    if (state === "omit") {
-      setOmit(true)
-      omitText()
-    }
-    if (state === "unOmit") {
-      setOmit(false)
-      setEye(false)
-    }
-  }
-
   const difficultyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDifficulty(e.target.valueAsNumber)
-
-    resetHandler()
+    reset()
   }
-
-  console.log(readOnly)
 
   return (
     <div
@@ -209,23 +228,25 @@ const Editor = ({
       >
         {!readOnly && text.trim().length > 0 && (
           <div
-            className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2"
+            className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2 disabled:bg-base-300"
             data-testid="editor-action-bar"
           >
             <div className="flex space-x-2">
               {isOmit && <Eye isEyeOpen={isEyeOpen} setEye={setEye} />}
 
-              {isOmit && selectedText && (
-                <Omit
-                  selectedText={selectedText}
-                  clearSelection={clearSelection}
-                  omitWord={omitWord}
-                />
+              {/* Omit selected text */}
+              {selectedText && (
+                <button
+                  onClick={omitSelectedWord}
+                  className="btn btn-secondary btn-sm"
+                >
+                  {selectedText.isOmitted ? "UnOmit" : "Omit"}
+                </button>
               )}
 
-              {isOmit && selectedText && notebookId && (
+              {selectedText && notebookId && (
                 <CreateFlashcard
-                  className="btn-sm btn"
+                  className="btn btn-accent btn-sm"
                   notebookId={notebookId}
                   defaultValues={{
                     question: selectedText.text,
@@ -237,22 +258,31 @@ const Editor = ({
             </div>
 
             <div className="flex-end flex space-x-2">
-              {isFirstOmit && (
+              {!isOmit && (
                 <DifficultyInput
                   difficulty={difficulty}
                   setDifficulty={difficultyHandler}
                 />
               )}
 
-              {!isFirstOmit && !selectedText && (
-                <Reset resetHandler={resetHandler} />
+              {isOmit && !selectedText && (
+                <button
+                  className="btn-outline btn btn-error btn-sm"
+                  onClick={reset}
+                >
+                  Reset
+                </button>
               )}
 
+              {/* omit full text */}
               {!isOmit && (
-                <OmitFullText
-                  setOmit={omitHandler}
-                  isDisabled={text.trim().length <= 0}
-                />
+                <button
+                  onClick={omitText}
+                  disabled={text.trim().length <= 0}
+                  className="btn btn-primary btn-sm mb-2"
+                >
+                  random Omit
+                </button>
               )}
             </div>
           </div>

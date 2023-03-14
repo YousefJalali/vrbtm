@@ -22,11 +22,13 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        light: {
-          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
+        winter: {
+          ...require("daisyui/src/colors/themes")["[data-theme=winter]"],
           primary: "#4E63F2",
-          secondary: "#474554",
-          accent: "#FF5D67",
+          secondary: "#C7D9FF",
+          // "secondary-content": "#333333",
+          // secondary: "#9BC4E2",
+          accent: "#FF7F50",
         },
         dark: {
           ...require("daisyui/src/colors/themes")["[data-theme=dark]"],

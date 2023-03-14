@@ -17,7 +17,7 @@ export default function DifficultyInput({
         value={difficulty}
         onChange={setDifficulty}
         type="range"
-        min="0"
+        min="0.6"
         max="1"
         step="0.2"
         className="range range-primary range-xs"

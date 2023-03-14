@@ -107,6 +107,24 @@ const handler = async (
       res.status(400).json({ error })
     }
   }
+
+  if (req.method === "DELETE") {
+    const { id, notebookId } = req.query
+
+    if (!id || typeof id !== "string")
+      return res.status(400).json({ error: "unsupported type" })
+
+    try {
+      const deletedFlashcard = await prisma.flashcard.delete({
+        where: { id },
+      })
+
+      return res.status(200).json({ data: deletedFlashcard })
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error })
+    }
+  }
 }
 
 export default handler

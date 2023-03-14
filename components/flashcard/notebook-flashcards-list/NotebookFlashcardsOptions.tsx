@@ -2,21 +2,54 @@ import { FiMoreVertical } from "react-icons/fi"
 import { SlPencil, SlPlus } from "react-icons/sl"
 import CreateFlashcard from "../CreateFlashcard"
 import { Dispatch, SetStateAction } from "react"
+import { useDeleteFlashcard } from "@/libs/data/flashcard"
+import UpdateFlashcard from "../UpdateFlashcard"
+import { Flashcard } from "@/libs/types"
 
 export default function NotebookFlashcardsOptions({
   notebookId,
   selectMode,
   setSelectMode,
   selected,
+  setSelected,
 }: {
   notebookId: string
   selectMode: boolean
   setSelectMode: Dispatch<SetStateAction<boolean>>
-  selected: string[]
+  selected: Flashcard | null
+  setSelected: Dispatch<SetStateAction<Flashcard | null>>
 }) {
-  return !selectMode ? (
-    <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0">
-      <label tabIndex={0} className="btn-ghost btn-square btn-xs btn -mr-2 p-0">
+  const { onSubmit } = useDeleteFlashcard(
+    selected ? selected.id : null,
+    notebookId,
+    () => {
+      setSelected(null)
+    }
+  )
+
+  return selectMode ? (
+    <div className="min-h-8 space-x-1">
+      <button
+        className="btn btn-error btn-sm"
+        disabled={!selected}
+        onClick={onSubmit}
+      >
+        Delete
+      </button>
+
+      {selected && (
+        <UpdateFlashcard
+          className="btn btn-primary btn-ghost btn-sm"
+          // disabled={!selected}
+          defaultValues={selected}
+        >
+          Edit
+        </UpdateFlashcard>
+      )}
+    </div>
+  ) : (
+    <div className="dropdown-bottom dropdown-end dropdown min-h-8 h-6 rounded-full p-0">
+      <label tabIndex={0} className="btn btn-ghost btn-square btn-xs -mr-2 p-0">
         <FiMoreVertical size={18} />
       </label>
       <ul
@@ -36,21 +69,6 @@ export default function NotebookFlashcardsOptions({
           </button>
         </li>
       </ul>
-    </div>
-  ) : (
-    <div className="space-x-4">
-      <button
-        className="link-hover link-error link"
-        disabled={selected.length === 0}
-      >
-        {selected.length > 1 ? "Delete all" : "Delete"}
-      </button>
-      <button
-        className="link-hover link disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:no-underline"
-        disabled={selected.length === 0 || selected.length > 1}
-      >
-        Edit
-      </button>
     </div>
   )
 }

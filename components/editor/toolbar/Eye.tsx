@@ -11,7 +11,7 @@ export default function Eye({
   return (
     <button
       onClick={() => setEye((prevState) => !prevState)}
-      className="btn-sm btn"
+      className="btn-secondary btn-sm btn"
     >
       {isEyeOpen ? <RxEyeOpen /> : <RxEyeClosed />}
     </button>

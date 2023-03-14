@@ -1,4 +1,5 @@
 import { useFlashcards } from "@/libs/data/flashcard"
+import { Flashcard } from "@/libs/types"
 import { useState } from "react"
 import { FiChevronLeft } from "react-icons/fi"
 import EmptyFlashcards from "../EmptyFlashcards"
@@ -7,13 +8,11 @@ import NotebookFlashcardsOptions from "./NotebookFlashcardsOptions"
 
 export default function NotebookFlashcardsList({
   notebookId,
-  aside = false,
 }: {
   notebookId: string
-  aside?: boolean
 }) {
   const [selectMode, setSelectMode] = useState(false)
-  const [selected, setSelected] = useState<string[]>([])
+  const [selected, setSelected] = useState<Flashcard | null>(null)
   const { flashcardsWithNotebook, isLoading } = useFlashcards(notebookId)
 
   if (isLoading) {
@@ -32,28 +31,28 @@ export default function NotebookFlashcardsList({
     )
   }
 
-  const selectHandler = (id: string) =>
-    selected.includes(id)
-      ? setSelected((prevState) =>
-          prevState.filter((selected) => selected !== id)
-        )
-      : setSelected((prevState) => prevState.concat(id))
+  // const selectHandler = (id: string) =>
+  //   selected.includes(id)
+  //     ? setSelected((prevState) =>
+  //         prevState.filter((selected) => selected !== id)
+  //       )
+  //     : setSelected((prevState) => prevState.concat(id))
 
   return (
     <>
       <div className="sticky top-0 z-10 mb-2 flex justify-between border-b bg-base-100 p-6">
         {selectMode ? (
           <button
-            className="link-hover link"
+            className="btn btn-ghost btn-sm -ml-3"
             onClick={() => {
               setSelectMode(false)
-              setSelected([])
+              setSelected(null)
             }}
           >
             Cancel
           </button>
         ) : (
-          <div className="relative flex items-center justify-center ">
+          <div className="min-h-8 relative flex items-center justify-center">
             <label
               htmlFor="flashcards-drawer"
               className="link-hover link -ml-2 flex sm:hidden"
@@ -62,17 +61,20 @@ export default function NotebookFlashcardsList({
             </label>
 
             <div className="prose hidden lg:inline-block">
-              <h4>Flashcards</h4>
+              <h2>Flashcards</h2>
             </div>
           </div>
         )}
 
-        <NotebookFlashcardsOptions
-          notebookId={notebookId}
-          selectMode={selectMode}
-          setSelectMode={setSelectMode}
-          selected={selected}
-        />
+        {flashcardsWithNotebook.length > 0 && (
+          <NotebookFlashcardsOptions
+            notebookId={notebookId}
+            selectMode={selectMode}
+            setSelectMode={setSelectMode}
+            selected={selected}
+            setSelected={setSelected}
+          />
+        )}
       </div>
 
       {flashcardsWithNotebook.length === 0 && (
@@ -89,10 +91,13 @@ export default function NotebookFlashcardsList({
               <div className="absolute top-0 left-0 z-10 h-full w-full sm:w-full">
                 <input
                   id={flashcard.id}
-                  type="checkbox"
+                  name="flashcards"
+                  type="radio"
                   className="peer hidden"
-                  checked={!!selected.includes(flashcard.id)}
-                  onChange={() => selectHandler(flashcard.id)}
+                  checked={selected?.id === flashcard.id}
+                  onChange={() => setSelected(flashcard)}
+                  // checked={!!selected.includes(flashcard.id)}
+                  // onChange={() => selectHandler(flashcard.id)}
                 />
                 <label
                   htmlFor={flashcard.id}

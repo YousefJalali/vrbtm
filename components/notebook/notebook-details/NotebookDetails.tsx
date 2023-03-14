@@ -80,17 +80,23 @@ export default function NotebookDetails({ id }: { id: string }) {
   }
 
   return (
-    <div className="drawer-mobile drawer drawer-end">
+    <div className="drawer drawer-mobile drawer-end">
       <input id="flashcards-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <header className="sticky top-0 z-10 mb-2 flex w-full items-center justify-between bg-base-100 p-6 lg:mb-6 lg:border-b">
           {isReadOnly ? (
-            <Link href="/notebooks" className="link-hover link -ml-2 flex">
+            <Link
+              href="/notebooks"
+              className="link-hover link min-h-8 -ml-2 flex items-center"
+            >
               <FiChevronLeft size={24} />
               <span>Notebooks</span>
             </Link>
           ) : (
-            <button className="link-hover link" onClick={cancelHandler}>
+            <button
+              className="btn-ghost btn btn-sm -ml-3"
+              onClick={cancelHandler}
+            >
               Cancel
             </button>
           )}
@@ -143,7 +149,7 @@ export default function NotebookDetails({ id }: { id: string }) {
       <div className="drawer-side border-l">
         <label htmlFor="flashcards-drawer" className="drawer-overlay"></label>
         <div className="relative w-full bg-base-100 text-base-content sm:w-80">
-          <NotebookFlashcardsList aside notebookId={notebook.id} />
+          <NotebookFlashcardsList notebookId={notebook.id} />
         </div>
       </div>
     </div>

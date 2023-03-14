@@ -6,6 +6,7 @@ import {
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
+import Logo from "./Logo"
 
 export default function SideDrawer() {
   const [theme, setTheme] = useState<string | null>(null)
@@ -31,10 +32,16 @@ export default function SideDrawer() {
       ></label>
 
       <ul className="menu w-80 space-y-2 bg-base-100 p-6 text-base-content">
-        <li className="prose mb-6 flex">
-          <h1 className="p-0 text-primary">VRBTM</h1>
+        <li className="mb-6">
+          <Link
+            href="/"
+            onClick={clickHandler}
+            className="flex h-full w-full justify-center hover:bg-transparent [&>svg]:w-1/2"
+          >
+            <Logo />
+          </Link>
         </li>
-        {/* <!-- Sidebar content here --> */}
+
         <li>
           <Link
             href="/"
@@ -96,11 +103,11 @@ export default function SideDrawer() {
               checked={theme?.trim() === "dark"}
               onChange={() =>
                 setTheme((prevState) =>
-                  prevState === "light" ? "dark" : "light"
+                  prevState === "winter" ? "dark" : "winter"
                 )
               }
               className="checked toggle-primary toggle"
-              data-toggle-theme="light, dark"
+              data-toggle-theme="winter, dark"
             />
           </label>
         </li>
