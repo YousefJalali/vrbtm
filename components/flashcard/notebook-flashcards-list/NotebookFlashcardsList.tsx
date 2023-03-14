@@ -43,7 +43,7 @@ export default function NotebookFlashcardsList({
       <div className="sticky top-0 z-10 mb-2 flex justify-between border-b bg-base-100 p-6">
         {selectMode ? (
           <button
-            className="btn btn-ghost btn-sm -ml-3"
+            className="btn-ghost btn btn-sm -ml-3"
             onClick={() => {
               setSelectMode(false)
               setSelected(null)
@@ -101,7 +101,7 @@ export default function NotebookFlashcardsList({
                 />
                 <label
                   htmlFor={flashcard.id}
-                  className="card h-full w-full cursor-pointer outline-dashed outline-offset-4 outline-base-300 peer-checked:outline-primary peer-checked:outline"
+                  className="card h-full w-full cursor-pointer ring-2 ring-base-300 ring-offset-4 peer-checked:ring peer-checked:ring-primary"
                 ></label>
               </div>
             )}

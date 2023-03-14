@@ -8,13 +8,18 @@ export default function UpdateFlashcard({
   className,
   children,
   defaultValues,
+  callback,
   ...props
 }: {
   className?: string
   children: ReactNode
   defaultValues: Flashcard
+  callback?: () => void
 }) {
-  const { onSubmit, error, isMutating } = useUpdateFlashcard(defaultValues.id)
+  const { onSubmit, error, isMutating } = useUpdateFlashcard(
+    defaultValues.id,
+    callback
+  )
   const [showModal, setModal] = useState(false)
 
   return (
@@ -29,6 +34,7 @@ export default function UpdateFlashcard({
         dismiss={() => setModal(false)}
       >
         <FlashcardForm
+          type="edit"
           id="update-flashcard-modal"
           onSubmit={onSubmit}
           error={error}

@@ -3,7 +3,10 @@ import { Flashcard } from "@/libs/types"
 import { updateFlashcard } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
 
-export function useUpdateFlashcard(flashcardId: string) {
+export function useUpdateFlashcard(
+  flashcardId: string,
+  callback?: (action?: any) => void
+) {
   const { trigger, error, isMutating, reset } = useSWRMutation(
     "/api/flashcards",
     (url, arg) => updateFlashcard([url, `?id=${flashcardId}`], arg)
@@ -11,10 +14,7 @@ export function useUpdateFlashcard(flashcardId: string) {
 
   const { setNotification } = useNotification()
 
-  const onSubmit = async (
-    formData: Flashcard,
-    callback?: (action?: any) => void
-  ) => {
+  const onSubmit = async (formData: Flashcard) => {
     trigger(formData, {
       optimisticData: ({ data: flashcards }: { data: Flashcard[] }) => ({
         data: flashcards.map((flashcard) =>
