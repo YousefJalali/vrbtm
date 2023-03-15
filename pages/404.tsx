@@ -12,8 +12,10 @@ export default function Custom404() {
         height={500}
         width={500}
       />
-      <h1>Oops! Page not found.</h1>
-      <span>We are sorry, but the page you requested could not be found.</span>
+      <h1 className="text-center">Oops! Page not found.</h1>
+      <span className="text-center">
+        We are sorry, but the page you requested could not be found.
+      </span>
       <Link className="btn-primary btn mt-6 gap-2" href="/">
         <FiArrowLeft />
         Go back home
