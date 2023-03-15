@@ -15,7 +15,7 @@ const AddToNotebook = dynamic(
   {
     ssr: false,
     loading: () => (
-      <button className="btn loading btn-primary mt-3 w-full"></button>
+      <button className="loading btn-primary btn mt-3 w-full"></button>
     ),
   }
 )
@@ -89,7 +89,7 @@ const Editor = ({
   const isWordOmitted = (index: number, length: number) =>
     editorRef.current?.getEditor().getFormat(index, length).mark as boolean
 
-  // const textHasOmittedWord = () => isWordOmitted(0, text.length)
+  const textHasOmittedWord = () => isWordOmitted(0, text.length)
 
   const omitWord = (
     word: string,
@@ -124,6 +124,14 @@ const Editor = ({
         !selectedText.isOmitted
       )
       clearSelection()
+      setOmit(true)
+
+      console.log(htmlText.includes("</mark>"))
+      if (selectedText.isOmitted) {
+        // if (!htmlText.includes("</mark>")) {
+        //   setOmit(false)
+        // }
+      }
     }
   }
 
@@ -221,24 +229,26 @@ const Editor = ({
       className="flex h-full flex-col px-6 pb-6"
     >
       <div
-        className={`mt-6 box-border flex flex-1 flex-col rounded-lg p-2 ${
+        className={`relative mt-6 box-border flex flex-1 flex-col rounded-lg p-2 lg:max-w-2xl ${
           !readOnly ? "bg-base-200" : ""
         }`}
         style={{ padding: readOnly ? 0 : undefined }}
       >
         {!readOnly && text.trim().length > 0 && (
           <div
-            className="mb-2 flex h-10 w-full justify-between space-x-2 border-b-2 pb-2 disabled:bg-base-300"
+            // className="sticky top-2 left-1/2 z-50 w-[calc(100%-1rem)] -translate-x-1/2 rounded-lg bg-base-300 p-2"
+            className="mb-2 flex w-full flex-wrap justify-between border-b-2 pb-2"
             data-testid="editor-action-bar"
           >
-            <div className="flex space-x-2">
+            <div className="flex gap-2">
               {isOmit && <Eye isEyeOpen={isEyeOpen} setEye={setEye} />}
 
               {/* Omit selected text */}
               {selectedText && (
                 <button
                   onClick={omitSelectedWord}
-                  className="btn btn-secondary btn-sm"
+                  className="btn-secondary btn-sm btn"
+                  // disabled={!selectedText}
                 >
                   {selectedText.isOmitted ? "UnOmit" : "Omit"}
                 </button>
@@ -246,7 +256,7 @@ const Editor = ({
 
               {selectedText && notebookId && (
                 <CreateFlashcard
-                  className="btn btn-accent btn-sm"
+                  className="btn-accent btn-sm btn"
                   notebookId={notebookId}
                   defaultValues={{
                     question: selectedText.text,
@@ -257,34 +267,35 @@ const Editor = ({
               )}
             </div>
 
-            <div className="flex-end flex space-x-2">
-              {!isOmit && (
-                <DifficultyInput
-                  difficulty={difficulty}
-                  setDifficulty={difficultyHandler}
-                />
-              )}
+            {!selectedText && (
+              <div>
+                {!isOmit && (
+                  <div className="flex-end flex space-x-2">
+                    <DifficultyInput
+                      difficulty={difficulty}
+                      setDifficulty={difficultyHandler}
+                    />
 
-              {isOmit && !selectedText && (
-                <button
-                  className="btn-outline btn btn-error btn-sm"
-                  onClick={reset}
-                >
-                  Reset
-                </button>
-              )}
+                    <button
+                      onClick={omitText}
+                      disabled={text.trim().length <= 0}
+                      className="btn-primary btn-sm btn"
+                    >
+                      random Omit
+                    </button>
+                  </div>
+                )}
 
-              {/* omit full text */}
-              {!isOmit && (
-                <button
-                  onClick={omitText}
-                  disabled={text.trim().length <= 0}
-                  className="btn btn-primary btn-sm mb-2"
-                >
-                  random Omit
-                </button>
-              )}
-            </div>
+                {isOmit && !selectedText && (
+                  <button
+                    className="btn-outline btn-error btn-sm btn"
+                    onClick={reset}
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
 
