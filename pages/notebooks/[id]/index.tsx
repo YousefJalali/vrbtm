@@ -2,27 +2,24 @@ import { Notebook } from "@/libs/types"
 import { GetStaticProps } from "next"
 import { prisma } from "@/libs/db/prisma"
 import { SWRConfig, unstable_serialize } from "swr"
-import { useRouter } from "next/router"
 import NotebookDetails from "@/components/notebook/notebook-details/NotebookDetails"
+
+type FallbackProp = {
+  [key: string]: {
+    data: Notebook[]
+  }
+}
 
 export default function NotebookDetailsPage({
   fallback,
+  id,
 }: {
-  [key: string]: Notebook[]
+  fallback: FallbackProp
+  id: string
 }) {
-  const router = useRouter()
-
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
-
-  if (typeof router.query.id !== "string") {
-    return "Notebook not found!!!"
-  }
-
   return (
     <SWRConfig value={{ fallback }}>
-      <NotebookDetails id={router.query.id} />
+      <NotebookDetails id={id} />
     </SWRConfig>
   )
 }
@@ -32,35 +29,44 @@ export async function getStaticPaths() {
   const paths = notebooks.map(({ id }) => ({ params: { id } }))
   return {
     paths,
-    fallback: false, // can also be true or 'blocking'
+    fallback: "blocking",
   }
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
   if (!context.params || typeof context.params.id !== "string") {
-    return {
-      props: {},
-    }
+    return { props: {} }
   }
 
-  const notebook = await prisma.notebook.findFirst({
-    where: {
-      id: context.params.id,
-    },
-    include: {
-      flashcards: true,
-    },
-  })
-
-  return {
-    props: {
-      // notebook: JSON.parse(JSON.stringify(notebook)),
-      fallback: {
-        [unstable_serialize(["/api/notebooks", `/${context.params.id}`])]: {
-          data: JSON.parse(JSON.stringify(notebook)),
-        },
+  try {
+    const notebook = await prisma.notebook.findFirst({
+      where: {
+        id: context.params.id,
       },
-      revalidate: 1,
-    },
+      include: {
+        flashcards: true,
+      },
+    })
+
+    if (!notebook) {
+      return {
+        notFound: true,
+      }
+    }
+
+    return {
+      props: {
+        fallback: {
+          [unstable_serialize(["/api/notebooks", `/${context.params.id}`])]: {
+            data: JSON.parse(JSON.stringify(notebook)),
+          },
+        },
+        id: context.params.id,
+      },
+    }
+  } catch (error) {
+    return {
+      notFound: true,
+    }
   }
 }

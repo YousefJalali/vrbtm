@@ -84,7 +84,6 @@ export default function NotebookForm({
   }, [error, setError, clearErrors])
 
   const submitHandler = (data: Notebook) => {
-    console.log(data)
     onSubmit({ ...initialValues(), ...data }, cancelHandler)
   }
 
