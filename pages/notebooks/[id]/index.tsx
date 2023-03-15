@@ -12,6 +12,10 @@ export default function NotebookDetailsPage({
 }) {
   const router = useRouter()
 
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
+
   if (typeof router.query.id !== "string") {
     return "Notebook not found!!!"
   }

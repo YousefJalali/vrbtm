@@ -94,7 +94,7 @@ export default function NotebookDetails({ id }: { id: string }) {
             </Link>
           ) : (
             <button
-              className="btn-ghost btn btn-sm -ml-3"
+              className="btn-ghost btn-sm btn -ml-3"
               onClick={cancelHandler}
             >
               Cancel
@@ -119,7 +119,7 @@ export default function NotebookDetails({ id }: { id: string }) {
           </div>
           {txtValue.trim().length === 0 && isReadOnly ? (
             <button
-              className=" w-full px-6 text-left italic opacity-50"
+              className=" mt-6 w-full px-6 text-left italic opacity-50"
               onClick={() => setReadOnly(false)}
             >
               A brief about the task...
