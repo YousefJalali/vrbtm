@@ -8,7 +8,7 @@ export default function AddToNotebook({ content }: { content: string }) {
   return (
     <>
       <button
-        className="btn-primary btn mt-3 w-full lg:max-w-2xl"
+        className="btn-primary btn mt-3 w-full"
         onClick={() => setModal(true)}
       >
         Add To Notebook

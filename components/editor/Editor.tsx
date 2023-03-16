@@ -229,7 +229,7 @@ const Editor = ({
       className="flex h-full flex-col px-6 pb-6"
     >
       <div
-        className={`relative mt-6 box-border flex flex-1 flex-col rounded-lg p-2 lg:max-w-2xl ${
+        className={`relative mt-6 box-border flex flex-1 flex-col rounded-lg p-2 ${
           !readOnly ? "bg-base-200" : ""
         }`}
         style={{ padding: readOnly ? 0 : undefined }}
