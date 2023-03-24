@@ -32,6 +32,7 @@ export default function UpdateFlashcard({
         id="update-flashcard-modal"
         isOpen={showModal}
         dismiss={() => setModal(false)}
+        style={{ display: isMutating ? "none" : "flex" }}
       >
         <FlashcardForm
           type="edit"

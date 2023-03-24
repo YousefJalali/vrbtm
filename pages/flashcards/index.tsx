@@ -1,10 +1,13 @@
 import { Notebook } from "@/libs/types"
-import { GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 import { prisma } from "@/libs/db/prisma"
 import { SWRConfig, unstable_serialize } from "swr"
 import FlashcardList from "@/components/flashcard/FlashcardList"
 import { useState } from "react"
 import SideDrawerButton from "@/components/layout/SideDrawerButton"
+import { baseUrl } from "@/libs/data"
+import { customFetch } from "@/utils"
+import cookie from "cookie"
 
 export default function Flashcards({
   fallback,
@@ -45,15 +48,21 @@ export default function Flashcards({
   )
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const flashcards = await prisma.flashcard.findMany({})
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { auth_token } = cookie.parse(context.req.headers.cookie || "")
+
+  const { data: flashcardsWithNotebooks } = await customFetch(
+    `${baseUrl}/api/notebooks?q=with-flashcards`,
+    { method: "GET", bodyData: null, token: auth_token }
+  )
+
+  console.log(flashcardsWithNotebooks)
 
   return {
     props: {
       fallback: {
-        [unstable_serialize(["/api/flashcards", ""])]: JSON.parse(
-          JSON.stringify(flashcards)
-        ),
+        [unstable_serialize(["/api/notebooks", "?q=with-flashcards"])]:
+          JSON.parse(JSON.stringify(flashcardsWithNotebooks)),
       },
     },
   }

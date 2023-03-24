@@ -31,7 +31,7 @@ export default function CreateNotebook({
         isOpen={showModal}
         dismiss={() => setModal(false)}
       >
-        <ProtectedComponent>
+        <ProtectedComponent dismiss={() => setModal(false)}>
           <NotebookForm
             id="new-notebook-modal"
             onSubmit={onSubmit}

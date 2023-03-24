@@ -98,67 +98,69 @@ export default function NotebookForm({
         {type === "create" ? "New" : "Update"} Notebook
       </h3>
 
-      <div className="flex space-x-2">
-        <div className="form-control w-full">
-          <label htmlFor="title" className="label">
-            <span className="label-text">Title</span>
-          </label>
+      <fieldset disabled={type === "create" && loading}>
+        <div className="flex space-x-2">
+          <div className="form-control w-full">
+            <label htmlFor="title" className="label">
+              <span className="label-text">Title</span>
+            </label>
 
-          <input
-            id="title"
-            type="text"
-            placeholder="Title..."
-            className={`input-bordered input w-full ${
-              errors?.title ? "input-error" : ""
-            }`}
-            {...register("title")}
-          />
+            <input
+              id="title"
+              type="text"
+              placeholder="Title..."
+              className={`input-bordered input w-full ${
+                errors?.title ? "input-error" : ""
+              }`}
+              {...register("title")}
+            />
 
-          <label className="label">
-            <span className="label-text-alt text-error">{titleError}</span>
-          </label>
+            <label className="label">
+              <span className="label-text-alt text-error">{titleError}</span>
+            </label>
+          </div>
+
+          <div className="form-control">
+            <label htmlFor="title" className="label invisible">
+              <span className="label-text">Color</span>
+            </label>
+            <Controller
+              control={control}
+              name="color"
+              render={({ field: { onChange, value } }) => (
+                <ColorInput
+                  color={value}
+                  onChange={(color) => onChange(color.hex)}
+                />
+              )}
+            />
+          </div>
         </div>
 
         <div className="form-control">
-          <label htmlFor="title" className="label invisible">
-            <span className="label-text">Color</span>
+          <label htmlFor="description" className="label">
+            <span className="label-text">Description</span>
           </label>
-          <Controller
-            control={control}
-            name="color"
-            render={({ field: { onChange, value } }) => (
-              <ColorInput
-                color={value}
-                onChange={(color) => onChange(color.hex)}
-              />
-            )}
-          />
+          <textarea
+            id="description"
+            placeholder="A brief about the notebook..."
+            className="textarea-bordered textarea h-24"
+            {...register("description")}
+          ></textarea>
         </div>
-      </div>
 
-      <div className="form-control">
-        <label htmlFor="description" className="label">
-          <span className="label-text">Description</span>
-        </label>
-        <textarea
-          id="description"
-          placeholder="A brief about the notebook..."
-          className="textarea-bordered textarea h-24"
-          {...register("description")}
-        ></textarea>
-      </div>
-
-      <div className="modal-action">
-        <button className="btn-ghost btn" onClick={cancelHandler}>
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className={`btn-primary btn ${loading ? "loading" : ""}`}
-        >
-          {type === "create" ? "Create" : "Update"}
-        </button>
-      </div>
+        <div className="modal-action">
+          <button className="btn-ghost btn" onClick={cancelHandler}>
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className={`btn-primary btn ${loading ? "loading" : ""}`}
+          >
+            {type === "create" ? "Create" : "Update"}
+          </button>
+        </div>
+      </fieldset>
     </form>
   )
 }

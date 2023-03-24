@@ -1,4 +1,10 @@
-import { ReactNode, useEffect, useRef } from "react"
+import {
+  CSSProperties,
+  ReactNode,
+  StyleHTMLAttributes,
+  useEffect,
+  useRef,
+} from "react"
 import { createPortal } from "react-dom"
 import {
   disableBodyScroll,
@@ -11,11 +17,13 @@ export default function Modal({
   dismiss,
   children,
   id,
+  style,
 }: {
   isOpen: boolean
   dismiss: () => void
   children: ReactNode
   id: string
+  style?: CSSProperties
 }) {
   const targetRef = useRef<HTMLDivElement>(null)
 
@@ -66,6 +74,7 @@ export default function Modal({
             className={`modal modal-bottom sm:modal-middle ${
               isOpen === undefined ? "" : isOpen ? "modal-open" : "modal-close"
             }`}
+            style={style}
           >
             <label
               htmlFor={id}

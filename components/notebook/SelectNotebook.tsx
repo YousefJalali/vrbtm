@@ -49,7 +49,7 @@ export default function SelectNotebook({
           </li>
         )}
 
-        {notebooks.length === 0 && (
+        {filter === "" && notebooks.length === 0 && (
           <li className="border-b py-3 text-center text-sm opacity-60">
             You dont have any notebook
           </li>

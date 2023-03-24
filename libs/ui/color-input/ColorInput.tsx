@@ -9,7 +9,7 @@ export default function ColorInput({
   onChange: ColorChangeHandler
 }) {
   return (
-    <div className="dropdown dropdown-bottom dropdown-end">
+    <div className="dropdown-bottom dropdown-end dropdown">
       <label tabIndex={0} className="input-bordered input flex items-center">
         <FiCircle fill={color} color={color} />
       </label>
@@ -17,7 +17,11 @@ export default function ColorInput({
         tabIndex={0}
         className="dropdown-content overflow-hidden rounded-lg shadow"
       >
-        <TwitterPicker color={color} onChange={onChange} />
+        <TwitterPicker
+          color={color}
+          onChange={onChange}
+          className="!bg-base-100"
+        />
       </div>
     </div>
   )

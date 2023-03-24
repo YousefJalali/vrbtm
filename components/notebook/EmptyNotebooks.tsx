@@ -18,9 +18,9 @@ export default function EmptyNotebooks() {
         We could not find any notebooks to display here.
       </p>
 
-      <CreateNotebook className="btn-primary btn-ghost btn-sm btn mt-4 text-primary">
+      <CreateNotebook className="btn-outline btn-primary btn-ghost btn-sm btn mt-4 text-primary">
         <span className="mr-2 hidden lg:inline-block">New Notebook</span>
-        <FiPlus size={24} />
+        <FiPlus size={18} />
       </CreateNotebook>
     </div>
   )

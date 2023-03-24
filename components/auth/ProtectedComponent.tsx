@@ -1,19 +1,15 @@
 import { useUser } from "@/libs/contexts/AuthCtx"
-import {
-  cloneElement,
-  ReactNode,
-  useState,
-  Children,
-  ReactElement,
-} from "react"
+import { useState } from "react"
 import { HiLockClosed } from "react-icons/hi"
 import Login from "./Login"
 import SignUp from "./SignUp"
 
 export default function ProtectedComponent({
   children,
+  dismiss,
 }: {
   children: JSX.Element
+  dismiss: () => void
 }) {
   const [isLogin, setLogin] = useState(false)
   const { user, isLoading } = useUser()
@@ -31,6 +27,12 @@ export default function ProtectedComponent({
     </>
   ) : (
     <>
+      <button
+        className="btn-outline btn-sm btn-circle btn absolute right-2 top-2"
+        onClick={dismiss}
+      >
+        ✕
+      </button>
       <div className="flex flex-col items-center justify-center">
         <div className="prose">
           <h3 className="flex items-center justify-center gap-2 text-center leading-none">

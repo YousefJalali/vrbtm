@@ -64,37 +64,39 @@ export default function FlashcardForm({
         {type === "create" ? "New" : "Update"} Flashcard
       </h3>
 
-      <div className="form-control w-full ">
-        <label className="label">
-          <span className="label-text">Question</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input-bordered input w-full "
-          {...register("question")}
-        />
-      </div>
+      <fieldset disabled={type === "create" && loading}>
+        <div className="form-control w-full ">
+          <label className="label">
+            <span className="label-text">Question</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Type the question here"
+            className="input-bordered input w-full"
+            {...register("question")}
+          />
+        </div>
 
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text">Answer</span>
-        </label>
-        <textarea
-          className="textarea-bordered textarea h-24"
-          placeholder="Bio"
-          {...register("answer")}
-        ></textarea>
-      </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Answer</span>
+          </label>
+          <textarea
+            className="textarea-bordered textarea h-24"
+            placeholder="Type the answer here"
+            {...register("answer")}
+          ></textarea>
+        </div>
 
-      <div className="modal-action">
-        <button className="btn-ghost btn" onClick={cancelHandler}>
-          Cancel
-        </button>
-        <button className={`btn-primary btn ${loading ? "loading" : ""}`}>
-          {type === "create" ? "create" : "Update"}
-        </button>
-      </div>
+        <div className="modal-action">
+          <button className="btn-ghost btn" onClick={cancelHandler}>
+            Cancel
+          </button>
+          <button className={`btn-primary btn ${loading ? "loading" : ""}`}>
+            {type === "create" ? "create" : "Update"}
+          </button>
+        </div>
+      </fieldset>
     </form>
   )
 }

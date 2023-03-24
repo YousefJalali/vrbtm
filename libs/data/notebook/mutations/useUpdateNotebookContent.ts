@@ -43,12 +43,12 @@ export const useUpdateNotebookContent = (
           variant: "success",
           link: query === "concat" ? `/notebooks/${notebookId}` : undefined,
         })
-
-        if (callback) {
-          callback()
-        }
       },
     })
+
+    if (callback) {
+      callback()
+    }
   }
 
   return { onSubmit, isMutating }

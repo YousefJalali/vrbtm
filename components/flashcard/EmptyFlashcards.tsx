@@ -1,4 +1,5 @@
 import { BsCardText } from "react-icons/bs"
+import { FiPlus } from "react-icons/fi"
 import CreateFlashcard from "./CreateFlashcard"
 
 export default function EmptyFlashcards({
@@ -15,10 +16,11 @@ export default function EmptyFlashcards({
       </p>
 
       <CreateFlashcard
-        className="btn-primary btn-sm btn mt-4"
+        className="btn-outline btn-primary btn-ghost btn-sm btn mt-4 gap-2 text-primary"
         notebookId={notebookId}
       >
         new flashcard
+        <FiPlus size={18} />
       </CreateFlashcard>
     </div>
   )

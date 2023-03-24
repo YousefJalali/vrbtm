@@ -1,9 +1,6 @@
 import dynamic from "next/dynamic"
-import Link from "next/link"
-import { useCallback, useMemo } from "react"
 import { BsCardText } from "react-icons/bs"
 import { FiEdit2, FiMoreVertical, FiTrash2 } from "react-icons/fi"
-// import DeleteNotebook from "../DeleteNotebook"
 
 const DeleteNotebook = dynamic(
   () => import("@/components/notebook/DeleteNotebook"),
@@ -53,7 +50,7 @@ export default function NotebookDetailsOptions({
   )
 
   return isMutating ? (
-    <button className="btn loading btn-ghost btn-square text-primary"></button>
+    <button className="loading btn-primary btn-sm btn">Saving...</button>
   ) : isReadOnly ? (
     <>
       <ul className="-mr-3 hidden lg:flex [&>li>button]:gap-2 [&>li>button]:btn-ghost [&>li>button]:btn-sm [&>li>button]:btn">
@@ -63,7 +60,7 @@ export default function NotebookDetailsOptions({
       <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0 lg:hidden">
         <label
           tabIndex={0}
-          className="btn btn-ghost btn-square btn-xs -mr-2 p-0"
+          className="btn-ghost btn-xs btn-square btn -mr-2 p-0"
         >
           <FiMoreVertical size={18} />
         </label>
@@ -77,7 +74,7 @@ export default function NotebookDetailsOptions({
     </>
   ) : (
     <button
-      className="btn btn-primary btn-sm"
+      className="btn-primary btn-sm btn"
       disabled={disabled}
       onClick={onSave}
     >

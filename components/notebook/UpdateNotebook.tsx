@@ -28,6 +28,7 @@ export default function UpdateNotebook({
         id="update-notebook-modal"
         isOpen={showModal}
         dismiss={() => setModal(false)}
+        style={{ display: isMutating ? "none" : "flex" }}
       >
         <NotebookForm
           id="update-notebook-modal"
