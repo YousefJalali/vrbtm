@@ -1,8 +1,10 @@
 import { Notebook } from "@/libs/types"
-import { GetStaticProps } from "next"
-import { prisma } from "@/libs/db/prisma"
+import { GetServerSideProps } from "next"
 import { SWRConfig, unstable_serialize } from "swr"
 import NotebookDetails from "@/components/notebook/notebook-details/NotebookDetails"
+import { customFetch } from "@/utils"
+import cookie from "cookie"
+import { baseUrl } from "@/libs/data"
 
 type FallbackProp = {
   [key: string]: {
@@ -24,31 +26,20 @@ export default function NotebookDetailsPage({
   )
 }
 
-export async function getStaticPaths() {
-  const notebooks = await prisma.notebook.findMany({})
-  const paths = notebooks.map(({ id }) => ({ params: { id } }))
-  return {
-    paths,
-    fallback: "blocking",
-  }
-}
-
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!context.params || typeof context.params.id !== "string") {
     return { props: {} }
   }
 
   try {
-    const notebook = await prisma.notebook.findFirst({
-      where: {
-        id: context.params.id,
-      },
-      include: {
-        flashcards: true,
-      },
-    })
+    const { auth_token } = cookie.parse(context.req.headers.cookie || "")
 
-    if (!notebook) {
+    const { data: notebook, error } = await customFetch(
+      `${baseUrl}/api/notebooks/${context.params.id}`,
+      { method: "GET", bodyData: null, token: auth_token }
+    )
+
+    if (error) {
       return {
         notFound: true,
       }

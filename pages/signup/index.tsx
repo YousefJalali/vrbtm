@@ -1,7 +1,8 @@
 import SignUp from "@/components/auth/SignUp"
-import Header from "@/components/layout/Header"
 import SideDrawerButton from "@/components/layout/SideDrawerButton"
 import Link from "next/link"
+import { GetServerSideProps } from "next"
+import { isAuthenticated } from "@/utils/isAuthenticated"
 
 export default function SignUpPage() {
   return (
@@ -9,7 +10,6 @@ export default function SignUpPage() {
       <header className="mb-6 flex justify-end lg:hidden">
         <SideDrawerButton />
       </header>
-
       <SignUp />
       <span className="label justify-start ">
         Already have an account?
@@ -19,4 +19,21 @@ export default function SignUpPage() {
       </span>
     </main>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const user = await isAuthenticated(req)
+
+  if (user) {
+    return {
+      redirect: {
+        destination: "/profile",
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }

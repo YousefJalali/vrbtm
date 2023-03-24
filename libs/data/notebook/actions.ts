@@ -5,9 +5,11 @@ export const createNotebook = async (
   url: string | [string, string],
   { arg }: { arg: Notebook }
 ) =>
+  // token: string
   await customFetch(url, {
     method: "POST",
     bodyData: arg,
+    // token,
   })
 
 export const updateNotebook = async (

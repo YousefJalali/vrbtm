@@ -1,10 +1,10 @@
 import type { AppProps } from "next/app"
+import { NotificationCtxProvider } from "@/libs/contexts/NotificationCtx"
+import { AuthContextProvider } from "@/libs/contexts/AuthCtx"
 import { themeChange } from "theme-change"
-import { SessionProvider } from "next-auth/react"
 import "@/styles/globals.css"
 import { Montserrat } from "@next/font/google"
 import Layout from "@/components/layout/Layout"
-import { NotificationCtxProvider } from "@/libs/contexts/NotificationCtx"
 import Head from "next/head"
 import { useEffect } from "react"
 
@@ -26,8 +26,8 @@ export default function MyApp({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <SessionProvider session={session}>
-        <div className={`${font.variable} font-sans`}>
+      <div className={`${font.variable} font-sans`}>
+        <AuthContextProvider>
           <NotificationCtxProvider>
             <Layout>
               <Component {...pageProps} />
@@ -37,8 +37,8 @@ export default function MyApp({
             <div id="prompt" />
             <div id="notification" />
           </NotificationCtxProvider>
-        </div>
-      </SessionProvider>
+        </AuthContextProvider>
+      </div>
     </>
   )
 }

@@ -2,6 +2,7 @@ import {
   Notebook as NotebookType,
   Flashcard as FlashcardType,
   Prisma,
+  User as UserType,
 } from "@prisma/client"
 
 export type Notebook = NotebookType
@@ -29,3 +30,7 @@ export type Flashcard = FlashcardType
 export type FlashcardWithNotebook = Prisma.FlashcardGetPayload<{
   include: { notebook: { select: { id: true; title: true; color: true } } }
 }>
+
+export type User = UserType
+export type CreateUserType = { name: string; email: string; password: string }
+export type LoginUserType = { email: string; password: string }

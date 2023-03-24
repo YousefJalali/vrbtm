@@ -7,19 +7,21 @@ import { Notebook } from "@/libs/types"
 import ColorInput from "@/libs/ui/color-input/ColorInput"
 import { addServerErrors } from "@/utils"
 
-const initialValues = () => ({
-  id: ObjectID().toHexString(),
-  title: "",
-  color:
-    "#" +
-    Math.floor(Math.random() * (0xffffff + 1))
-      .toString(16)
-      .padStart(6, "0"),
-  description: "",
-  content: "",
-  updatedAt: new Date(),
-  createdAt: new Date(),
-})
+const initialValues = () =>
+  ({
+    id: ObjectID().toHexString(),
+    title: "",
+    color:
+      "#" +
+      Math.floor(Math.random() * (0xffffff + 1))
+        .toString(16)
+        .padStart(6, "0"),
+    description: "",
+    content: "",
+    userId: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  } as Notebook)
 
 export default function NotebookForm({
   id,
@@ -30,6 +32,7 @@ export default function NotebookForm({
   reset,
   loading,
   defaultValues,
+  ...props
 }: {
   id: string
   type?: "create" | "edit"

@@ -1,5 +1,6 @@
 import useNotebooks from "@/libs/data/notebook/queries/useNotebooks"
 import { NotebookWithFlashcardsCount } from "@/libs/types"
+import EmptyNotebooks from "./EmptyNotebooks"
 import NotebookCard from "./notebook-item/NotebookCard"
 
 export default function NotebookCards({ search }: { search: string }) {
@@ -17,11 +18,11 @@ export default function NotebookCards({ search }: { search: string }) {
     return <div>Loading...</div>
   }
 
-  return (
+  return notebooks.length === 0 ? (
+    <EmptyNotebooks />
+  ) : (
     <ul className="columns-2 gap-5 bg-base-100 pb-2 sm:columns-3xs">
-      {notebooks.length === 0 ? (
-        <li>You do not have any notebooks.</li>
-      ) : filteredNotebooks(notebooks).length > 0 ? (
+      {filteredNotebooks(notebooks).length > 0 ? (
         filteredNotebooks(notebooks).map((notebook) => (
           <li
             key={notebook.id}

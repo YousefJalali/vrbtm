@@ -3,10 +3,12 @@ import { Notebook } from "@/libs/types"
 import { createNotebook } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
 import { getErrorMessage } from "@/utils"
+import Cookie from "js-cookie"
 
 export const useCreateNotebook = (query: string = "") => {
   const { trigger, error, isMutating, reset } = useSWRMutation(
     `/api/notebooks${query ? `?q=${query}` : ""}`,
+    // (url, arg) => createNotebook(url, arg, Cookie.get("auth_token") || "")
     createNotebook
   )
 
@@ -16,6 +18,7 @@ export const useCreateNotebook = (query: string = "") => {
     formData: Notebook,
     callback?: (action?: any) => void
   ) => {
+    console.log(formData)
     trigger(formData, {
       optimisticData: ({ data: notebooks }: { data: Notebook[] }) => ({
         data: [

@@ -5,11 +5,15 @@ export function addServerErrors<T>(
   //@ts-ignore
   setError: UseFormSetError<T>
 ) {
-  for (const [key, value] of Object.entries(errors)) {
-    setError(key as Path<T>, {
-      type: "manual",
-      message: (value as FieldError).message,
-    })
+  try {
+    for (const [key, value] of Object.entries(errors)) {
+      setError(key as Path<T>, {
+        type: "manual",
+        message: (value as FieldError).message,
+      })
+    }
+  } catch (error) {
+    console.log(error)
   }
 }
 

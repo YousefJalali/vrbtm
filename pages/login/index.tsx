@@ -1,7 +1,8 @@
 import Login from "@/components/auth/Login"
-import Header from "@/components/layout/Header"
 import SideDrawerButton from "@/components/layout/SideDrawerButton"
+import { GetServerSideProps } from "next"
 import Link from "next/link"
+import { isAuthenticated } from "@/utils/isAuthenticated"
 
 export default function LoginPage() {
   return (
@@ -20,4 +21,21 @@ export default function LoginPage() {
       </span>
     </main>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const user = await isAuthenticated(req)
+
+  if (user) {
+    return {
+      redirect: {
+        destination: "/profile",
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }

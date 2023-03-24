@@ -3,21 +3,21 @@ export async function customFetch<T>(
   {
     method = "GET",
     bodyData,
+    token,
   }: {
     method?: "GET" | "POST" | "PUT" | "DELETE"
     bodyData?: T
+    token?: string
   }
 ) {
-  const headers = { "Content-Type": "application/json" }
-  // if (token) {
-  //   headers.Authorization = `Bearer ${token}`
-  // }
+  const requestHeaders = { "Content-Type": "application/json" }
 
   const res = await fetch(typeof url === "string" ? url : url.join(""), {
     method,
     ...(bodyData && { body: JSON.stringify(bodyData) }),
     headers: {
-      ...headers,
+      ...requestHeaders,
+      ...(token && { Authorization: `Bearer ${token}` }),
     },
   })
 

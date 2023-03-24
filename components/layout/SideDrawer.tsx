@@ -7,11 +7,14 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import Logo from "./Logo"
+import { useUser } from "@/libs/contexts/AuthCtx"
+import Image from "next/image"
 
 export default function SideDrawer() {
   const [theme, setTheme] = useState<string | null>(null)
   const labelRef = useRef<HTMLLabelElement>(null)
   const router = useRouter()
+  const { user, isLoading } = useUser()
 
   const clickHandler = () => {
     if (labelRef.current) {
@@ -74,25 +77,54 @@ export default function SideDrawer() {
         </li>
 
         <ul className="menu flex flex-1 justify-end space-y-2">
-          <li>
-            <Link
-              href="/signup"
-              onClick={clickHandler}
-              className={router.pathname === "/signup" ? "active" : ""}
-            >
-              Sign Up
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="/login"
-              onClick={clickHandler}
-              className={router.pathname === "/login" ? "active" : ""}
-            >
-              Login
-            </Link>
-          </li>
+          {isLoading ? (
+            <li>
+              <span>Loading...</span>
+            </li>
+          ) : user ? (
+            <li className="rounded-xl border">
+              <Link
+                href="/profile"
+                onClick={clickHandler}
+                // className={router.pathname === "/profile" ? "active" : ""}
+              >
+                <Image
+                  className="h-12 w-12 rounded-full"
+                  height={150}
+                  width={150}
+                  src="https://via.placeholder.com/150"
+                  alt="Avatar"
+                />
+                <div className="flex flex-col items-start ">
+                  <span className="text-sm font-light opacity-50">
+                    Welcome back,
+                  </span>
+                  <span className="font-semibold">{user.displayName}</span>
+                </div>
+              </Link>
+            </li>
+          ) : (
+            <>
+              <li>
+                <Link
+                  href="/signup"
+                  onClick={clickHandler}
+                  className={router.pathname === "/signup" ? "active" : ""}
+                >
+                  Sign Up
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/login"
+                  onClick={clickHandler}
+                  className={router.pathname === "/login" ? "active" : ""}
+                >
+                  Login
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
 
         <li className="form-control w-full border-t pt-2">

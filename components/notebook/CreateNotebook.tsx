@@ -1,6 +1,7 @@
 import { useCreateNotebook } from "@/libs/data/notebook"
 import Modal from "@/libs/ui/modal/Modal"
 import { ReactNode, useState } from "react"
+import ProtectedComponent from "../auth/ProtectedComponent"
 import NotebookForm from "./NotebookForm"
 
 export default function CreateNotebook({
@@ -30,14 +31,16 @@ export default function CreateNotebook({
         isOpen={showModal}
         dismiss={() => setModal(false)}
       >
-        <NotebookForm
-          id="new-notebook-modal"
-          onSubmit={onSubmit}
-          onCancel={() => setModal(false)}
-          error={error}
-          loading={isMutating}
-          reset={reset}
-        />
+        <ProtectedComponent>
+          <NotebookForm
+            id="new-notebook-modal"
+            onSubmit={onSubmit}
+            onCancel={() => setModal(false)}
+            error={error}
+            loading={isMutating}
+            reset={reset}
+          />
+        </ProtectedComponent>
       </Modal>
     </>
   )

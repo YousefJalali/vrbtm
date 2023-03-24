@@ -1,6 +1,5 @@
 import { FC } from "react"
 import { createPortal } from "react-dom"
-import { AnimatePresence } from "framer-motion"
 import { useNotification } from "@/libs/hooks/useNotification"
 import { FiX } from "react-icons/fi"
 import Link from "next/link"

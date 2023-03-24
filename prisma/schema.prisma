@@ -36,6 +36,15 @@ datasource db {
 //   updatedAt   DateTime    @updatedAt
 // }
 
+model User {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  uid       String     @unique
+  // name      String
+  // email     String   @unique
+  notebooks Notebook[]
+  createdAt DateTime   @default(now())
+}
+
 model Notebook {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -43,6 +52,8 @@ model Notebook {
   description String
   content     String
   flashcards  Flashcard[]
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String      @db.ObjectId
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
