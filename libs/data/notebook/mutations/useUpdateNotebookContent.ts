@@ -3,6 +3,7 @@ import useSWRMutation from "swr/mutation"
 import { addToNotebook } from "../actions"
 import { Notebook } from "@/libs/types"
 import { useNotification } from "@/libs/hooks/useNotification"
+import { getErrorMessage } from "@/utils"
 
 export const useUpdateNotebookContent = (
   notebookId: string | null,
@@ -28,7 +29,10 @@ export const useUpdateNotebookContent = (
       rollbackOnError: true,
       throwOnError: false,
       onError: (error) => {
-        console.log("error", error)
+        setNotification({
+          message: getErrorMessage(error),
+          variant: "error",
+        })
       },
       onSuccess: () => {
         setNotification({

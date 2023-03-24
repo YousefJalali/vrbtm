@@ -18,7 +18,6 @@ export const useCreateNotebook = (query: string = "") => {
     formData: Notebook,
     callback?: (action?: any) => void
   ) => {
-    console.log(formData)
     trigger(formData, {
       optimisticData: ({ data: notebooks }: { data: Notebook[] }) => ({
         data: [

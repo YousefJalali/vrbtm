@@ -31,8 +31,7 @@ const handler = async (
 
       return res.status(200).json({ data: flashcards })
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ error })
+      return res.status(500).json({ error })
     }
   }
 
@@ -55,7 +54,6 @@ const handler = async (
 
       let id = flashcard.id
       if (!ObjectID.isValid(id)) {
-        console.log("id not valid, new id will be assigned")
         id = ObjectID().toHexString()
       }
 
@@ -66,10 +64,9 @@ const handler = async (
         },
       })
 
-      res.json({ data: createdFlashcard })
+      return res.json({ data: createdFlashcard })
     } catch (error) {
-      console.log(error)
-      res.status(400).json({ error })
+      return res.status(400).json({ error })
     }
   }
 
@@ -101,10 +98,9 @@ const handler = async (
         },
       })
 
-      res.json({ data: updatedFlashcard })
+      return res.json({ data: updatedFlashcard })
     } catch (error) {
-      console.log(error)
-      res.status(400).json({ error })
+      return res.status(400).json({ error })
     }
   }
 
@@ -121,8 +117,7 @@ const handler = async (
 
       return res.status(200).json({ data: deletedFlashcard })
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ error })
+      return res.status(500).json({ error })
     }
   }
 }

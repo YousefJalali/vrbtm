@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server"
 // import { firebaseAdmin } from "@/config/firebaseAdmin"
 
 export async function middleware(req: NextRequest) {
-  // console.log({ middleware: req.headers })
   return NextResponse.next()
   // const requestHeaders = new Headers(req.headers)
   // const token = requestHeaders.get("authorization")?.split(" ")[1]

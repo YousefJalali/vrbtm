@@ -20,21 +20,16 @@ export default function Modal({
   const targetRef = useRef<HTMLDivElement>(null)
 
   // useEffect(() => {
-  //   console.log("Called")
   //   let elem = document.getElementById("modal")
-  //   console.log(elem)
-  //   console.log(targetRef.current)
 
   //   if (elem !== null && targetRef.current) {
   //     const arr = Array.from(elem.children)
 
-  //     console.log(arr.some((child) => child.className.includes("modal-open")))
-
   //     if (arr.some((child) => child.className.includes("modal-open"))) {
-  //       console.log("here")
+
   //       disableBodyScroll(targetRef.current)
   //     } else {
-  //       console.log("here 2")
+
   //       enableBodyScroll(targetRef.current)
   //     }
   //   }

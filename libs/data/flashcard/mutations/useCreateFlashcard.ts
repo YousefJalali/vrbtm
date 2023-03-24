@@ -2,6 +2,7 @@ import useSWRMutation from "swr/mutation"
 import { Flashcard, FlashcardWithNotebook, Notebook } from "@/libs/types"
 import { createFlashcard } from "../actions"
 import { useNotification } from "@/libs/hooks/useNotification"
+import { getErrorMessage } from "@/utils"
 
 export const useCreateFlashcard = (notebookId: string) => {
   const { trigger, error, isMutating } = useSWRMutation(
@@ -41,7 +42,10 @@ export const useCreateFlashcard = (notebookId: string) => {
       rollbackOnError: true,
       throwOnError: false,
       onError: (err) => {
-        console.log(err)
+        setNotification({
+          message: getErrorMessage(error),
+          variant: "error",
+        })
       },
       onSuccess: () => {
         setNotification({

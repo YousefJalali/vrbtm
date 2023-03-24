@@ -59,8 +59,7 @@ const handler = async (
 
         return res.status(200).json({ data: notebooks })
       } catch (error) {
-        console.log(error)
-        res.status(500).json({ error })
+        return res.status(500).json({ error })
       }
       break
 
@@ -104,7 +103,6 @@ const handler = async (
 
         let id = notebookForm.id
         if (!ObjectID.isValid(id)) {
-          console.log("id not valid, new id will be assigned")
           id = ObjectID().toHexString()
         }
 
@@ -117,10 +115,9 @@ const handler = async (
           },
         })
 
-        res.json({ data: createdNotebook })
+        return res.json({ data: createdNotebook })
       } catch (error) {
-        console.log(error)
-        res.status(400).json({ error })
+        return res.status(400).json({ error })
       }
       break
 
@@ -167,10 +164,9 @@ const handler = async (
           },
         })
 
-        res.json({ data: updatedNotebook })
+        return res.json({ data: updatedNotebook })
       } catch (error) {
-        console.log(error)
-        res.status(400).json({ error })
+        return res.status(400).json({ error })
       }
       break
 
@@ -193,8 +189,7 @@ const handler = async (
 
         return res.status(200).json({ data: deletedNotebook })
       } catch (error) {
-        console.log(error)
-        res.status(500).json({ error })
+        return res.status(500).json({ error })
       }
       break
 

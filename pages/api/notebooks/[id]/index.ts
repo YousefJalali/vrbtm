@@ -53,8 +53,7 @@ const handler = async (
 
         return res.status(200).json({ data: notebook })
       } catch (error) {
-        console.log(error)
-        res.status(500).json({ error })
+        return res.status(500).json({ error })
       }
       break
 
@@ -104,7 +103,6 @@ const handler = async (
 
           res.status(200).json({ data: updatedNotebook })
         } catch (error) {
-          console.log(error)
           res.status(500).json({ error })
         }
       }
@@ -123,7 +121,6 @@ const handler = async (
 
           res.status(200).json({ data: updatedNotebook })
         } catch (error) {
-          console.log(error)
           res.status(500).json({ error })
         }
       }

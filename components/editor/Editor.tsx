@@ -126,7 +126,6 @@ const Editor = ({
       clearSelection()
       setOmit(true)
 
-      console.log(htmlText.includes("</mark>"))
       if (selectedText.isOmitted) {
         // if (!htmlText.includes("</mark>")) {
         //   setOmit(false)
