@@ -32,4 +32,12 @@ a {
   cursor: pointer;
 }
 
+#nprogress .bar {
+  @apply h-1 bg-primary !important;
+}
+
+#nprogress .peg {
+  @apply shadow-none !important;
+}
+
 @tailwind utilities;
