@@ -11,7 +11,7 @@ const CreateNotebook = dynamic(
 
 export default function EmptyNotebooks() {
   return (
-    <div className="flex flex-col items-center bg-base-100 p-6">
+    <div className="flex flex-col items-center bg-base-100 py-6">
       <BsJournalText size={48} className="opacity-60" />
       <h3 className="mt-4 text-center text-lg font-semibold">No Notebooks</h3>
       <p className="mt-2 text-center opacity-60">
