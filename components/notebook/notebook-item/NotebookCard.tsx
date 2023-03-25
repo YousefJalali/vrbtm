@@ -53,8 +53,8 @@ export default function NotebookCard({
         </div>
       </Link>
 
-      <div className="dropdown-bottom dropdown-end dropdown absolute top-1 right-0 rounded-full p-0 active:bg-transparent">
-        <label tabIndex={0} className="btn-link btn-sm btn-square btn p-0">
+      <div className="dropdown-bottom dropdown-end dropdown absolute top-2 right-1 rounded-full p-0 active:bg-transparent">
+        <label tabIndex={0} className="btn-ghost btn-xs btn-circle btn p-0">
           <FiMoreVertical size={18} color={color} />
         </label>
         <ul

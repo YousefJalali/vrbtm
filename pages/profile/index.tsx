@@ -1,13 +1,13 @@
 import SideDrawerButton from "@/components/layout/SideDrawerButton"
 import { logout } from "@/libs/data/user/actions"
 import { GetServerSideProps } from "next"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { FiEdit2, FiLogOut } from "react-icons/fi"
 import cookie from "cookie"
 import { firebaseAdmin } from "@/config/firebaseAdmin"
+import Avatar from "@/components/profile/Avatar"
 
 export default function ProfilePage({ user }: { user: any }) {
   const [editMode, setEditMode] = useState(false)
@@ -42,16 +42,10 @@ export default function ProfilePage({ user }: { user: any }) {
       <div className="py-12 lg:max-w-lg">
         <div className="flex flex-col gap-12 lg:flex-row">
           <div className="flex w-full flex-col items-center lg:w-1/2">
-            <Image
-              className="h-1/2 w-1/2 rounded-full lg:h-full lg:w-full lg:self-start"
-              height={150}
-              width={150}
-              src="https://via.placeholder.com/150"
-              alt="Avatar"
-            />
-            <button className="btn-ghost btn-sm btn mt-1 block">
+            <Avatar name={user.name} large />
+            {/* <button className="btn-ghost btn-sm btn mt-1 block">
               Edit photo
-            </button>
+            </button> */}
           </div>
 
           <form className="w-full space-y-4">

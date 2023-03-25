@@ -8,7 +8,7 @@ import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import Logo from "./Logo"
 import { useUser } from "@/libs/contexts/AuthCtx"
-import Image from "next/image"
+import ProfileButton from "../profile/ProfileButton"
 
 export default function SideDrawer() {
   const [theme, setTheme] = useState<string | null>(null)
@@ -83,25 +83,7 @@ export default function SideDrawer() {
             </li>
           ) : user ? (
             <li className="rounded-xl border">
-              <Link
-                href="/profile"
-                onClick={clickHandler}
-                // className={router.pathname === "/profile" ? "active" : ""}
-              >
-                <Image
-                  className="h-12 w-12 rounded-full"
-                  height={150}
-                  width={150}
-                  src="https://via.placeholder.com/150"
-                  alt="Avatar"
-                />
-                <div className="flex flex-col items-start ">
-                  <span className="text-sm font-light opacity-50">
-                    Welcome back,
-                  </span>
-                  <span className="font-semibold">{user.displayName}</span>
-                </div>
-              </Link>
+              <ProfileButton user={user} onClick={clickHandler} />
             </li>
           ) : (
             <>
