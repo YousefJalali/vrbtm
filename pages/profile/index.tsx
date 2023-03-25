@@ -2,16 +2,17 @@ import SideDrawerButton from "@/components/layout/SideDrawerButton"
 import { logout } from "@/libs/data/user/actions"
 import { GetServerSideProps } from "next"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { FiEdit2, FiLogOut } from "react-icons/fi"
-import cookie from "cookie"
-import { firebaseAdmin } from "@/config/firebaseAdmin"
 import Avatar from "@/components/profile/Avatar"
+import { isAuthenticated } from "@/utils/isAuthenticated"
+import { useUser } from "@/libs/contexts/AuthCtx"
 
-export default function ProfilePage({ user }: { user: any }) {
+export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false)
   const router = useRouter()
+  const { user, isLoading } = useUser()
 
   const {
     register,
@@ -19,14 +20,27 @@ export default function ProfilePage({ user }: { user: any }) {
     formState: { errors },
     setError,
     watch,
+    reset,
   } = useForm({
-    defaultValues: { name: user.name, email: user.email },
+    defaultValues: { name: "", email: "" },
     // resolver: yupResolver(notebookValidation),
   })
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (user) {
+        reset({ name: user.displayName, email: user.email })
+      }
+    }
+  }, [isLoading, user, reset])
 
   const handleLogout = async () => {
     await logout()
     router.push("/")
+  }
+
+  if (isLoading) {
+    return <main className="p-6">Loading...</main>
   }
 
   return (
@@ -42,7 +56,7 @@ export default function ProfilePage({ user }: { user: any }) {
       <div className="py-12 lg:max-w-lg">
         <div className="flex flex-col gap-12 lg:flex-row">
           <div className="flex w-full flex-col items-center lg:w-1/2">
-            <Avatar name={user.name} large />
+            <Avatar large />
             {/* <button className="btn-ghost btn-sm btn mt-1 block">
               Edit photo
             </button> */}
@@ -105,8 +119,7 @@ export default function ProfilePage({ user }: { user: any }) {
               <button
                 className="btn-primary btn"
                 disabled={
-                  watch("name") === user?.displayName &&
-                  watch("email") === user?.email
+                  watch("name") === user?.name && watch("email") === user?.email
                 }
                 onClick={() => console.log("saved")}
               >
@@ -121,26 +134,18 @@ export default function ProfilePage({ user }: { user: any }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  try {
-    if (!req.headers.cookie) throw Error
+  const user = await isAuthenticated(req)
 
-    const { auth_token } = cookie.parse(req.headers.cookie)
-
-    if (!auth_token) throw Error
-
-    const user = await firebaseAdmin.auth().verifyIdToken(auth_token)
-
-    if (!user) throw Error
-
-    return {
-      props: { user },
-    }
-  } catch (error) {
+  if (!user) {
     return {
       redirect: {
         destination: "/",
         permanent: false,
       },
     }
+  }
+
+  return {
+    props: { user },
   }
 }

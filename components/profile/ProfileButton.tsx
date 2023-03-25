@@ -10,10 +10,12 @@ export default function ProfileButton({
 }) {
   return (
     <Link href="/profile" onClick={onClick}>
-      <Avatar name={user.displayName} />
+      <Avatar />
       <div className="flex flex-col items-start ">
         <span className="text-sm font-light opacity-50">Welcome back,</span>
-        <span className="font-semibold">{user.displayName}</span>
+        <span className="font-semibold first-letter:capitalize">
+          {user.displayName.split(" ")[0]}
+        </span>
       </div>
     </Link>
   )

@@ -100,7 +100,12 @@ export default function SideDrawer() {
                 <Link
                   href="/login"
                   onClick={clickHandler}
-                  className={router.pathname === "/login" ? "active" : ""}
+                  className={
+                    router.pathname === "/login" ||
+                    router.pathname === "/forgot-password"
+                      ? "active"
+                      : ""
+                  }
                 >
                   Login
                 </Link>

@@ -62,8 +62,6 @@ export default function Login() {
 
   return (
     <form className="prose lg:max-w-lg" onSubmit={handleSubmit(submitHandler)}>
-      <h1>Login</h1>
-
       <fieldset disabled={loading} className="space-y-4">
         <div className="form-control w-full ">
           <label className="label">
@@ -88,7 +86,7 @@ export default function Login() {
           <label className="label">
             <span className="label-text">Password</span>
             <span className="label-text-alt">
-              <Link href="/forgot_password">Forgot password?</Link>
+              <Link href="/forgot-password">Forgot password?</Link>
             </span>
           </label>
           <input

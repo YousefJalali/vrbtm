@@ -59,8 +59,6 @@ export default function SignUp() {
 
   return (
     <form className="prose lg:max-w-lg" onSubmit={handleSubmit(submitHandler)}>
-      <h1>Create a free account!</h1>
-
       <fieldset disabled={loading} className="space-y-4">
         <div className="form-control w-full">
           <label className="label">

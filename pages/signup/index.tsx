@@ -6,18 +6,32 @@ import { isAuthenticated } from "@/utils/isAuthenticated"
 
 export default function SignUpPage() {
   return (
-    <main className="p-6">
-      <header className="mb-6 flex justify-end lg:hidden">
+    <>
+      <header className="fixed top-6 right-6 flex justify-end lg:hidden">
         <SideDrawerButton />
       </header>
-      <SignUp />
-      <span className="label justify-start ">
-        Already have an account?
-        <Link href="/login" className="px-1 text-primary underline">
-          Login
-        </Link>
-      </span>
-    </main>
+
+      <div className="flex min-h-screen flex-col justify-center bg-base-200 p-6">
+        <div className="mx-auto w-full md:max-w-lg">
+          <div className="prose text-center">
+            <h1>Create a free account!</h1>
+            <p>
+              Join us today! Please fill in your information to create an
+              account
+            </p>
+          </div>
+          <div className="mt-8 rounded-xl bg-base-100 p-6 shadow">
+            <SignUp />
+            <span className="label mt-2 justify-start">
+              Already have an account?
+              <Link href="/login" className="px-1 text-primary underline">
+                Login
+              </Link>
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 
