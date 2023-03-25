@@ -34,3 +34,5 @@ export type FlashcardWithNotebook = Prisma.FlashcardGetPayload<{
 export type User = UserType
 export type CreateUserType = { name: string; email: string; password: string }
 export type LoginUserType = { email: string; password: string }
+export type ForgotPasswordType = { email: string }
+export type ResetPasswordType = { password: string; confirmPassword: string }

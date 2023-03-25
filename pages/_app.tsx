@@ -26,7 +26,7 @@ export default function MyApp({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <div className={`${font.variable} font-sans`}>
+      <div className={`${font.variable} bg-base-200 font-sans`}>
         <AuthContextProvider>
           <NotificationCtxProvider>
             <Layout>

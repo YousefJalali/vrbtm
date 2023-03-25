@@ -1,5 +1,7 @@
 import { getUser } from "@/libs/data/user/actions"
 import { LoginUserType } from "@/libs/types"
+import { loginValidation } from "@/utils/validations"
+import { yupResolver } from "@hookform/resolvers/yup"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -19,7 +21,7 @@ export default function Login() {
       email: "",
       password: "",
     },
-    // resolver: yupResolver(notebookValidation),
+    resolver: yupResolver(loginValidation),
   })
 
   const submitHandler = async (data: LoginUserType) => {
@@ -76,7 +78,7 @@ export default function Login() {
             {...register("email")}
           />
           <label className={`label ${!errors?.email?.message ? "hidden" : ""}`}>
-            <span className="label-text-alt text-error">
+            <span className="label-text-alt text-error first-letter:uppercase">
               {errors?.email?.message}
             </span>
           </label>
@@ -100,7 +102,7 @@ export default function Login() {
           <label
             className={`label ${!errors?.password?.message ? "hidden" : ""}`}
           >
-            <span className="label-text-alt text-error">
+            <span className="label-text-alt text-error first-letter:uppercase">
               {errors?.password?.message}
             </span>
           </label>

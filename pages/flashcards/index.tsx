@@ -19,16 +19,16 @@ export default function Flashcards({
   return (
     <main>
       <header className="flex w-full flex-col items-center justify-between py-6 px-6 lg:mb-6 lg:flex-row lg:border-b">
-        <div className="flex w-full items-center justify-between">
-          <div className="prose-sm prose lg:hidden">
+        <div className="flex w-full items-center justify-between lg:hidden">
+          <div className="prose-sm prose">
             <h1 className="m-0 text-primary">Flashcards</h1>
           </div>
-          <div className="lg:hidden">
+          <div>
             <SideDrawerButton />
           </div>
         </div>
 
-        <div className="flex w-full space-x-4 p-0">
+        <div className="flex w-full space-x-4 p-0 lg:justify-end">
           <input
             type="search"
             placeholder="Search..."

@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form"
 import { createUser } from "@/libs/data/user/actions"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { signUpValidation } from "@/utils/validations"
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false)
@@ -19,7 +21,7 @@ export default function SignUp() {
       email: "",
       password: "",
     },
-    // resolver: yupResolver(notebookValidation),
+    resolver: yupResolver(signUpValidation),
   })
 
   const submitHandler = async (data: CreateUserType) => {
@@ -68,9 +70,16 @@ export default function SignUp() {
           <input
             type="text"
             placeholder="john doe"
-            className="input-bordered input w-full"
+            className={`error input-bordered input w-full ${
+              errors?.name?.message ? "input-error" : ""
+            }`}
             {...register("name")}
           />
+          <label className={`label ${!errors?.email?.message ? "hidden" : ""}`}>
+            <span className="label-text-alt text-error first-letter:uppercase">
+              {errors?.name?.message}
+            </span>
+          </label>
         </div>
 
         <div className="form-control w-full">
@@ -86,7 +95,7 @@ export default function SignUp() {
             {...register("email")}
           />
           <label className={`label ${!errors?.email?.message ? "hidden" : ""}`}>
-            <span className="label-text-alt text-error">
+            <span className="label-text-alt text-error first-letter:uppercase">
               {errors?.email?.message}
             </span>
           </label>
@@ -108,7 +117,7 @@ export default function SignUp() {
           <label
             className={`label ${!errors?.password?.message ? "hidden" : ""}`}
           >
-            <span className="label-text-alt text-error">
+            <span className="label-text-alt text-error first-letter:uppercase">
               {errors?.password?.message}
             </span>
           </label>
