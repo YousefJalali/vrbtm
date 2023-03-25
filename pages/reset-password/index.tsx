@@ -2,9 +2,11 @@ import AuthLayout from "@/components/layout/AuthLayout"
 import { auth } from "@/config/firebase"
 import { useNotification } from "@/libs/hooks/useNotification"
 import { ResetPasswordType } from "@/libs/types"
+import { isAuthenticated } from "@/utils/isAuthenticated"
 import { resetPasswordValidation } from "@/utils/validations"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { confirmPasswordReset } from "firebase/auth"
+import { GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -132,4 +134,21 @@ export default function ResetPasswordPage() {
       </div>
     </AuthLayout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const user = await isAuthenticated(req)
+
+  if (user) {
+    return {
+      redirect: {
+        destination: "/profile",
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }

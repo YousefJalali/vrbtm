@@ -1,9 +1,11 @@
 import AuthLayout from "@/components/layout/AuthLayout"
 import { auth } from "@/config/firebase"
 import { ForgotPasswordType } from "@/libs/types"
+import { isAuthenticated } from "@/utils/isAuthenticated"
 import { forgotPasswordValidation } from "@/utils/validations"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { sendPasswordResetEmail } from "firebase/auth"
+import { GetServerSideProps } from "next"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -122,4 +124,21 @@ export default function ForgotPasswordPage() {
       </div>
     </AuthLayout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const user = await isAuthenticated(req)
+
+  if (user) {
+    return {
+      redirect: {
+        destination: "/profile",
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
