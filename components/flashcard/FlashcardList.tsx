@@ -1,6 +1,7 @@
 import { useNotebooks } from "@/libs/data/notebook"
 import { NotebookWithFlashcards } from "@/libs/types"
 import Link from "next/link"
+import { useCallback } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import EmptyFlashcards from "./EmptyFlashcards"
 import FlashcardItem from "./FlashcardItem"
@@ -9,17 +10,33 @@ export default function FlashcardList({ search }: { search: string }) {
   const { notebooks: notebooksWithFlashcards, isLoading } =
     useNotebooks<NotebookWithFlashcards[]>("with-flashcards")
 
-  const filteredData = (data: NotebookWithFlashcards[]) =>
-    data.filter((notebook) => {
-      return (
-        notebook.title.includes(search) ||
-        notebook.flashcards.some(
-          (flashcard) =>
-            flashcard.question.includes(search) ||
-            flashcard.answer.includes(search)
-        )
-      )
-    })
+  const filteredData = useCallback(
+    (data: NotebookWithFlashcards[]) => {
+      const filtered: NotebookWithFlashcards[] = []
+      data.forEach((notebook) => {
+        const query = search.toLowerCase()
+        if (
+          notebook.flashcards.some(
+            (flashcard) =>
+              flashcard.question.toLowerCase().includes(query) ||
+              flashcard.answer.toLowerCase().includes(query)
+          )
+        ) {
+          filtered.push({
+            ...notebook,
+            flashcards: notebook.flashcards.filter(
+              (flashcard) =>
+                flashcard.question.toLowerCase().includes(query) ||
+                flashcard.answer.toLowerCase().includes(query)
+            ),
+          })
+        }
+      })
+
+      return filtered
+    },
+    [search]
+  )
 
   if (isLoading) {
     return <div>Loading...</div>
