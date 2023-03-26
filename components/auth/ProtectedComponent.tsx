@@ -44,7 +44,7 @@ export default function ProtectedComponent({
             or sign up to start creating your personal notebooks.
           </p>
         </div>
-        <span className="my-6 block w-1/2 bg-base-300 p-0.5"></span>
+        <div className="divider"></div>
       </div>
 
       {isLogin && <Login />}

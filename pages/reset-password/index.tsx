@@ -57,6 +57,10 @@ export default function ResetPasswordPage() {
 
           default:
             console.log(error)
+            setNotification({
+              message: "Something is wrong; try again later.",
+              variant: "error",
+            })
             break
         }
       })

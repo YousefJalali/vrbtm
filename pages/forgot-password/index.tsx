@@ -1,5 +1,6 @@
 import AuthLayout from "@/components/layout/AuthLayout"
 import { auth } from "@/config/firebase"
+import { useNotification } from "@/libs/hooks/useNotification"
 import { ForgotPasswordType } from "@/libs/types"
 import { isAuthenticated } from "@/utils/isAuthenticated"
 import { forgotPasswordValidation } from "@/utils/validations"
@@ -12,6 +13,7 @@ import { useForm } from "react-hook-form"
 export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const { setNotification } = useNotification()
   // const router = useRouter()
 
   const {
@@ -56,6 +58,10 @@ export default function ForgotPasswordPage() {
 
           default:
             console.log(error)
+            setNotification({
+              message: "Something is wrong; try again later.",
+              variant: "error",
+            })
             break
         }
       })

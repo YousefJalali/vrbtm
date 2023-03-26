@@ -1,6 +1,5 @@
 import { Notebook } from "@/libs/types"
 import { GetServerSideProps } from "next"
-import { prisma } from "@/libs/db/prisma"
 import { SWRConfig, unstable_serialize } from "swr"
 import FlashcardList from "@/components/flashcard/FlashcardList"
 import { useState } from "react"
@@ -55,8 +54,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `${baseUrl}/api/notebooks?q=with-flashcards`,
     { method: "GET", bodyData: null, token: auth_token }
   )
-
-  console.log(flashcardsWithNotebooks)
 
   return {
     props: {

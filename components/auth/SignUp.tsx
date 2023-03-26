@@ -87,7 +87,7 @@ export default function SignUp() {
             <span className="label-text">Email address</span>
           </label>
           <input
-            type="text"
+            type="email"
             placeholder="johndoe@example.com"
             className={`error input-bordered input w-full ${
               errors?.email?.message ? "input-error" : ""
