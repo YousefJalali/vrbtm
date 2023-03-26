@@ -3,6 +3,7 @@ import {
   ForgotPasswordType,
   LoginUserType,
   ResetPasswordType,
+  UpdateProfileType,
 } from "@/libs/types"
 import { object, ref, Schema, string } from "yup"
 
@@ -26,4 +27,8 @@ export const resetPasswordValidation: Schema<ResetPasswordType> = object({
   confirmPassword: string()
     .defined()
     .oneOf([ref("password"), ""], "Passwords must match"),
+})
+
+export const updateProfileValidation: Schema<UpdateProfileType> = object({
+  displayName: string().defined().required("Enter your full name"),
 })

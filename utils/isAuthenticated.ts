@@ -15,11 +15,15 @@ export async function isAuthenticated(req: any) {
     token = auth_token
   }
 
-  if (token) {
+  if (!token) {
+    return null
+  }
+
+  try {
     const user = await firebaseAdmin.auth().verifyIdToken(token)
 
     return user.uid
-  } else {
+  } catch (error) {
     return null
   }
 }

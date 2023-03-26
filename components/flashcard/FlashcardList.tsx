@@ -53,7 +53,7 @@ export default function FlashcardList({ search }: { search: string }) {
                   className="link-hover link flex items-center"
                 >
                   <span className="truncate font-bold">{notebook.title}</span>
-                  <FiChevronRight size={18} />
+                  <FiChevronRight size={18} className="ml-1" />
                 </Link>
               </div>
 
