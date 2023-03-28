@@ -6,20 +6,35 @@ import "@/styles/globals.css"
 import { Montserrat } from "@next/font/google"
 import Layout from "@/components/layout/Layout"
 import Head from "next/head"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Router from "next/router"
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
+import Cookie from "js-cookie"
+import dynamic from "next/dynamic"
 
 const font = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" })
+
+// const Onboarding = dynamic(() => import("@/components/onboarding/Onboarding"), {
+//   ssr: false,
+//   // loading: () => (
+//   //   <button className="loading btn-primary btn mt-3 w-full"></button>
+//   // ),
+// })
 
 export default function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
+  // const [splashScreen, setSplashScreen] = useState(true)
+
   useEffect(() => {
     themeChange(false)
+
+    Cookie.set("first-visit", "false")
   }, [])
+
+  const firstVisit = Cookie.get("first-visit")
 
   //loading progress bar
   NProgress.configure({ showSpinner: false })
@@ -38,6 +53,13 @@ export default function MyApp({
       <div className={`${font.variable} bg-base-200 font-sans`}>
         <AuthContextProvider>
           <NotificationCtxProvider>
+            {/* {splashScreen && (
+              <Onboarding
+                dismiss={() => setSplashScreen(false)}
+                isOpen={splashScreen}
+              />
+            )} */}
+
             <Layout>
               <Component {...pageProps} />
             </Layout>
