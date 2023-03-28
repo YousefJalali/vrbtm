@@ -11,6 +11,8 @@ import {
   enableBodyScroll,
   clearAllBodyScrollLocks,
 } from "body-scroll-lock"
+import { AnimatePresence, motion } from "framer-motion"
+import { useMedia } from "@/libs/hooks"
 
 export default function Modal({
   isOpen,
@@ -60,34 +62,59 @@ export default function Modal({
   //   // }
   // }, [isOpen])
 
+  const isMobile = useMedia("(max-width: 768px)")
   if (typeof window === "undefined") return null
 
-  return createPortal
-    ? createPortal(
+  const variants = isMobile
+    ? {
+        closed: { y: "100%" },
+        open: { y: 0 },
+      }
+    : {
+        closed: { scale: 0.5, opacity: 0 },
+        open: { scale: 1, opacity: 1 },
+      }
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
         <>
-          {/* if "isOpen" is undefined, modal will be controlled by label */}
-          {isOpen === undefined && (
-            <input type="checkbox" id={id} className="modal-toggle" />
+          {createPortal(
+            <motion.div
+              ref={targetRef}
+              className={`modal modal-open modal-bottom transition-none sm:modal-middle`}
+              style={style}
+            >
+              <motion.div
+                className="absolute top-0 left-0 h-full w-full bg-black"
+                onClick={dismiss}
+                variants={{
+                  closed: { opacity: 0 },
+                  open: { opacity: 0.1 },
+                }}
+                transition={{ duration: 0.2 }}
+                initial="closed"
+                animate="open"
+                exit="closed"
+              />
+
+              <motion.div
+                className="modal-box z-50 transition-none"
+                id={`${id}-box`}
+                variants={variants}
+                initial="closed"
+                animate="open"
+                exit="closed"
+                transition={{ type: "tween", duration: 0.2 }}
+              >
+                {children}
+              </motion.div>
+            </motion.div>,
+            document.getElementById("modal") as HTMLDivElement,
+            id
           )}
-          <div
-            ref={targetRef}
-            className={`modal modal-bottom sm:modal-middle ${
-              isOpen === undefined ? "" : isOpen ? "modal-open" : "modal-close"
-            }`}
-            style={style}
-          >
-            <label
-              htmlFor={id}
-              className="absolute top-0 left-0 h-full w-full bg-black opacity-5"
-              onClick={dismiss}
-            />
-            <div className="modal-box" id={`${id}-box`}>
-              {isOpen && children}
-            </div>
-          </div>
-        </>,
-        document.getElementById("modal") as HTMLDivElement,
-        id
-      )
-    : null
+        </>
+      )}
+    </AnimatePresence>
+  )
 }
