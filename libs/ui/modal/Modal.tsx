@@ -1,10 +1,4 @@
-import {
-  CSSProperties,
-  ReactNode,
-  StyleHTMLAttributes,
-  useEffect,
-  useRef,
-} from "react"
+import { CSSProperties, ReactNode, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import {
   disableBodyScroll,
@@ -13,6 +7,39 @@ import {
 } from "body-scroll-lock"
 import { AnimatePresence, motion } from "framer-motion"
 import { useMedia } from "@/libs/hooks"
+
+function Content({
+  id,
+  isOpen,
+  children,
+}: {
+  id: string
+  isOpen: boolean
+  children: ReactNode
+}) {
+  const targetRef = useRef<HTMLDivElement>(null)
+
+  // console.log(targetRef, id, isOpen)
+
+  // useEffect(() => {
+  //   if (targetRef.current) {
+  //     if (isOpen) {
+  //       console.log("here")
+  //       disableBodyScroll(targetRef.current)
+  //     } else {
+  //       enableBodyScroll(targetRef.current)
+  //     }
+  //   }
+
+  //   return () => {
+  //     console.log("cleared")
+  //     // enableBodyScroll(targetRef.current)
+  //     clearAllBodyScrollLocks()
+  //   }
+  // }, [isOpen, id])
+
+  return <div ref={targetRef}>{children}</div>
+}
 
 export default function Modal({
   isOpen,
@@ -27,42 +54,8 @@ export default function Modal({
   id: string
   style?: CSSProperties
 }) {
-  const targetRef = useRef<HTMLDivElement>(null)
-
-  // useEffect(() => {
-  //   let elem = document.getElementById("modal")
-
-  //   if (elem !== null && targetRef.current) {
-  //     const arr = Array.from(elem.children)
-
-  //     if (arr.some((child) => child.className.includes("modal-open"))) {
-
-  //       disableBodyScroll(targetRef.current)
-  //     } else {
-
-  //       enableBodyScroll(targetRef.current)
-  //     }
-  //   }
-  //   return () => {
-  //     clearAllBodyScrollLocks()
-  //   }
-  // }, [isOpen])
-
-  // useEffect(() => {
-  //   if (targetRef.current) {
-  //     if (isOpen) {
-  //       disableBodyScroll(targetRef.current)
-  //     } else {
-  //       enableBodyScroll(targetRef.current)
-  //     }
-  //   }
-
-  //   // return () => {
-  //   //   clearAllBodyScrollLocks()
-  //   // }
-  // }, [isOpen])
-
   const isMobile = useMedia("(max-width: 768px)")
+
   if (typeof window === "undefined") return null
 
   const variants = isMobile
@@ -81,8 +74,7 @@ export default function Modal({
         <>
           {createPortal(
             <motion.div
-              ref={targetRef}
-              className={`modal modal-open modal-bottom transition-none sm:modal-middle`}
+              className="modal modal-open modal-bottom transition-none sm:modal-middle"
               style={style}
             >
               <motion.div
@@ -99,6 +91,7 @@ export default function Modal({
               />
 
               <motion.div
+                // ref={targetRef}
                 className="modal-box z-50 transition-none"
                 id={`${id}-box`}
                 variants={variants}
@@ -107,7 +100,9 @@ export default function Modal({
                 exit="closed"
                 transition={{ type: "tween", duration: 0.2 }}
               >
-                {children}
+                <Content id={id} isOpen={isOpen}>
+                  {children}
+                </Content>
               </motion.div>
             </motion.div>,
             document.getElementById("modal") as HTMLDivElement,

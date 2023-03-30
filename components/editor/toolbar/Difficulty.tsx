@@ -1,12 +1,13 @@
-import { ChangeEvent } from "react"
+import { ChangeEvent, InputHTMLAttributes } from "react"
 
 export default function DifficultyInput({
   difficulty,
   setDifficulty,
+  ...props
 }: {
   difficulty: number
   setDifficulty: (e: ChangeEvent<HTMLInputElement>) => void
-}) {
+} & InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div
       className={`flex h-full space-x-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content`}
@@ -21,6 +22,7 @@ export default function DifficultyInput({
         max="1"
         step="0.2"
         className="range range-primary range-xs"
+        {...props}
       />
     </div>
   )

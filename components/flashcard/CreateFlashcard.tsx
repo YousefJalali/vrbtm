@@ -2,26 +2,25 @@ import { useCreateFlashcard } from "@/libs/data/flashcard"
 import { Notebook } from "@/libs/types"
 import Modal from "@/libs/ui/modal/Modal"
 import { Flashcard } from "@prisma/client"
-import { ReactNode, useState } from "react"
+import { ButtonHTMLAttributes, ReactNode, useState } from "react"
 import FlashcardForm from "./FlashcardForm"
 
 export default function CreateFlashcard({
   notebookId,
-  className,
   children,
   defaultValues,
+  ...props
 }: {
   notebookId: string
-  className?: string
   children: ReactNode
   defaultValues?: Partial<Flashcard>
-}) {
+} & ButtonHTMLAttributes<HTMLButtonElement>) {
   const { onSubmit, error, isMutating } = useCreateFlashcard(notebookId)
   const [showModal, setModal] = useState(false)
 
   return (
     <>
-      <button className={className} onClick={() => setModal(true)}>
+      <button onClick={() => setModal(true)} {...props}>
         {children}
       </button>
 

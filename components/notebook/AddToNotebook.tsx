@@ -1,8 +1,11 @@
 import Modal from "@/libs/ui/modal/Modal"
-import { useState } from "react"
+import { ButtonHTMLAttributes, useState } from "react"
 import SelectNotebook from "./SelectNotebook"
 
-export default function AddToNotebook({ content }: { content: string }) {
+export default function AddToNotebook({
+  content,
+  ...props
+}: { content: string } & ButtonHTMLAttributes<HTMLButtonElement>) {
   const [showModal, setModal] = useState(false)
 
   return (
@@ -10,6 +13,7 @@ export default function AddToNotebook({ content }: { content: string }) {
       <button
         className="btn-primary btn mt-3 w-full"
         onClick={() => setModal(true)}
+        {...props}
       >
         Add To Notebook
       </button>

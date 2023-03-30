@@ -19,7 +19,7 @@ export default function NotebookDetails({ id }: { id: string }) {
   const [value, setValue] = useState("")
   const [txtValue, setTxtValue] = useState("")
   const [initialValue, setInitialValue] = useState("")
-  const [isReadOnly, setReadOnly] = useState(true)
+  const [readOnly, setReadOnly] = useState(true)
   const [undoChange, setUndoChange] = useState(false)
 
   const { notebook, isLoading } = useNotebook<Notebook>(id)
@@ -66,7 +66,7 @@ export default function NotebookDetails({ id }: { id: string }) {
   }
 
   const cancelHandler = () => {
-    if (!isReadOnly && value !== initialValue) {
+    if (!readOnly && value !== initialValue) {
       setUndoChange(true)
     } else {
       setReadOnly(true)
@@ -80,11 +80,11 @@ export default function NotebookDetails({ id }: { id: string }) {
   }
 
   return (
-    <div className="drawer drawer-mobile drawer-end">
+    <div className="drawer drawer-end drawer-mobile">
       <input id="flashcards-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <header className="sticky top-0 z-10 mb-2 flex w-full items-center justify-between bg-base-100 p-6 lg:mb-6 lg:border-b">
-          {isReadOnly ? (
+          {readOnly ? (
             <Link
               href="/notebooks"
               className="link-hover link min-h-8 -ml-2 flex items-center"
@@ -106,7 +106,7 @@ export default function NotebookDetails({ id }: { id: string }) {
               ...{ notebookId: notebook.id },
               ...{ onEdit: () => setReadOnly(false) },
               ...{ onSave: saveHandler },
-              isReadOnly,
+              readOnly,
               isMutating,
               ...{ disabled: value === initialValue },
             }}
@@ -117,7 +117,7 @@ export default function NotebookDetails({ id }: { id: string }) {
           <div className="prose px-6 lg:mb-6">
             <h1>{notebook.title}</h1>
           </div>
-          {txtValue.trim().length === 0 && isReadOnly ? (
+          {txtValue.trim().length === 0 && readOnly ? (
             <button
               className=" mt-6 w-full px-6 text-left italic opacity-50"
               onClick={() => setReadOnly(false)}
@@ -128,7 +128,7 @@ export default function NotebookDetails({ id }: { id: string }) {
             <Editor
               htmlText={value}
               onChange={setValue}
-              readOnly={isReadOnly}
+              readOnly={readOnly}
               notebookId={notebook.id}
               omitMode
             />
@@ -146,12 +146,14 @@ export default function NotebookDetails({ id }: { id: string }) {
         />
       </div>
 
-      <div className="drawer-side border-l">
-        <label htmlFor="flashcards-drawer" className="drawer-overlay"></label>
-        <div className="relative w-full bg-base-100 text-base-content sm:w-80">
-          <NotebookFlashcardsList notebookId={notebook.id} />
+      {readOnly && (
+        <div className="drawer-side border-l">
+          <label htmlFor="flashcards-drawer" className="drawer-overlay"></label>
+          <div className="relative w-full bg-base-100 text-base-content sm:w-80">
+            <NotebookFlashcardsList notebookId={notebook.id} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

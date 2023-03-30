@@ -17,14 +17,14 @@ const DeleteNotebook = dynamic(
 
 export default function NotebookDetailsOptions({
   notebookId,
-  isReadOnly,
+  readOnly,
   isMutating,
   disabled,
   onEdit,
   onSave,
 }: {
   notebookId: string
-  isReadOnly: boolean
+  readOnly: boolean
   isMutating: boolean
   disabled: boolean
   onEdit: () => void
@@ -51,7 +51,7 @@ export default function NotebookDetailsOptions({
 
   return isMutating ? (
     <button className="loading btn-primary btn-sm btn">Saving...</button>
-  ) : isReadOnly ? (
+  ) : readOnly ? (
     <>
       <ul className="-mr-3 hidden lg:flex [&>li>button]:gap-2 [&>li>button]:btn-ghost [&>li>button]:btn-sm [&>li>button]:btn">
         <Menu />
@@ -60,7 +60,7 @@ export default function NotebookDetailsOptions({
       <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0 lg:hidden">
         <label
           tabIndex={0}
-          className="btn-ghost btn-xs btn-square btn -mr-2 p-0"
+          className="btn-ghost btn-square btn-xs btn -mr-2 p-0"
         >
           <FiMoreVertical size={18} />
         </label>
