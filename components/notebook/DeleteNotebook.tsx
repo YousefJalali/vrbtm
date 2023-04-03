@@ -28,7 +28,7 @@ export default function DeleteNotebook({
         onClick={() => setPrompt(true)}
       >
         <FiTrash2 />
-        Delete
+        <span>Delete</span>
       </button>
 
       <Prompt

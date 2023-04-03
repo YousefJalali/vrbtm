@@ -40,7 +40,10 @@ export default function NotebookDetailsOptions({
 
       <li>
         <button onClick={onEdit}>
-          <FiEdit2 /> Edit content
+          <FiEdit2 />
+          <span>
+            Edit <span className="lg:hidden xl:inline-block">content</span>
+          </span>
         </button>
       </li>
       <li>

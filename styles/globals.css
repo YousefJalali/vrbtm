@@ -21,7 +21,7 @@
 }
 
 .ql-editor.ql-blank::before {
-  @apply text-base-content opacity-50 !important;
+  @apply not-italic text-base-content opacity-50 !important;
 }
 
 .ql-editor mark {

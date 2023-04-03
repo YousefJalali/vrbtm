@@ -83,7 +83,7 @@ export default function NotebookDetails({ id }: { id: string }) {
     <div className="drawer drawer-end drawer-mobile">
       <input id="flashcards-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <header className="sticky top-0 z-10 mb-2 flex w-full items-center justify-between bg-base-100 p-6 lg:mb-6 lg:border-b">
+        <header className="flex w-full items-center justify-between bg-base-100 p-6 lg:border-b">
           {readOnly ? (
             <Link
               href="/notebooks"
@@ -113,16 +113,16 @@ export default function NotebookDetails({ id }: { id: string }) {
           />
         </header>
 
-        <section>
-          <div className="prose px-6 lg:mb-6">
+        <section className="flex h-screen max-h-screen flex-col overflow-scroll md:pt-4">
+          {/* <div className="prose px-6">
             <h1>{notebook.title}</h1>
-          </div>
+          </div> */}
           {txtValue.trim().length === 0 && readOnly ? (
             <button
-              className=" mt-6 w-full px-6 text-left italic opacity-50"
+              className="mt-6 w-full px-6 text-left opacity-50"
               onClick={() => setReadOnly(false)}
             >
-              A brief about the task...
+              Type or paste your text here
             </button>
           ) : (
             <Editor
@@ -131,6 +131,7 @@ export default function NotebookDetails({ id }: { id: string }) {
               readOnly={readOnly}
               notebookId={notebook.id}
               omitMode
+              title={notebook.title}
             />
           )}
         </section>

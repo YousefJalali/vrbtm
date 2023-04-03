@@ -5,10 +5,10 @@ import { TextEditor } from "@/libs/ui/rich-text-editor"
 import MenuContext from "./MenuContext"
 
 import { getTextFromHtml, removeUselessWords } from "@/utils"
-import Eye from "./toolbar/Eye"
-import DifficultyInput from "./toolbar/Difficulty"
 import CreateFlashcard from "../flashcard/CreateFlashcard"
 import dynamic from "next/dynamic"
+import { RxEyeClosed, RxEyeOpen } from "react-icons/rx"
+import { BsCardText } from "react-icons/bs"
 
 const AddToNotebook = dynamic(
   () => import("@/components/notebook/AddToNotebook"),
@@ -27,6 +27,7 @@ type Props = {
   onChange: (value: string) => void
   omitMode?: boolean
   notebookId?: string
+  title?: string
 }
 
 const Editor = ({
@@ -36,6 +37,7 @@ const Editor = ({
   onChange,
   omitMode = false,
   notebookId,
+  title = "",
 }: Props) => {
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
@@ -59,20 +61,6 @@ const Editor = ({
       }
     }
   }, [isOmit])
-
-  // useEffect(() => {
-  //   if (!readOnly) {
-  //     if (editorRef.current) {
-  //       editorRef.current.focus()
-  //     }
-  //   }
-  // }, [readOnly])
-
-  // useEffect(() => {
-  //   if (readOnly) {
-  //     setEye(false)
-  //   }
-  // }, [readOnly])
 
   useEffect(() => {
     const extractedText = getTextFromHtml(htmlText)
@@ -222,103 +210,344 @@ const Editor = ({
   }
 
   return (
-    <div
-      id="rich-text-editor"
-      aria-label="rich-text-editor"
-      className="flex h-full flex-col px-6 pb-6"
-    >
-      <div
-        className={`relative mt-6 box-border flex flex-1 flex-col rounded-lg p-2 ${
-          !readOnly ? "bg-base-200" : ""
-        }`}
-        style={{ padding: readOnly ? 0 : undefined }}
-      >
+    <div className="drawer drawer-end drawer-mobile">
+      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content">
         {!readOnly && text.trim().length > 0 && (
-          <div
-            // className="sticky top-2 left-1/2 z-50 w-[calc(100%-1rem)] -translate-x-1/2 rounded-lg bg-base-300 p-2"
-            className="mb-2 flex w-full flex-wrap justify-between border-b-2 pb-2"
-            data-testid="editor-action-bar"
+          <label
+            htmlFor="my-drawer-2"
+            className="btn-primary drawer-button btn fixed bottom-6 right-6 z-50 lg:hidden"
           >
-            <div className="flex gap-2">
-              {isOmit && <Eye isEyeOpen={isEyeOpen} setEye={setEye} />}
-
-              {/* Omit selected text */}
-              {selectedText && (
-                <button
-                  onClick={omitSelectedWord}
-                  className="btn-secondary btn-sm btn"
-                  // disabled={!selectedText}
-                >
-                  {selectedText.isOmitted ? "UnOmit" : "Omit"}
-                </button>
-              )}
-
-              {selectedText && notebookId && (
-                <CreateFlashcard
-                  className="btn-accent btn-sm btn"
-                  notebookId={notebookId}
-                  defaultValues={{
-                    question: selectedText.text,
-                  }}
-                >
-                  Create flashcard...
-                </CreateFlashcard>
-              )}
-            </div>
-
-            {!selectedText && (
-              <div>
-                {!isOmit && (
-                  <div className="flex-end flex space-x-2">
-                    <DifficultyInput
-                      difficulty={difficulty}
-                      setDifficulty={difficultyHandler}
-                    />
-
-                    <button
-                      onClick={omitText}
-                      disabled={text.trim().length <= 0}
-                      className="btn-primary btn-sm btn"
-                    >
-                      random Omit
-                    </button>
-                  </div>
-                )}
-
-                {isOmit && !selectedText && (
-                  <button
-                    className="btn-outline btn-error btn-sm btn"
-                    onClick={reset}
-                  >
-                    Reset
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+            Omit
+          </label>
         )}
-
-        <div className="flex flex-1 flex-col">
-          {/* <MenuContext isOmit={isOmit}> */}
+        <div className="h-full">
+          <div className="prose px-6">
+            <h1>{title}</h1>
+          </div>
           <TextEditor
             ref={editorRef}
             readOnly={readOnly}
             defaultValue={defaultValue}
             value={htmlText}
             onChange={changeHandler}
-            placeholder="A brief about the task..."
-            className={`flex flex-1 flex-col [&_mark]:bg-primary
+            placeholder="Type or paste your text here"
+            className={`h-full p-6 [&_mark]:bg-primary
               ${isEyeOpen && "[&_mark]:bg-transparent [&_mark]:text-primary"}
             `}
             onChangeSelection={changeSelectionHandler}
           />
-          {/* </MenuContext> */}
         </div>
       </div>
+      {!readOnly && (
+        <div className="drawer-side">
+          <label
+            htmlFor="my-drawer-2"
+            className="drawer-overlay"
+            style={{ opacity: 0 }}
+          ></label>
+          <div className="w-64 bg-base-100 text-base-content shadow-lg md:w-80">
+            {text.trim().length <= 0 ? (
+              <span className="hidden p-6 md:block">
+                Start writing to omit words.
+              </span>
+            ) : (
+              <div className="p-4 pr-6" data-testid="editor-action-bar">
+                <div className="flex h-full w-full flex-col gap-2">
+                  <div className="flex h-full w-full flex-col gap-3 rounded-lg bg-base-200 p-2">
+                    {/* difficulty */}
+                    <div>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content">
+                          <span className="leading-none text-base-content">
+                            Difficulty
+                          </span>
 
-      {!notebookId && isOmit && <AddToNotebook content={htmlText} />}
+                          <input
+                            value={difficulty}
+                            onChange={difficultyHandler}
+                            type="range"
+                            min="0.6"
+                            max="1"
+                            step="0.2"
+                            className="range range-primary range-xs"
+                          />
+                        </div>
+
+                        <button
+                          onClick={omitText}
+                          disabled={text.trim().length <= 0}
+                          className="btn-secondary btn-sm btn"
+                        >
+                          random Omit
+                        </button>
+                      </div>
+
+                      <label className="label-text label opacity-70">
+                        Words randomly omitted based on chosen difficulty level
+                      </label>
+                    </div>
+
+                    {/* Omit word */}
+                    <div>
+                      <button
+                        onClick={omitSelectedWord}
+                        className="btn-secondary btn-sm btn w-full"
+                        disabled={!selectedText}
+                      >
+                        {selectedText?.isOmitted ? "UnOmit" : "Omit"}
+                      </button>
+                      <label className="label-text label opacity-70">
+                        Select word or words to be omitted
+                      </label>
+                    </div>
+
+                    {/* Clear omit */}
+                    <div>
+                      <button
+                        className="btn-error btn-sm btn w-full"
+                        onClick={reset}
+                        disabled={!isOmit}
+                      >
+                        Clear
+                      </button>
+                      <label className="label-text label opacity-70">
+                        Clear all omitted words
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Toggle omit */}
+                  <div className="w-full rounded-lg bg-base-200 p-2">
+                    <label className="label cursor-pointer p-0">
+                      <span
+                        className={`flex items-center gap-2 ${
+                          isOmit ? "" : "cursor-not-allowed opacity-50"
+                        }`}
+                      >
+                        {isEyeOpen ? (
+                          <>
+                            <RxEyeOpen />
+                            <span className="label-text">Visible</span>
+                          </>
+                        ) : (
+                          <>
+                            <RxEyeClosed />
+                            <span className="label-text">Hidden</span>
+                          </>
+                        )}
+                      </span>
+                      <input
+                        type="checkbox"
+                        className="toggle-primary toggle flex"
+                        checked={isEyeOpen}
+                        onChange={() => setEye((prevState) => !prevState)}
+                        disabled={!isOmit}
+                      />
+                    </label>
+                    <label className="label-text label mt-2 block p-0 opacity-70">
+                      View/Hide all omitted words
+                    </label>
+                  </div>
+
+                  {notebookId && (
+                    <div className="rounded-lg bg-base-200 p-2">
+                      <CreateFlashcard
+                        className="btn-accent btn-sm btn w-full gap-2"
+                        notebookId={notebookId}
+                        defaultValues={{
+                          question: selectedText?.text,
+                        }}
+                        // disabled={!selectedText}
+                      >
+                        <BsCardText />
+                        Create flashcard
+                      </CreateFlashcard>
+                      <label className="label-text label mt-2 block p-0 opacity-70">
+                        You can select text to display as the flashcard question
+                      </label>
+                    </div>
+                  )}
+                </div>
+
+                <>
+                  {!notebookId && (
+                    <div className="w-full">
+                      <AddToNotebook content={htmlText} />
+                    </div>
+                  )}
+                </>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
+
+  // return (
+  //   <div className="flex h-full flex-col md:flex-row-reverse">
+  //     {/* control bar */}
+  //     {!readOnly && (
+  //       <div className="max-h-full w-full bg-base-100 text-base-content md:w-80">
+  //         {text.trim().length <= 0 ? (
+  //           <span className="hidden p-6 md:block">
+  //             Start writing to omit words.
+  //           </span>
+  //         ) : (
+  //           <div
+  //             className="w-full p-6 pb-0 md:flex md:h-full md:flex-col md:justify-between md:pl-0 md:pb-6"
+  //             data-testid="editor-action-bar"
+  //           >
+  //             <div className="flex flex-wrap gap-2 rounded-lg bg-base-200 p-2 md:h-full md:w-full md:flex-col md:gap-0 md:border md:bg-base-100">
+  //               {/* difficulty */}
+  //               <div className="flex rounded-t-lg bg-base-200 md:flex-col md:p-2">
+  //                 <div className="flex gap-2 md:flex-col">
+  //                   <div className="flex gap-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content">
+  //                     <span className="leading-none text-base-content">
+  //                       Difficulty
+  //                     </span>
+
+  //                     <input
+  //                       value={difficulty}
+  //                       onChange={difficultyHandler}
+  //                       type="range"
+  //                       min="0.6"
+  //                       max="1"
+  //                       step="0.2"
+  //                       className="range range-primary range-xs"
+  //                     />
+  //                   </div>
+
+  //                   <button
+  //                     onClick={omitText}
+  //                     disabled={text.trim().length <= 0}
+  //                     className="btn-secondary btn-sm btn"
+  //                   >
+  //                     random Omit
+  //                   </button>
+  //                 </div>
+
+  //                 <label className="label-text label mt-2 mb-4 hidden p-0 opacity-70 md:block">
+  //                   Words randomly omitted based on chosen difficulty level
+  //                 </label>
+  //               </div>
+
+  //               {/* Omit word */}
+  //               <div className="bg-base-200 md:p-2">
+  //                 <button
+  //                   onClick={omitSelectedWord}
+  //                   className="btn-secondary btn-sm btn w-full"
+  //                   disabled={!selectedText}
+  //                 >
+  //                   {selectedText?.isOmitted ? "UnOmit" : "Omit"}
+  //                 </button>
+  //                 <label className="label-text label mt-2 mb-4 hidden p-0 opacity-70 md:block">
+  //                   Select word or words to be omitted
+  //                 </label>
+  //               </div>
+
+  //               {/* Clear omit */}
+  //               <div className="rounded-b-lg bg-base-200 md:p-2">
+  //                 <button
+  //                   className="btn-error btn-sm btn w-full"
+  //                   onClick={reset}
+  //                   disabled={!isOmit}
+  //                 >
+  //                   Clear
+  //                 </button>
+  //                 <label className="label-text label mt-2 hidden p-0 opacity-70 md:block">
+  //                   Clear all omitted words
+  //                 </label>
+  //               </div>
+
+  //               {/* Toggle omit */}
+  //               <div className="w-fit rounded-lg bg-base-300 p-2 md:mt-6 md:mb-4 md:w-full md:bg-base-200">
+  //                 <label className="label cursor-pointer p-0">
+  //                   <span
+  //                     className={`flex items-center gap-2 ${
+  //                       isOmit ? "" : "cursor-not-allowed opacity-50"
+  //                     }`}
+  //                   >
+  //                     {isEyeOpen ? (
+  //                       <>
+  //                         <RxEyeOpen />
+  //                         <span className="label-text hidden md:inline-block">
+  //                           Visible
+  //                         </span>
+  //                       </>
+  //                     ) : (
+  //                       <>
+  //                         <RxEyeClosed />
+  //                         <span className="label-text hidden md:inline-block">
+  //                           Hidden
+  //                         </span>
+  //                       </>
+  //                     )}
+  //                   </span>
+  //                   <input
+  //                     type="checkbox"
+  //                     className="toggle-primary toggle hidden md:flex"
+  //                     checked={isEyeOpen}
+  //                     onChange={() => setEye((prevState) => !prevState)}
+  //                     disabled={!isOmit}
+  //                   />
+  //                 </label>
+  //                 <label className="label-text label mt-2 hidden p-0 opacity-70 md:block">
+  //                   View/Hide all omitted words
+  //                 </label>
+  //               </div>
+
+  //               {notebookId && (
+  //                 <div className="rounded-lg bg-base-200 md:p-2">
+  //                   <CreateFlashcard
+  //                     className="btn-accent btn-sm btn w-full gap-2"
+  //                     notebookId={notebookId}
+  //                     defaultValues={{
+  //                       question: selectedText?.text,
+  //                     }}
+  //                     // disabled={!selectedText}
+  //                   >
+  //                     <BsCardText />
+  //                     <span className="hidden lg:inline-block">
+  //                       Create flashcard...
+  //                     </span>
+  //                   </CreateFlashcard>
+  //                   <label className="label-text label mt-2 hidden p-0 opacity-70 md:block">
+  //                     You can select text to display as the flashcard question
+  //                   </label>
+  //                 </div>
+  //               )}
+  //             </div>
+
+  //             <>
+  //               {!notebookId && (
+  //                 <div className="fixed bottom-6 left-6 z-50 w-[calc(100%-3rem)] md:relative md:bottom-0 md:left-0 md:w-full">
+  //                   <AddToNotebook content={htmlText} />
+  //                 </div>
+  //               )}
+  //             </>
+  //           </div>
+  //         )}
+  //       </div>
+  //     )}
+
+  //     <div className="h-full flex-1">
+  //       <TextEditor
+  //         ref={editorRef}
+  //         readOnly={readOnly}
+  //         defaultValue={defaultValue}
+  //         value={htmlText}
+  //         onChange={changeHandler}
+  //         placeholder="Type or paste your text here"
+  //         className={`h-full p-6 [&_mark]:bg-primary
+  //             ${isEyeOpen && "[&_mark]:bg-transparent [&_mark]:text-primary"}
+  //           `}
+  //         onChangeSelection={changeSelectionHandler}
+  //       />
+  //     </div>
+  //   </div>
+  // )
 }
 
 export default Editor
