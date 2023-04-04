@@ -6,7 +6,7 @@ export default function Home() {
   const [value, setValue] = useState("")
 
   return (
-    <>
+    <main className="overflow-hidden">
       <header className="flex w-full items-center justify-between p-6 pb-0 lg:hidden">
         <div className="prose-sm prose w-full">
           <h1 className="m-0 text-primary">Verbatim</h1>
@@ -16,6 +16,6 @@ export default function Home() {
       <section className="h-full">
         <Editor htmlText={value} onChange={setValue} />
       </section>
-    </>
+    </main>
   )
 }

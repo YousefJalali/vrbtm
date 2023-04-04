@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <input id="side-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex w-full flex-col justify-center">
         <div
-          className="min-w-screen relative flex min-h-screen w-full flex-col overflow-hidden"
+          className="min-w-screen relative flex min-h-screen w-full flex-col"
           style={{ minHeight: height }}
         >
           {children}
