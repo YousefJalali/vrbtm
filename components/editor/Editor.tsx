@@ -31,7 +31,7 @@ type Props = {
 }
 
 const Editor = ({
-  readOnly = false,
+  readOnly: isReadOnly = false,
   defaultValue,
   htmlText = "",
   onChange,
@@ -42,6 +42,7 @@ const Editor = ({
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
   const [isEyeOpen, setEye] = useState(false)
+  const [readOnly, setReadOnly] = useState(isReadOnly)
   const [isOmit, setOmit] = useState(omitMode)
   const [selectedText, setSelectedText] = useState<{
     text: string
@@ -51,6 +52,10 @@ const Editor = ({
   } | null>(null)
 
   const editorRef = useRef<ReactQuill>(null)
+
+  useEffect(() => {
+    setReadOnly(isReadOnly)
+  }, [isReadOnly])
 
   useEffect(() => {
     if (editorRef.current) {
@@ -113,12 +118,6 @@ const Editor = ({
       )
       clearSelection()
       setOmit(true)
-
-      if (selectedText.isOmitted) {
-        // if (!htmlText.includes("</mark>")) {
-        //   setOmit(false)
-        // }
-      }
     }
   }
 
@@ -158,33 +157,33 @@ const Editor = ({
 
   const omitText = () => {
     if (text.length > 0) {
-      if (!htmlText.includes("</mark>")) {
-        const arrToBeOmitted = removeUselessWords(text)
+      const arrToBeOmitted = removeUselessWords(text)
 
-        let startIndex = Math.floor(
-          Math.random() *
-            (arrToBeOmitted.length -
-              Math.floor(arrToBeOmitted.length * difficulty) +
-              1)
-        )
+      let startIndex = Math.floor(
+        Math.random() *
+          (arrToBeOmitted.length -
+            Math.floor(arrToBeOmitted.length * difficulty) +
+            1)
+      )
 
-        let slicedArray = arrToBeOmitted.slice(
-          startIndex,
-          startIndex + Math.floor(arrToBeOmitted.length * difficulty)
-        )
+      let slicedArray = arrToBeOmitted.slice(
+        startIndex,
+        startIndex + Math.floor(arrToBeOmitted.length * difficulty)
+      )
 
-        slicedArray.forEach((word) => {
-          if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
-            omitWord(
-              word,
-              text.search(new RegExp("\\b" + word + "\\b")), //index
-              word.length,
-              true
-            )
-          }
-        })
+      slicedArray.forEach((word) => {
+        if (word.replace(/[^a-zA-Z0-9 ]/g, "").trim().length > 0) {
+          omitWord(
+            word,
+            text.search(new RegExp("\\b" + word + "\\b")), //index
+            word.length,
+            true
+          )
+        }
+      })
 
-        setOmit(true)
+      setOmit(true)
+      if (textHasOmittedWord()) {
       }
     }
   }
@@ -211,20 +210,26 @@ const Editor = ({
 
   return (
     <div className="drawer drawer-end drawer-mobile">
-      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+      <input
+        id="editor-control-side"
+        type="checkbox"
+        className="drawer-toggle"
+      />
       <div className="drawer-content">
         {!readOnly && text.trim().length > 0 && (
           <label
-            htmlFor="my-drawer-2"
-            className="btn-primary drawer-button btn fixed bottom-6 right-6 z-50 lg:hidden"
+            htmlFor="editor-control-side"
+            className="btn-primary drawer-button btn-sm btn absolute right-16 top-[26px] z-50 lg:hidden"
           >
             Omit
           </label>
         )}
         <div className="h-full">
-          <div className="prose px-6">
-            <h1>{title}</h1>
-          </div>
+          {title && (
+            <div className="prose px-6">
+              <h1>{title}</h1>
+            </div>
+          )}
           <TextEditor
             ref={editorRef}
             readOnly={readOnly}
@@ -242,11 +247,12 @@ const Editor = ({
       {!readOnly && (
         <div className="drawer-side">
           <label
-            htmlFor="my-drawer-2"
+            htmlFor="editor-control-side"
             className="drawer-overlay"
             style={{ opacity: 0 }}
           ></label>
-          <div className="w-64 bg-base-100 text-base-content shadow-lg md:w-80">
+          <div className="w-64 rounded-tl-2xl bg-base-200 text-base-content shadow-lg md:w-80">
+            {/* <div className="absolute right-0 -top-6 z-50 h-16 w-full bg-primary" /> */}
             {text.trim().length <= 0 ? (
               <span className="hidden p-6 md:block">
                 Start writing to omit words.
@@ -254,7 +260,7 @@ const Editor = ({
             ) : (
               <div className="p-4 pr-6" data-testid="editor-action-bar">
                 <div className="flex h-full w-full flex-col gap-2">
-                  <div className="flex h-full w-full flex-col gap-3 rounded-lg bg-base-200 p-2">
+                  <div className="flex h-full w-full flex-col gap-3 rounded-lg bg-base-300 p-2">
                     {/* difficulty */}
                     <div>
                       <div className="flex flex-col gap-2">
@@ -318,7 +324,7 @@ const Editor = ({
                   </div>
 
                   {/* Toggle omit */}
-                  <div className="w-full rounded-lg bg-base-200 p-2">
+                  <div className="w-full rounded-lg bg-base-300 p-2">
                     <label className="label cursor-pointer p-0">
                       <span
                         className={`flex items-center gap-2 ${
@@ -351,7 +357,7 @@ const Editor = ({
                   </div>
 
                   {notebookId && (
-                    <div className="rounded-lg bg-base-200 p-2">
+                    <div className="rounded-lg bg-base-300 p-2">
                       <CreateFlashcard
                         className="btn-accent btn-sm btn w-full gap-2"
                         notebookId={notebookId}
@@ -384,170 +390,6 @@ const Editor = ({
       )}
     </div>
   )
-
-  // return (
-  //   <div className="flex h-full flex-col md:flex-row-reverse">
-  //     {/* control bar */}
-  //     {!readOnly && (
-  //       <div className="max-h-full w-full bg-base-100 text-base-content md:w-80">
-  //         {text.trim().length <= 0 ? (
-  //           <span className="hidden p-6 md:block">
-  //             Start writing to omit words.
-  //           </span>
-  //         ) : (
-  //           <div
-  //             className="w-full p-6 pb-0 md:flex md:h-full md:flex-col md:justify-between md:pl-0 md:pb-6"
-  //             data-testid="editor-action-bar"
-  //           >
-  //             <div className="flex flex-wrap gap-2 rounded-lg bg-base-200 p-2 md:h-full md:w-full md:flex-col md:gap-0 md:border md:bg-base-100">
-  //               {/* difficulty */}
-  //               <div className="flex rounded-t-lg bg-base-200 md:flex-col md:p-2">
-  //                 <div className="flex gap-2 md:flex-col">
-  //                   <div className="flex gap-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content">
-  //                     <span className="leading-none text-base-content">
-  //                       Difficulty
-  //                     </span>
-
-  //                     <input
-  //                       value={difficulty}
-  //                       onChange={difficultyHandler}
-  //                       type="range"
-  //                       min="0.6"
-  //                       max="1"
-  //                       step="0.2"
-  //                       className="range range-primary range-xs"
-  //                     />
-  //                   </div>
-
-  //                   <button
-  //                     onClick={omitText}
-  //                     disabled={text.trim().length <= 0}
-  //                     className="btn-secondary btn-sm btn"
-  //                   >
-  //                     random Omit
-  //                   </button>
-  //                 </div>
-
-  //                 <label className="label-text label mt-2 mb-4 hidden p-0 opacity-70 md:block">
-  //                   Words randomly omitted based on chosen difficulty level
-  //                 </label>
-  //               </div>
-
-  //               {/* Omit word */}
-  //               <div className="bg-base-200 md:p-2">
-  //                 <button
-  //                   onClick={omitSelectedWord}
-  //                   className="btn-secondary btn-sm btn w-full"
-  //                   disabled={!selectedText}
-  //                 >
-  //                   {selectedText?.isOmitted ? "UnOmit" : "Omit"}
-  //                 </button>
-  //                 <label className="label-text label mt-2 mb-4 hidden p-0 opacity-70 md:block">
-  //                   Select word or words to be omitted
-  //                 </label>
-  //               </div>
-
-  //               {/* Clear omit */}
-  //               <div className="rounded-b-lg bg-base-200 md:p-2">
-  //                 <button
-  //                   className="btn-error btn-sm btn w-full"
-  //                   onClick={reset}
-  //                   disabled={!isOmit}
-  //                 >
-  //                   Clear
-  //                 </button>
-  //                 <label className="label-text label mt-2 hidden p-0 opacity-70 md:block">
-  //                   Clear all omitted words
-  //                 </label>
-  //               </div>
-
-  //               {/* Toggle omit */}
-  //               <div className="w-fit rounded-lg bg-base-300 p-2 md:mt-6 md:mb-4 md:w-full md:bg-base-200">
-  //                 <label className="label cursor-pointer p-0">
-  //                   <span
-  //                     className={`flex items-center gap-2 ${
-  //                       isOmit ? "" : "cursor-not-allowed opacity-50"
-  //                     }`}
-  //                   >
-  //                     {isEyeOpen ? (
-  //                       <>
-  //                         <RxEyeOpen />
-  //                         <span className="label-text hidden md:inline-block">
-  //                           Visible
-  //                         </span>
-  //                       </>
-  //                     ) : (
-  //                       <>
-  //                         <RxEyeClosed />
-  //                         <span className="label-text hidden md:inline-block">
-  //                           Hidden
-  //                         </span>
-  //                       </>
-  //                     )}
-  //                   </span>
-  //                   <input
-  //                     type="checkbox"
-  //                     className="toggle-primary toggle hidden md:flex"
-  //                     checked={isEyeOpen}
-  //                     onChange={() => setEye((prevState) => !prevState)}
-  //                     disabled={!isOmit}
-  //                   />
-  //                 </label>
-  //                 <label className="label-text label mt-2 hidden p-0 opacity-70 md:block">
-  //                   View/Hide all omitted words
-  //                 </label>
-  //               </div>
-
-  //               {notebookId && (
-  //                 <div className="rounded-lg bg-base-200 md:p-2">
-  //                   <CreateFlashcard
-  //                     className="btn-accent btn-sm btn w-full gap-2"
-  //                     notebookId={notebookId}
-  //                     defaultValues={{
-  //                       question: selectedText?.text,
-  //                     }}
-  //                     // disabled={!selectedText}
-  //                   >
-  //                     <BsCardText />
-  //                     <span className="hidden lg:inline-block">
-  //                       Create flashcard...
-  //                     </span>
-  //                   </CreateFlashcard>
-  //                   <label className="label-text label mt-2 hidden p-0 opacity-70 md:block">
-  //                     You can select text to display as the flashcard question
-  //                   </label>
-  //                 </div>
-  //               )}
-  //             </div>
-
-  //             <>
-  //               {!notebookId && (
-  //                 <div className="fixed bottom-6 left-6 z-50 w-[calc(100%-3rem)] md:relative md:bottom-0 md:left-0 md:w-full">
-  //                   <AddToNotebook content={htmlText} />
-  //                 </div>
-  //               )}
-  //             </>
-  //           </div>
-  //         )}
-  //       </div>
-  //     )}
-
-  //     <div className="h-full flex-1">
-  //       <TextEditor
-  //         ref={editorRef}
-  //         readOnly={readOnly}
-  //         defaultValue={defaultValue}
-  //         value={htmlText}
-  //         onChange={changeHandler}
-  //         placeholder="Type or paste your text here"
-  //         className={`h-full p-6 [&_mark]:bg-primary
-  //             ${isEyeOpen && "[&_mark]:bg-transparent [&_mark]:text-primary"}
-  //           `}
-  //         onChangeSelection={changeSelectionHandler}
-  //       />
-  //     </div>
-  //   </div>
-  // )
 }
 
 export default Editor

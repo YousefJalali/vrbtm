@@ -65,7 +65,11 @@ const ReactQuillEditor = dynamic(
   },
   {
     ssr: false,
-    loading: () => <p data-testid="editor-loading">Loading ...</p>,
+    loading: () => (
+      <p data-testid="editor-loading" className="p-6">
+        Loading...
+      </p>
+    ),
   }
 )
 
