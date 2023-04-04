@@ -57,15 +57,15 @@ const Editor = ({
     setReadOnly(isReadOnly)
   }, [isReadOnly])
 
-  useEffect(() => {
-    if (editorRef.current) {
-      if (isOmit) {
-        editorRef.current.blur()
-      } else {
-        editorRef.current.focus()
-      }
-    }
-  }, [isOmit])
+  // useEffect(() => {
+  //   if (editorRef.current) {
+  //     if (isOmit) {
+  //       editorRef.current.blur()
+  //     } else {
+  //       editorRef.current.focus()
+  //     }
+  //   }
+  // }, [isOmit])
 
   useEffect(() => {
     const extractedText = getTextFromHtml(htmlText)
