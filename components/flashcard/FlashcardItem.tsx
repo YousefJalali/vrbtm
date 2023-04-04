@@ -1,6 +1,6 @@
 import { Flashcard } from "@/libs/types"
 import chroma from "chroma-js"
-import { ReactNode } from "react"
+import { ReactNode, useMemo } from "react"
 
 export default function FlashcardItem({
   flashcard,
@@ -9,8 +9,18 @@ export default function FlashcardItem({
   flashcard: Flashcard
   notebookColor: string
 }) {
-  const color = `${chroma(notebookColor).darken(2)}`
-  const bgColor = `${chroma(notebookColor).alpha(0.3)}`
+  const colors = useMemo(
+    () => ({
+      frontColor: `${chroma(notebookColor)
+        .set("hsv.s", "*0.3")
+        .set("hsv.v", "0.95")}`,
+      backColor: `${chroma(notebookColor)
+        .set("hsv.s", "*0.5")
+        .set("hsv.v", "0.95")}`,
+      text: `${chroma(notebookColor).darken(2)}`,
+    }),
+    [notebookColor]
+  )
 
   const Wrapper = ({
     on = false,
@@ -23,9 +33,16 @@ export default function FlashcardItem({
       className={`card ${
         on ? "swap-on" : "swap-off font-semibold"
       } h-32 w-[calc(100vw-3rem)]  overflow-hidden shadow-lg sm:w-full`}
-      style={{ backgroundColor: bgColor, color }}
+      style={{
+        backgroundColor: on ? colors.frontColor : colors.backColor,
+        color: colors.text,
+      }}
     >
-      <div className="card-body flex h-full items-center justify-center">
+      <div className="card-body relative flex h-full items-center justify-center">
+        <div
+          className="absolute top-2 left-2 z-50 h-8 w-8 rounded-full"
+          style={{ backgroundColor: notebookColor }}
+        />
         {children}
       </div>
     </div>

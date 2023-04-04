@@ -2,6 +2,7 @@ import { NotebookWithFlashcardsCount } from "@/libs/types"
 import chroma from "chroma-js"
 import dynamic from "next/dynamic"
 import Link from "next/link"
+import { useMemo } from "react"
 import { FiEdit2, FiMoreVertical } from "react-icons/fi"
 import DeleteNotebook from "../DeleteNotebook"
 
@@ -18,11 +19,16 @@ export default function NotebookCard({
 }: {
   notebook: NotebookWithFlashcardsCount
 }) {
-  const color = `${chroma(notebook.color).darken(2)}`
-  const bgColor = [
-    `${chroma(notebook.color).alpha(0.3)}`,
-    `${chroma(notebook.color).alpha(0.6)}`,
-  ]
+  const colors = useMemo(
+    () => ({
+      bg: [
+        `${chroma(notebook.color).set("hsv.s", "*0.3").set("hsv.v", "0.95")}`,
+        `${chroma(notebook.color).set("hsv.s", "*0.5").set("hsv.v", "0.85")}`,
+      ],
+      text: `${chroma(notebook.color).darken(2)}`,
+    }),
+    [notebook.color]
+  )
 
   return (
     <>
@@ -33,19 +39,19 @@ export default function NotebookCard({
         <div
           className="relative w-full rounded-lg p-3 shadow"
           style={{
-            background: `linear-gradient(180deg, ${bgColor[0]}, ${bgColor[1]})`,
+            background: `linear-gradient(180deg, ${colors.bg[0]}, ${colors.bg[1]})`,
           }}
         >
           <h3
             className="mb-3 mt-5 pr-14 text-xl capitalize line-clamp-4"
-            style={{ color }}
+            style={{ color: colors.text }}
           >
             {notebook.title}
           </h3>
 
           <span
             className="menu text-sm font-normal opacity-50"
-            style={{ color }}
+            style={{ color: colors.text }}
           >
             <span>{notebook.content.length} Words</span>
             <span>{notebook._count.flashcards} Flashcards</span>
@@ -55,7 +61,7 @@ export default function NotebookCard({
 
       <div className="dropdown-bottom dropdown-end dropdown absolute top-2 right-1 rounded-full p-0 active:bg-transparent">
         <label tabIndex={0} className="btn-ghost btn-xs btn-circle btn p-0">
-          <FiMoreVertical size={18} color={color} />
+          <FiMoreVertical size={18} color={colors.text} />
         </label>
         <ul
           tabIndex={0}

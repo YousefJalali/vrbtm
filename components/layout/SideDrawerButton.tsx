@@ -2,7 +2,7 @@ export default function SideDrawerButton() {
   return (
     <label
       htmlFor="side-drawer"
-      className="btn-ghost drawer-button btn-square btn-sm btn -mr-1 p-0"
+      className="btn-ghost drawer-button btn-sm btn-circle btn -mr-1 p-0"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
