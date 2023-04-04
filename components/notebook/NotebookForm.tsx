@@ -150,7 +150,11 @@ export default function NotebookForm({
         </div>
 
         <div className="modal-action">
-          <button className="btn-ghost btn" onClick={cancelHandler}>
+          <button
+            type="button"
+            className="btn-ghost btn"
+            onClick={cancelHandler}
+          >
             Cancel
           </button>
           <button

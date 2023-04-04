@@ -119,10 +119,17 @@ export default function FlashcardForm({
         </div>
 
         <div className="modal-action">
-          <button className="btn-ghost btn" onClick={cancelHandler}>
+          <button
+            type="button"
+            className="btn-ghost btn"
+            onClick={cancelHandler}
+          >
             Cancel
           </button>
-          <button className={`btn-primary btn ${loading ? "loading" : ""}`}>
+          <button
+            type="submit"
+            className={`btn-primary btn ${loading ? "loading" : ""}`}
+          >
             {type === "create" ? "create" : "Update"}
           </button>
         </div>
