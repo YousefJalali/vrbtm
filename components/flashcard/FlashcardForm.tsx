@@ -87,7 +87,7 @@ export default function FlashcardForm({
                 errors?.question?.message ? "hidden" : ""
               }`}
             >
-              {100 - watch("question").length} characters left
+              {100 - (watch("question")?.length ?? 0)} characters left
             </span>
           </label>
         </div>
@@ -113,7 +113,7 @@ export default function FlashcardForm({
                 errors?.answer?.message ? "hidden" : ""
               }`}
             >
-              {100 - watch("answer").length} characters left
+              {100 - (watch("answer")?.length ?? 0)} characters left
             </span>
           </label>
         </div>

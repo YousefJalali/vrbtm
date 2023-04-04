@@ -39,10 +39,10 @@ const Editor = ({
   notebookId,
   title = "",
 }: Props) => {
+  const [readOnly, setReadOnly] = useState(isReadOnly)
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
   const [isEyeOpen, setEye] = useState(false)
-  const [readOnly, setReadOnly] = useState(isReadOnly)
   const [isOmit, setOmit] = useState(omitMode)
   const [selectedText, setSelectedText] = useState<{
     text: string
@@ -216,7 +216,7 @@ const Editor = ({
         className="drawer-toggle"
       />
       <div className="drawer-content">
-        {!readOnly && text.trim().length > 0 && (
+        {!readOnly && text.trim().length > 0 && !notebookId && (
           <label
             htmlFor="editor-control-side"
             className="btn-primary drawer-button btn-sm btn absolute right-16 top-[26px] z-50 lg:hidden"
@@ -232,7 +232,7 @@ const Editor = ({
           )}
           <TextEditor
             ref={editorRef}
-            readOnly={readOnly}
+            readOnly={readOnly || (isOmit && !isEyeOpen)}
             defaultValue={defaultValue}
             value={htmlText}
             onChange={changeHandler}
@@ -251,7 +251,7 @@ const Editor = ({
             className="drawer-overlay"
             style={{ opacity: 0 }}
           ></label>
-          <div className="w-64 rounded-tl-2xl bg-base-200 text-base-content shadow-lg md:w-80">
+          <div className="w-80 rounded-tl-2xl bg-base-200 text-base-content shadow-lg md:w-72">
             {/* <div className="absolute right-0 -top-6 z-50 h-16 w-full bg-primary" /> */}
             {text.trim().length <= 0 ? (
               <span className="hidden p-6 md:block">

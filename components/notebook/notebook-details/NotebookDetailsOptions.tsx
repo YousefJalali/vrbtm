@@ -76,12 +76,20 @@ export default function NotebookDetailsOptions({
       </div>
     </>
   ) : (
-    <button
-      className="btn-primary btn-sm btn"
-      disabled={disabled}
-      onClick={onSave}
-    >
-      Save
-    </button>
+    <div className="flex gap-2">
+      <label
+        htmlFor="editor-control-side"
+        className="btn-primary btn-outline drawer-button btn-sm btn lg:hidden"
+      >
+        Omit
+      </label>
+      <button
+        className="btn-primary btn-sm btn"
+        disabled={disabled}
+        onClick={onSave}
+      >
+        Save
+      </button>
+    </div>
   )
 }
