@@ -49,6 +49,7 @@ export default function FlashcardForm({
     formState: { errors },
     setError,
     reset,
+    watch,
   } = useForm<Flashcard>({
     defaultValues: { ...initialValues(), ...defaultValues },
     resolver: yupResolver(flashcardValidation),
@@ -69,12 +70,26 @@ export default function FlashcardForm({
           <label className="label">
             <span className="label-text">Question</span>
           </label>
-          <input
-            type="text"
+          <textarea
+            className={`${
+              errors?.question ? "input-error" : ""
+            } textarea-bordered textarea h-24`}
             placeholder="Type the question here"
-            className="input-bordered input w-full"
+            maxLength={100}
             {...register("question")}
-          />
+          ></textarea>
+          <label className="label">
+            <span className="label-text-alt text-error first-letter:uppercase">
+              {errors?.question?.message}
+            </span>
+            <span
+              className={`label-text-alt ${
+                errors?.question?.message ? "hidden" : ""
+              }`}
+            >
+              {100 - watch("question").length} characters left
+            </span>
+          </label>
         </div>
 
         <div className="form-control">
@@ -82,10 +97,25 @@ export default function FlashcardForm({
             <span className="label-text">Answer</span>
           </label>
           <textarea
-            className="textarea-bordered textarea h-24"
+            className={`${
+              errors?.question ? "input-error" : ""
+            } textarea-bordered textarea h-24`}
             placeholder="Type the answer here"
+            maxLength={100}
             {...register("answer")}
           ></textarea>
+          <label className="label">
+            <span className="label-text-alt text-error first-letter:uppercase">
+              {errors?.answer?.message}
+            </span>
+            <span
+              className={`label-text-alt ${
+                errors?.answer?.message ? "hidden" : ""
+              }`}
+            >
+              {100 - watch("answer").length} characters left
+            </span>
+          </label>
         </div>
 
         <div className="modal-action">

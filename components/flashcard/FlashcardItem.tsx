@@ -21,8 +21,8 @@ export default function FlashcardItem({
   }) => (
     <div
       className={`card ${
-        on ? "swap-on" : "swap-off"
-      } h-32 w-[calc(100vw-3rem)]  sm:w-full`}
+        on ? "swap-on" : "swap-off font-semibold"
+      } h-32 w-[calc(100vw-3rem)]  overflow-hidden shadow-lg sm:w-full`}
       style={{ backgroundColor: bgColor, color }}
     >
       <div className="card-body flex h-full items-center justify-center">
@@ -35,9 +35,7 @@ export default function FlashcardItem({
     <label className="swap swap-flip h-32 place-content-stretch sm:w-full">
       <input type="checkbox" className="w-full" />
 
-      <Wrapper>
-        <h2 className="card-title">{flashcard.question}</h2>
-      </Wrapper>
+      <Wrapper>{flashcard.question}</Wrapper>
 
       <Wrapper on>{flashcard.answer}</Wrapper>
     </label>
