@@ -39,10 +39,6 @@ export default function FlashcardItem({
       }}
     >
       <div className="card-body relative flex h-full items-center justify-center">
-        <div
-          className="absolute top-2 left-2 z-50 h-8 w-8 rounded-full"
-          style={{ backgroundColor: notebookColor }}
-        />
         {children}
       </div>
     </div>
