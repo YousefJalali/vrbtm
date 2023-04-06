@@ -75,7 +75,7 @@ export default function FlashcardForm({
               errors?.question ? "input-error" : ""
             } textarea-bordered textarea h-24`}
             placeholder="Type the question here"
-            maxLength={100}
+            maxLength={80}
             {...register("question")}
           ></textarea>
           <label className="label">
@@ -87,7 +87,7 @@ export default function FlashcardForm({
                 errors?.question?.message ? "hidden" : ""
               }`}
             >
-              {100 - (watch("question")?.length ?? 0)} characters left
+              {80 - (watch("question")?.length ?? 0)} characters left
             </span>
           </label>
         </div>
@@ -101,7 +101,7 @@ export default function FlashcardForm({
               errors?.question ? "input-error" : ""
             } textarea-bordered textarea h-24`}
             placeholder="Type the answer here"
-            maxLength={100}
+            maxLength={80}
             {...register("answer")}
           ></textarea>
           <label className="label">
@@ -113,7 +113,7 @@ export default function FlashcardForm({
                 errors?.answer?.message ? "hidden" : ""
               }`}
             >
-              {100 - (watch("answer")?.length ?? 0)} characters left
+              {80 - (watch("answer")?.length ?? 0)} characters left
             </span>
           </label>
         </div>

@@ -38,8 +38,8 @@ export default function FlashcardItem({
         color: colors.text,
       }}
     >
-      <div className="card-body relative flex h-full items-center justify-center">
-        {children}
+      <div className="card-body flex w-full justify-center p-4">
+        <span className="w-full break-words text-center">{children}</span>
       </div>
     </div>
   )

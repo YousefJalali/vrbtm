@@ -5,9 +5,9 @@ export const flashcardValidation: Schema<Flashcard> = object({
   id: string().defined(),
   question: string()
     .defined()
-    .max(100)
+    .max(80)
     .required("notebook must have a question"),
-  answer: string().defined().max(100).required("notebook must have a answer"),
+  answer: string().defined().max(80).required("notebook must have a answer"),
   notebookId: string().required(
     "flashcard must be under a notebook, select or create a notebook"
   ),
