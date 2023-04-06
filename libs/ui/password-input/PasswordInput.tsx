@@ -1,12 +1,16 @@
-import { HTMLAttributes, useState } from "react"
+import { ReactNode, useState } from "react"
 import { FiEye, FiEyeOff } from "react-icons/fi"
 
-export function PasswordInput({ ...props }: HTMLAttributes<HTMLInputElement>) {
+export function PasswordInput({
+  children,
+}: {
+  children: ({ isPasswordVisible }: { isPasswordVisible: boolean }) => ReactNode
+}) {
   const [isPasswordVisible, togglePasswordVisibility] = useState(false)
 
   return (
     <label className="input-group">
-      <input type={isPasswordVisible ? "text" : "password"} {...props} />
+      {children({ isPasswordVisible })}
       <span className="p-0">
         <button
           type="button"

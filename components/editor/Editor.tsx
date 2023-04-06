@@ -211,7 +211,7 @@ const Editor = ({
   return (
     <section className="h-full overflow-y-scroll md:flex">
       <input id="editor-control-side" type="checkbox" className="peer hidden" />
-      <div>
+      <div className="flex-1">
         {!readOnly && text.trim().length > 0 && !notebookId && (
           <label
             htmlFor="editor-control-side"
@@ -229,7 +229,7 @@ const Editor = ({
             value={htmlText}
             onChange={changeHandler}
             placeholder="Type or paste your text here"
-            className={`h-full p-6 [&_mark]:bg-primary
+            className={`h-full w-full p-6 [&_mark]:bg-primary
               ${isEyeOpen && "[&_mark]:bg-transparent [&_mark]:text-primary"}
             `}
             onChangeSelection={changeSelectionHandler}

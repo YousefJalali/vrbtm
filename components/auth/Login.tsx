@@ -92,13 +92,21 @@ export default function Login() {
               <Link href="/forgot-password">Forgot password?</Link>
             </span>
           </label>
-          <PasswordInput
-            placeholder="••••••"
-            className={`input-bordered input w-full ${
-              errors?.password?.message ? "input-error" : ""
-            }`}
-            {...register("password")}
-          />
+          <PasswordInput>
+            {({ isPasswordVisible }) => {
+              return (
+                <input
+                  type={isPasswordVisible ? "text" : "password"}
+                  placeholder="••••••"
+                  className={`input-bordered input w-full ${
+                    errors?.password?.message ? "input-error" : ""
+                  }`}
+                  {...register("password")}
+                />
+              )
+            }}
+          </PasswordInput>
+
           <label
             className={`label ${!errors?.password?.message ? "hidden" : ""}`}
           >

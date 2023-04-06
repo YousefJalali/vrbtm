@@ -107,13 +107,20 @@ export default function SignUp() {
             <span className="label-text">Password</span>
             {/* <span className="label-text-alt">Alt label</span> */}
           </label>
-          <PasswordInput
-            placeholder="••••••"
-            className={`input-bordered input w-full ${
-              errors?.password?.message ? "input-error" : ""
-            }`}
-            {...register("password")}
-          />
+          <PasswordInput>
+            {({ isPasswordVisible }) => {
+              return (
+                <input
+                  type={isPasswordVisible ? "text" : "password"}
+                  placeholder="••••••"
+                  className={`input-bordered input w-full ${
+                    errors?.password?.message ? "input-error" : ""
+                  }`}
+                  {...register("password")}
+                />
+              )
+            }}
+          </PasswordInput>
           <label
             className={`label ${!errors?.password?.message ? "hidden" : ""}`}
           >
