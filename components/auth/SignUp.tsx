@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpValidation } from "@/utils/validations"
+import { PasswordInput } from "@/libs/ui"
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false)
@@ -106,8 +107,7 @@ export default function SignUp() {
             <span className="label-text">Password</span>
             {/* <span className="label-text-alt">Alt label</span> */}
           </label>
-          <input
-            type="password"
+          <PasswordInput
             placeholder="••••••"
             className={`input-bordered input w-full ${
               errors?.password?.message ? "input-error" : ""

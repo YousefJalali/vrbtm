@@ -1,5 +1,6 @@
 import { getUser } from "@/libs/data/user/actions"
 import { LoginUserType } from "@/libs/types"
+import { PasswordInput } from "@/libs/ui"
 import { loginValidation } from "@/utils/validations"
 import { yupResolver } from "@hookform/resolvers/yup"
 import Link from "next/link"
@@ -84,15 +85,14 @@ export default function Login() {
           </label>
         </div>
 
-        <div className="form-control w-full ">
+        <div className="form-control relative w-full">
           <label className="label">
             <span className="label-text">Password</span>
             <span className="label-text-alt">
               <Link href="/forgot-password">Forgot password?</Link>
             </span>
           </label>
-          <input
-            type="password"
+          <PasswordInput
             placeholder="••••••"
             className={`input-bordered input w-full ${
               errors?.password?.message ? "input-error" : ""
