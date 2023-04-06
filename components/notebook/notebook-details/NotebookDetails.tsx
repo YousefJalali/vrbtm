@@ -7,7 +7,8 @@ import { getTextFromHtml } from "@/utils"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { FiChevronLeft } from "react-icons/fi"
+import { BsJournalText } from "react-icons/bs"
+import { FiChevronLeft, FiPlus } from "react-icons/fi"
 import NotebookDetailsOptions from "./NotebookDetailsOptions"
 
 const Prompt = dynamic(() => import("@/libs/ui/prompt/Prompt"), {
@@ -20,6 +21,7 @@ export default function NotebookDetails({ id }: { id: string }) {
   const [txtValue, setTxtValue] = useState("")
   const [initialValue, setInitialValue] = useState("")
   const [readOnly, setReadOnly] = useState(true)
+  const [isOmit, setOmit] = useState(true)
   const [undoChange, setUndoChange] = useState(false)
 
   const { notebook, isLoading } = useNotebook<Notebook>(id)
@@ -33,15 +35,12 @@ export default function NotebookDetails({ id }: { id: string }) {
   )
 
   useEffect(() => {
-    const extractedText = getTextFromHtml(notebook.content)
-
-    setTxtValue(extractedText || "")
-  }, [notebook])
-
-  useEffect(() => {
     if (notebook) {
       setValue(notebook.content)
       setInitialValue(notebook.content)
+
+      const extractedText = getTextFromHtml(notebook.content)
+      setTxtValue(extractedText || "")
     }
   }, [notebook])
 
@@ -79,6 +78,11 @@ export default function NotebookDetails({ id }: { id: string }) {
     setReadOnly(true)
   }
 
+  const editMode = () => {
+    setReadOnly(false)
+    setOmit(false)
+  }
+
   return (
     <div className="drawer-mobile drawer drawer-end">
       <input id="flashcards-drawer" type="checkbox" className="drawer-toggle" />
@@ -104,7 +108,7 @@ export default function NotebookDetails({ id }: { id: string }) {
           <NotebookDetailsOptions
             {...{
               ...{ notebookId: notebook.id },
-              ...{ onEdit: () => setReadOnly(false) },
+              ...{ onEdit: editMode },
               ...{ onSave: saveHandler },
               readOnly,
               isMutating,
@@ -113,25 +117,30 @@ export default function NotebookDetails({ id }: { id: string }) {
           />
         </header>
 
-        <section className="flex h-screen max-h-screen flex-col overflow-scroll md:pt-4">
+        <section className="flex h-screen max-h-screen w-full flex-col overflow-scroll md:pt-4">
           <div className="prose px-6">
             <h1>{notebook.title}</h1>
           </div>
 
           {txtValue.trim().length === 0 && readOnly ? (
-            <button
-              className="mt-6 w-full px-6 text-left opacity-50"
-              onClick={() => setReadOnly(false)}
-            >
-              Type or paste your text here
-            </button>
+            <div className="mt-8 flex w-full flex-col items-center justify-center gap-4">
+              <BsJournalText size={48} className="opacity-60" />
+              <p>This notebook has no content.</p>
+              <button
+                className="btn-primary btn-sm btn gap-2"
+                onClick={editMode}
+              >
+                <FiPlus size={18} />
+                Add content
+              </button>
+            </div>
           ) : (
             <Editor
               htmlText={value}
               onChange={setValue}
               readOnly={readOnly}
               notebookId={notebook.id}
-              omitMode
+              isOmit={isOmit}
               title={notebook.title}
             />
           )}

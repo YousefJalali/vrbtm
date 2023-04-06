@@ -9,6 +9,7 @@ import CreateFlashcard from "../flashcard/CreateFlashcard"
 import dynamic from "next/dynamic"
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx"
 import { BsCardText } from "react-icons/bs"
+import EmptyContent from "./EmptyContent"
 
 const AddToNotebook = dynamic(
   () => import("@/components/notebook/AddToNotebook"),
@@ -25,7 +26,7 @@ type Props = {
   defaultValue?: string
   htmlText: string
   onChange: (value: string) => void
-  omitMode?: boolean
+  isOmit?: boolean
   notebookId?: string
   title?: string
 }
@@ -35,7 +36,7 @@ const Editor = ({
   defaultValue,
   htmlText = "",
   onChange,
-  omitMode = false,
+  isOmit: initialOmit = false,
   notebookId,
   title = "",
 }: Props) => {
@@ -43,7 +44,7 @@ const Editor = ({
   const [difficulty, setDifficulty] = useState(0.8)
   const [text, setText] = useState("")
   const [isEyeOpen, setEye] = useState(false)
-  const [isOmit, setOmit] = useState(omitMode)
+  const [isOmit, setOmit] = useState(initialOmit)
   const [selectedText, setSelectedText] = useState<{
     text: string
     index: number
@@ -57,15 +58,15 @@ const Editor = ({
     setReadOnly(isReadOnly)
   }, [isReadOnly])
 
-  // useEffect(() => {
-  //   if (editorRef.current) {
-  //     if (isOmit) {
-  //       editorRef.current.blur()
-  //     } else {
-  //       editorRef.current.focus()
-  //     }
-  //   }
-  // }, [isOmit])
+  useEffect(() => {
+    if (editorRef.current) {
+      if (isOmit) {
+        editorRef.current.blur()
+      } else {
+        editorRef.current.focus()
+      }
+    }
+  }, [isOmit])
 
   useEffect(() => {
     const extractedText = getTextFromHtml(htmlText)
@@ -208,6 +209,8 @@ const Editor = ({
     reset()
   }
 
+  console.log(text.trim().length)
+
   return (
     <section className="h-full overflow-y-scroll md:flex">
       <input id="editor-control-side" type="checkbox" className="peer hidden" />
@@ -215,7 +218,7 @@ const Editor = ({
         {!readOnly && text.trim().length > 0 && !notebookId && (
           <label
             htmlFor="editor-control-side"
-            className="btn-primary drawer-button btn-sm btn absolute right-16 top-[26px] z-50 md:hidden"
+            className="drawer-button btn-primary btn-sm btn absolute right-16 top-[26px] z-50 md:hidden"
           >
             Omit
           </label>
@@ -223,7 +226,6 @@ const Editor = ({
         <div className="h-full">
           <TextEditor
             ref={editorRef}
-            // readOnly={readOnly}
             readOnly={readOnly || (isOmit && !isEyeOpen)}
             defaultValue={defaultValue}
             value={htmlText}
@@ -247,9 +249,9 @@ const Editor = ({
           <div className="w-64 bg-base-100 text-base-content shadow-lg md:w-80 md:shadow-none">
             {/* <div className="absolute right-0 -top-6 z-50 h-16 w-full bg-primary" /> */}
             {text.trim().length <= 0 ? (
-              <span className="hidden p-6 md:block">
-                Start writing to omit words.
-              </span>
+              <div className="mt-6 w-full p-6 md:mt-0">
+                <EmptyContent />
+              </div>
             ) : (
               <div className="p-4 pr-6" data-testid="editor-action-bar">
                 <div className="flex h-full w-full flex-col gap-2">
