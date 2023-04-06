@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { height } = useWindowSize()
 
   return (
-    <div className="drawer drawer-mobile mx-auto max-w-[100rem] bg-base-100">
+    <div className="drawer-mobile drawer mx-auto max-w-[100rem] bg-base-100">
       {/* <div className="absolute top-6 z-50 h-[1px] w-screen bg-primary" />
       <div className="absolute bottom-6 z-50 h-[1px] w-screen bg-primary" />
       <div className="absolute left-6 z-50 h-screen w-[1px] bg-primary" />

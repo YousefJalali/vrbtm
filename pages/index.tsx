@@ -13,9 +13,8 @@ export default function Home() {
         </div>
         <SideDrawerButton />
       </header>
-      <section className="h-full">
-        <Editor htmlText={value} onChange={setValue} />
-      </section>
+
+      <Editor htmlText={value} onChange={setValue} />
     </main>
   )
 }

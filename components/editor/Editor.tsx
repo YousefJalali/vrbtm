@@ -209,29 +209,21 @@ const Editor = ({
   }
 
   return (
-    <div className="drawer drawer-end drawer-mobile">
-      <input
-        id="editor-control-side"
-        type="checkbox"
-        className="drawer-toggle"
-      />
-      <div className="drawer-content">
+    <section className="h-full overflow-y-scroll md:flex">
+      <input id="editor-control-side" type="checkbox" className="peer hidden" />
+      <div>
         {!readOnly && text.trim().length > 0 && !notebookId && (
           <label
             htmlFor="editor-control-side"
-            className="btn-primary drawer-button btn-sm btn absolute right-16 top-[26px] z-50 lg:hidden"
+            className="btn-primary drawer-button btn-sm btn absolute right-16 top-[26px] z-50 md:hidden"
           >
             Omit
           </label>
         )}
         <div className="h-full">
-          {title && (
-            <div className="prose px-6">
-              <h1>{title}</h1>
-            </div>
-          )}
           <TextEditor
             ref={editorRef}
+            // readOnly={readOnly}
             readOnly={readOnly || (isOmit && !isEyeOpen)}
             defaultValue={defaultValue}
             value={htmlText}
@@ -244,14 +236,15 @@ const Editor = ({
           />
         </div>
       </div>
+
+      {/* control */}
       {!readOnly && (
-        <div className="drawer-side">
+        <div className="fixed top-0 right-0 z-50 hidden h-screen peer-checked:flex md:relative md:flex">
           <label
             htmlFor="editor-control-side"
-            className="drawer-overlay"
-            style={{ opacity: 0 }}
+            className="z-40 h-screen w-screen bg-black opacity-10 md:hidden"
           ></label>
-          <div className="w-80 rounded-tl-2xl bg-base-200 text-base-content shadow-lg md:w-72">
+          <div className="w-64 bg-base-100 text-base-content shadow-lg md:w-80 md:shadow-none">
             {/* <div className="absolute right-0 -top-6 z-50 h-16 w-full bg-primary" /> */}
             {text.trim().length <= 0 ? (
               <span className="hidden p-6 md:block">
@@ -260,11 +253,11 @@ const Editor = ({
             ) : (
               <div className="p-4 pr-6" data-testid="editor-action-bar">
                 <div className="flex h-full w-full flex-col gap-2">
-                  <div className="flex h-full w-full flex-col gap-3 rounded-lg bg-base-300 p-2">
+                  <div className="flex h-full w-full flex-col gap-3 rounded-lg bg-base-200 p-2">
                     {/* difficulty */}
                     <div>
                       <div className="flex flex-col gap-2">
-                        <div className="flex gap-2 rounded-lg bg-base-300 p-2 text-sm leading-none text-base-content">
+                        <div className="flex gap-2 rounded-lg bg-base-200 p-2 text-sm leading-none text-base-content">
                           <span className="leading-none text-base-content">
                             Difficulty
                           </span>
@@ -324,7 +317,7 @@ const Editor = ({
                   </div>
 
                   {/* Toggle omit */}
-                  <div className="w-full rounded-lg bg-base-300 p-2">
+                  <div className="w-full rounded-lg bg-base-200 p-2">
                     <label className="label cursor-pointer p-0">
                       <span
                         className={`flex items-center gap-2 ${
@@ -357,7 +350,7 @@ const Editor = ({
                   </div>
 
                   {notebookId && (
-                    <div className="rounded-lg bg-base-300 p-2">
+                    <div className="rounded-lg bg-base-200 p-2">
                       <CreateFlashcard
                         className="btn-accent btn-sm btn w-full gap-2"
                         notebookId={notebookId}
@@ -388,7 +381,7 @@ const Editor = ({
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 
