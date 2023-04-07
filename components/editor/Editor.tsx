@@ -209,8 +209,6 @@ const Editor = ({
     reset()
   }
 
-  console.log(text.trim().length)
-
   return (
     <section className="h-full overflow-y-scroll md:flex">
       <input id="editor-control-side" type="checkbox" className="peer hidden" />
