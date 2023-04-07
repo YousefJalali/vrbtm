@@ -13,6 +13,7 @@ import { updateProfile } from "firebase/auth"
 import { useNotification } from "@/libs/hooks/useNotification"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { updateProfileValidation } from "@/utils/validations"
+import Head from "next/head"
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(false)
@@ -85,107 +86,115 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="p-6">
-      <header className="mb-6 flex justify-end lg:hidden">
-        <SideDrawerButton />
-      </header>
+    <>
+      <Head>
+        <title>Profile | VRBTM</title>
+      </Head>
 
-      <div className="prose">
-        <h1>Profile</h1>
-      </div>
+      <main className="p-6">
+        <header className="mb-6 flex justify-end lg:hidden">
+          <SideDrawerButton />
+        </header>
 
-      <div className="py-12 lg:max-w-lg">
-        <div className="flex flex-col gap-12 lg:flex-row">
-          <div className="flex w-full flex-col items-center lg:w-1/2">
-            <Avatar large />
-            {/* <button className="btn-ghost btn-sm btn mt-1 block">
+        <div className="prose">
+          <h1>Profile</h1>
+        </div>
+
+        <div className="py-12 lg:max-w-lg">
+          <div className="flex flex-col gap-12 lg:flex-row">
+            <div className="flex w-full flex-col items-center lg:w-1/2">
+              <Avatar large />
+              {/* <button className="btn-ghost btn-sm btn mt-1 block">
               Edit photo
             </button> */}
-          </div>
+            </div>
 
-          <form className="w-full" onSubmit={handleSubmit(submitHandler)}>
-            <fieldset disabled={loading} className="space-y-4">
-              <div className="form-control w-full">
-                <label className="label px-0 opacity-60">
-                  <span className="label-text">Email</span>
-                </label>
-                <span className="input w-full p-0 leading-[3rem]">
-                  {user?.email}
-                </span>
-              </div>
-
-              <div className="form-control w-full">
-                <label className="label px-0 opacity-60">
-                  <span className="label-text">Name</span>
-                </label>
-                <input
-                  readOnly={!editMode}
-                  type="text"
-                  // placeholder="johndoe@example.com"
-                  className={`input-bordered input w-full read-only:border-0 read-only:p-0 read-only:focus:ring-0 ${
-                    errors?.displayName?.message ? "input-error" : ""
-                  }`}
-                  {...register("displayName")}
-                />
-
-                <label
-                  className={`label ${
-                    !errors?.displayName?.message ? "hidden" : ""
-                  }`}
-                >
-                  <span className="label-text-alt text-error">
-                    {errors?.displayName?.message}
+            <form className="w-full" onSubmit={handleSubmit(submitHandler)}>
+              <fieldset disabled={loading} className="space-y-4">
+                <div className="form-control w-full">
+                  <label className="label px-0 opacity-60">
+                    <span className="label-text">Email</span>
+                  </label>
+                  <span className="input w-full p-0 leading-[3rem]">
+                    {user?.email}
                   </span>
-                </label>
-              </div>
+                </div>
 
-              <div className="mt-12 flex space-x-2">
-                {!editMode ? (
-                  <>
-                    <button
-                      type="button"
-                      className="btn-primary btn w-full flex-1 gap-2 lg:w-fit lg:flex-initial"
-                      onClick={() => setEditMode(true)}
-                    >
-                      <FiEdit2 />
-                      edit
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-outline btn-error btn gap-2"
-                      onClick={handleLogout}
-                    >
-                      <FiLogOut />
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      className="btn-ghost btn"
-                      onClick={() => {
-                        setEditMode(false)
-                        reset({ displayName: user.displayName })
-                      }}
-                    >
-                      cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className={`btn-primary btn ${loading ? "loading" : ""}`}
-                      disabled={watch("displayName") === user?.displayName}
-                    >
-                      save
-                    </button>
-                  </>
-                )}
-              </div>
-            </fieldset>
-          </form>
+                <div className="form-control w-full">
+                  <label className="label px-0 opacity-60">
+                    <span className="label-text">Name</span>
+                  </label>
+                  <input
+                    readOnly={!editMode}
+                    type="text"
+                    // placeholder="johndoe@example.com"
+                    className={`input-bordered input w-full read-only:border-0 read-only:p-0 read-only:focus:ring-0 ${
+                      errors?.displayName?.message ? "input-error" : ""
+                    }`}
+                    {...register("displayName")}
+                  />
+
+                  <label
+                    className={`label ${
+                      !errors?.displayName?.message ? "hidden" : ""
+                    }`}
+                  >
+                    <span className="label-text-alt text-error">
+                      {errors?.displayName?.message}
+                    </span>
+                  </label>
+                </div>
+
+                <div className="mt-12 flex space-x-2">
+                  {!editMode ? (
+                    <>
+                      <button
+                        type="button"
+                        className="btn-primary btn w-full flex-1 gap-2 lg:w-fit lg:flex-initial"
+                        onClick={() => setEditMode(true)}
+                      >
+                        <FiEdit2 />
+                        edit
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-outline btn-error btn gap-2"
+                        onClick={handleLogout}
+                      >
+                        <FiLogOut />
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="btn-ghost btn"
+                        onClick={() => {
+                          setEditMode(false)
+                          reset({ displayName: user.displayName })
+                        }}
+                      >
+                        cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className={`btn-primary btn ${
+                          loading ? "loading" : ""
+                        }`}
+                        disabled={watch("displayName") === user?.displayName}
+                      >
+                        save
+                      </button>
+                    </>
+                  )}
+                </div>
+              </fieldset>
+            </form>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
 

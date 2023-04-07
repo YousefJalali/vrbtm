@@ -5,6 +5,7 @@ import NotebookDetails from "@/components/notebook/notebook-details/NotebookDeta
 import { customFetch } from "@/utils"
 import cookie from "cookie"
 import { baseUrl } from "@/libs/data"
+import Head from "next/head"
 
 type FallbackProp = {
   [key: string]: {
@@ -15,14 +16,21 @@ type FallbackProp = {
 export default function NotebookDetailsPage({
   fallback,
   id,
+  title,
 }: {
   fallback: FallbackProp
   id: string
+  title: string
 }) {
   return (
-    <SWRConfig value={{ fallback }}>
-      <NotebookDetails id={id} />
-    </SWRConfig>
+    <>
+      <Head>
+        <title>{title.charAt(0).toUpperCase() + title.slice(1)} | VRBTM</title>
+      </Head>
+      <SWRConfig value={{ fallback }}>
+        <NotebookDetails id={id} />
+      </SWRConfig>
+    </>
   )
 }
 
@@ -53,6 +61,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           },
         },
         id: context.params.id,
+        title: notebook.title,
       },
     }
   } catch (error) {
