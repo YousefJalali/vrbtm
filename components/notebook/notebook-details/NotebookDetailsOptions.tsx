@@ -63,7 +63,7 @@ export default function NotebookDetailsOptions({
       <div className="dropdown-bottom dropdown-end dropdown h-6 rounded-full p-0 lg:hidden">
         <label
           tabIndex={0}
-          className="btn-ghost btn-square btn-xs btn -mr-2 p-0"
+          className="btn-ghost btn-xs btn-circle btn -mr-2 p-0"
         >
           <FiMoreVertical size={18} />
         </label>

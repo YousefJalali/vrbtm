@@ -30,7 +30,7 @@ export default function NotebookFlashcardsOptions({
   return selectMode ? (
     <div className="min-h-8 space-x-1">
       <button
-        className="btn-error btn btn-sm"
+        className="btn-error btn-sm btn"
         disabled={!selected}
         onClick={onSubmit}
       >
@@ -39,7 +39,7 @@ export default function NotebookFlashcardsOptions({
 
       {selected && (
         <UpdateFlashcard
-          className="btn-primary btn-ghost btn btn-sm"
+          className="btn-primary btn-ghost btn-sm btn"
           // disabled={!selected}
           defaultValues={selected}
           callback={() => setSelectMode(false)}
@@ -50,7 +50,7 @@ export default function NotebookFlashcardsOptions({
     </div>
   ) : (
     <div className="dropdown-bottom dropdown-end dropdown min-h-8 h-6 rounded-full p-0">
-      <label tabIndex={0} className="btn-ghost btn btn-square btn-xs -mr-2 p-0">
+      <label tabIndex={0} className="btn-ghost btn-xs btn-circle btn -mr-2 p-0">
         <FiMoreVertical size={18} />
       </label>
       <ul
