@@ -1,7 +1,7 @@
 import useSWRMutation from "swr/mutation"
 import { Flashcard, FlashcardWithNotebook, Notebook } from "@/libs/types"
 import { createFlashcard } from "../actions"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks/"
 import { getErrorMessage } from "@/utils"
 
 export const useCreateFlashcard = (notebookId: string) => {

@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { customFetch, getErrorMessage } from "@/utils"
-import { Flashcard, FlashcardWithNotebook } from "@/libs/types"
+import { FlashcardWithNotebook } from "@/libs/types"
 
 export const useFlashcards = (notebookId?: string) => {
   const { data, error, mutate } = useSWR("/api/flashcards", (url) =>

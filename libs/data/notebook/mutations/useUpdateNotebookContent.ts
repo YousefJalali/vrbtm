@@ -2,7 +2,7 @@ import useSWRMutation from "swr/mutation"
 
 import { addToNotebook } from "../actions"
 import { Notebook } from "@/libs/types"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks"
 import { getErrorMessage } from "@/utils"
 
 export const useUpdateNotebookContent = (

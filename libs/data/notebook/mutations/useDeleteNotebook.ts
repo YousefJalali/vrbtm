@@ -1,7 +1,7 @@
 import useSWRMutation from "swr/mutation"
 import { Notebook } from "@/libs/types"
 import { deleteNotebook } from "../actions"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks"
 import { getErrorMessage } from "@/utils"
 
 export const useDeleteNotebook = (

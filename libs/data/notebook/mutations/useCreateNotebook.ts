@@ -1,9 +1,8 @@
 import useSWRMutation from "swr/mutation"
 import { Notebook } from "@/libs/types"
 import { createNotebook } from "../actions"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks"
 import { getErrorMessage } from "@/utils"
-import Cookie from "js-cookie"
 
 export const useCreateNotebook = (query: string = "") => {
   const { trigger, error, isMutating, reset } = useSWRMutation(

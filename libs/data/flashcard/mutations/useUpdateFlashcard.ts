@@ -1,7 +1,7 @@
 import useSWRMutation from "swr/mutation"
 import { Flashcard } from "@/libs/types"
 import { updateFlashcard } from "../actions"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks"
 
 export function useUpdateFlashcard(
   flashcardId: string,

@@ -1,6 +1,6 @@
 import AuthLayout from "@/components/layout/AuthLayout"
 import { auth } from "@/config/firebase"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks"
 import { ForgotPasswordType } from "@/libs/types"
 import { isAuthenticated } from "@/utils/isAuthenticated"
 import { forgotPasswordValidation } from "@/utils/validations"

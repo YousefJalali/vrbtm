@@ -1,8 +1,6 @@
 import { Notebook } from "@/libs/types"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { prisma } from "@/libs/db/prisma"
-import cookie from "cookie"
-import { firebaseAdmin } from "@/config/firebaseAdmin"
 import omit from "lodash.omit"
 import { isAuthenticated } from "@/utils/isAuthenticated"
 

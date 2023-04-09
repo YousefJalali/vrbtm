@@ -1,5 +1,4 @@
 import { useCreateFlashcard } from "@/libs/data/flashcard"
-import { Notebook } from "@/libs/types"
 import Modal from "@/libs/ui/modal/Modal"
 import { Flashcard } from "@prisma/client"
 import { ButtonHTMLAttributes, ReactNode, useState } from "react"

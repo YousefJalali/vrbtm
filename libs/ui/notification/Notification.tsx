@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { createPortal } from "react-dom"
-import { useNotification } from "@/libs/hooks/useNotification"
+import { useNotification } from "@/libs/hooks"
 import { FiX } from "react-icons/fi"
 import {
   TbAlertTriangle,

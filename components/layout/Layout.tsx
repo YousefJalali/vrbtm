@@ -1,4 +1,4 @@
-import useWindowSize from "@/libs/hooks/useWindowSize"
+import { useWindowSize } from "@/libs/hooks"
 import { ReactNode } from "react"
 import SideDrawer from "./SideDrawer"
 import { Notification } from "@/ui/notification"
