@@ -11,7 +11,9 @@ import Router from "next/router"
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
 import Cookie from "js-cookie"
-import dynamic from "next/dynamic"
+// import dynamic from "next/dynamic"
+import { ErrorBoundary } from "react-error-boundary"
+import Custom500Comp from "@/components/500"
 
 const font = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" })
 
@@ -34,7 +36,7 @@ export default function MyApp({
     Cookie.set("first-visit", "false")
   }, [])
 
-  const firstVisit = Cookie.get("first-visit")
+  // const firstVisit = Cookie.get("first-visit")
 
   //loading progress bar
   NProgress.configure({ showSpinner: false })
@@ -50,26 +52,28 @@ export default function MyApp({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <div className={`${font.variable} bg-base-200 font-sans`}>
-        <AuthContextProvider>
-          <NotificationCtxProvider>
-            {/* {splashScreen && (
+      <ErrorBoundary fallback={<Custom500Comp />}>
+        <div className={`${font.variable} bg-base-200 font-sans`}>
+          <AuthContextProvider>
+            <NotificationCtxProvider>
+              {/* {splashScreen && (
               <Onboarding
                 dismiss={() => setSplashScreen(false)}
                 isOpen={splashScreen}
               />
             )} */}
 
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
 
-            <div id="modal" />
-            <div id="prompt" />
-            <div id="notification" />
-          </NotificationCtxProvider>
-        </AuthContextProvider>
-      </div>
+              <div id="modal" />
+              <div id="prompt" />
+              <div id="notification" />
+            </NotificationCtxProvider>
+          </AuthContextProvider>
+        </div>
+      </ErrorBoundary>
     </>
   )
 }

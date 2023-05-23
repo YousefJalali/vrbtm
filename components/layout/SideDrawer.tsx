@@ -77,15 +77,10 @@ export default function SideDrawer() {
         </li>
 
         <ul className="menu flex flex-1 justify-end space-y-2">
-          {isLoading ? (
-            <li>
-              <span>Loading...</span>
-            </li>
-          ) : user ? (
-            <li className="rounded-xl border">
-              <ProfileButton user={user} onClick={clickHandler} />
-            </li>
-          ) : (
+          <li className="bg-transparent">
+            <ProfileButton onClick={clickHandler} />
+          </li>
+          {!isLoading && !user && (
             <>
               <li>
                 <Link

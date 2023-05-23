@@ -27,12 +27,6 @@ export default function ProtectedComponent({
     </>
   ) : (
     <>
-      <button
-        className="btn-outline btn-sm btn-circle btn absolute right-2 top-2"
-        onClick={dismiss}
-      >
-        ✕
-      </button>
       <div className="flex flex-col items-center justify-center">
         <div className="prose">
           <h3 className="flex items-center justify-center gap-2 text-center leading-none">

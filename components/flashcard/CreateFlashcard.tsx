@@ -27,6 +27,7 @@ export default function CreateFlashcard({
         id="new-flashcard-modal"
         isOpen={showModal}
         dismiss={() => setModal(false)}
+        closeButton
       >
         <FlashcardForm
           id="new-flashcard-modal"

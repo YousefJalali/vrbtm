@@ -20,9 +20,9 @@ export default function Custom404() {
         />
         <div className="prose">
           <h1 className="text-center">Oops! Page not found.</h1>
-          <span className="text-center">
+          <p className="text-center">
             We are sorry, but the page you requested could not be found.
-          </span>
+          </p>
         </div>
 
         <Link className="btn-primary btn mt-6 gap-2" href="/">

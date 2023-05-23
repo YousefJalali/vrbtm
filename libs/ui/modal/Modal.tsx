@@ -1,45 +1,47 @@
-import { CSSProperties, ReactNode, useEffect, useRef } from "react"
+import { CSSProperties, ReactNode, useRef } from "react"
 import { createPortal } from "react-dom"
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from "body-scroll-lock"
+// import {
+//   disableBodyScroll,
+//   enableBodyScroll,
+//   clearAllBodyScrollLocks,
+// } from "body-scroll-lock"
 import { AnimatePresence, motion } from "framer-motion"
 import { useMedia } from "@/libs/hooks"
 
-function Content({
-  id,
-  isOpen,
-  children,
-}: {
-  id: string
-  isOpen: boolean
-  children: ReactNode
-}) {
-  const targetRef = useRef<HTMLDivElement>(null)
+// function Content({
+//   id,
+//   isOpen,
+//   children,
+//   closeButton
+// }: {
+//   id: string
+//   isOpen: boolean
+//   children: ReactNode
+//   closeButton?:boolean
+// }) {
+//   const targetRef = useRef<HTMLDivElement>(null)
 
-  // console.log(targetRef, id, isOpen)
+//   // console.log(targetRef, id, isOpen)
 
-  // useEffect(() => {
-  //   if (targetRef.current) {
-  //     if (isOpen) {
-  //       console.log("here")
-  //       disableBodyScroll(targetRef.current)
-  //     } else {
-  //       enableBodyScroll(targetRef.current)
-  //     }
-  //   }
+//   // useEffect(() => {
+//   //   if (targetRef.current) {
+//   //     if (isOpen) {
+//   //       console.log("here")
+//   //       disableBodyScroll(targetRef.current)
+//   //     } else {
+//   //       enableBodyScroll(targetRef.current)
+//   //     }
+//   //   }
 
-  //   return () => {
-  //     console.log("cleared")
-  //     // enableBodyScroll(targetRef.current)
-  //     clearAllBodyScrollLocks()
-  //   }
-  // }, [isOpen, id])
+//   //   return () => {
+//   //     console.log("cleared")
+//   //     // enableBodyScroll(targetRef.current)
+//   //     clearAllBodyScrollLocks()
+//   //   }
+//   // }, [isOpen, id])
 
-  return <div ref={targetRef}>{children}</div>
-}
+//   return <div ref={targetRef}>{children}</div>
+// }
 
 export default function Modal({
   isOpen,
@@ -47,12 +49,14 @@ export default function Modal({
   children,
   id,
   style,
+  closeButton,
 }: {
   isOpen: boolean
   dismiss: () => void
   children: ReactNode
   id: string
   style?: CSSProperties
+  closeButton?: boolean
 }) {
   const isMobile = useMedia("(max-width: 768px)")
 
@@ -92,7 +96,7 @@ export default function Modal({
 
               <motion.div
                 // ref={targetRef}
-                className="modal-box z-50 transition-none"
+                className="modal-box relative z-50 transition-none"
                 id={`${id}-box`}
                 variants={variants}
                 initial="closed"
@@ -100,9 +104,15 @@ export default function Modal({
                 exit="closed"
                 transition={{ type: "tween", duration: 0.2 }}
               >
-                <Content id={id} isOpen={isOpen}>
-                  {children}
-                </Content>
+                {closeButton && (
+                  <button
+                    className="btn-outline btn-sm btn-circle btn absolute right-2 top-2"
+                    onClick={dismiss}
+                  >
+                    ✕
+                  </button>
+                )}
+                <div>{children}</div>
               </motion.div>
             </motion.div>,
             document.getElementById("modal") as HTMLDivElement,

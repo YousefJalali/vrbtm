@@ -8,11 +8,6 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="drawer-mobile drawer mx-auto max-w-[100rem] bg-base-100">
-      {/* <div className="absolute top-6 z-50 h-[1px] w-screen bg-primary" />
-      <div className="absolute bottom-6 z-50 h-[1px] w-screen bg-primary" />
-      <div className="absolute left-6 z-50 h-screen w-[1px] bg-primary" />
-      <div className="absolute right-6 z-50 h-screen w-[1px] bg-primary" /> */}
-
       <input id="side-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex w-full flex-col justify-center">
         <div
